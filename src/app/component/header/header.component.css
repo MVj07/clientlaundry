@@ -1,0 +1,33 @@
+
+
+nav {
+/* background: var(--box-clr) */
+background-color: #fff;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);;
+
+}
+
+.navbar .head{
+  color: #d88fff;
+  font-family: cursive;
+}
+
+.navbar-nav{
+background-color: transparent;
+}
+
+  .navbar-nav .nav-link {
+/* color: var(--white-clr); */
+ font-weight: bold;
+
+  }
+
+  .navbar-nav .nav-link:hover {
+   color: #d88fff !important;
+  
+  }
+
+.navbar-toggler {
+  background-color: white;
+  border: 1px solid white;
+}

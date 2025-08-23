@@ -1,0 +1,118 @@
+<app-header></app-header>
+<section class="py-5">
+    <h1 class="text-center wd-title">Orders</h1>
+    <div class="">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 py-3">
+                <div class="d-flex justify-content-center py-5" *ngIf="isLoading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <ng-container *ngIf="!isLoading">
+                    <div *ngIf="orders?.length === 0" class="text-center text-muted py-4 fB center">
+                        No orders found.
+                    </div>
+                    <div class="save-boxs mb-3 px-4 py-4"
+                        *ngFor="let order of orders |paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}">
+                        <div class="row pt-2">
+                            <!-- <div class="col">
+                            <div><span class="fw-bold">B/No :&nbsp;</span><span>1234</span></div>
+                        </div> -->
+                            <div class="col">
+                                <div><span class="fw-bold">Kuri :&nbsp;</span><span>{{order.kuri}}</span></div>
+                            </div>
+                            <div class="col">
+                                <div><span class="fw-bold">Date
+                                        :&nbsp;</span><span>{{order.customerId.createdAt}}</span></div>
+                            </div>
+                        </div>
+                        <div class="row pt-2">
+                            <div class="col">
+                                <div class="">
+                                    <span class="fw-bold">Customer Name :
+                                        &nbsp;</span><span>{{order.customerId.name}}</span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="">
+                                    <span class="fw-bold">Phone Number :
+                                        &nbsp;</span><span>{{order.customerId.mobile}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="address-box pt-2">
+                            <p class="fw-bold">Address :</p>
+                            <address>
+                                {{order.customerId.address}}
+                            </address>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="w-100">
+                                <thead class="">
+                                    <tr>
+                                        <th class="p-2">Product Name</th>
+                                        <th>Qty</th>
+                                        <th>Amount</th>
+                                        <th>Total Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center" *ngFor="let item of order.items">
+                                        <td class="p-2">{{item.name}}</td>
+                                        <td>{{item.qty}}</td>
+                                        <td>{{item.amount}}</td>
+                                        <td>{{item.qty * item.amount}}</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="d-flex align-items-center justify-content-end gap-3">
+                                        <label class="form-label text-end">Total Amount :</label>
+                                        <div class="">
+                                            <input type="text" class="form-control" placeholder="Total amount"
+                                                [value]="getOrderTotal(order)" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row pt-3">
+                            <div class="col">
+                                <button class="primaryBtn">Edit</button>
+                            </div>
+                            <div class="col">
+                                <button class="primaryBtn" (click)="deleteOrder(order._id)">Delete</button>
+                            </div>
+                            <div class="col">
+                                <button class="primaryBtn"
+                                    (click)="moveWashing(order._id, order.kuri, order.customerId)">Move to
+                                    washing</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="5" [directionLinks]="true"
+                            [autoHide]="true">
+                        </pagination-controls>
+                    </div>
+                </ng-container>
+            </div>
+
+            <!-- example -->
+        </div>
+
+    </div>
+</section>

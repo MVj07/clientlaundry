@@ -1,0 +1,126 @@
+:root{
+    --primary-clr:#fbfeff; 
+    --box-clr:#1d1d1ddf;
+    --black-clr:#010101;
+    --red-clr:red;
+    --silver-clr:rgb(184, 180, 180);
+    --pink-clr:pink;
+   --white-clr:#ffffff;
+   --green-clr:rgb(27, 198, 61);
+  /* --primary-clr: #cbd6da;
+--box-clr: #e9eced;
+--accent-clr: #4a90a4;
+--contrast-clr: #f9c89b;
+--companion-clr: #b7c7a3;
+--match-clr: #a1b0b8;
+--match-clr: #7f98a0;
+ */
+
+}
+
+
+body{
+    /* background-image: linear-gradient(120deg, #70d9ff 70%, transparent 100%); */
+    background-color: #D6CDF2;
+    color: #253a54 !important;
+      font-family: "Mona Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      height: 100%;
+      background-repeat: no-repeat;
+  background-size: cover; /* ensures it fits to screen */
+  background-attachment: fixed;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+.fN{
+  font-weight: 100 !important;
+}
+
+.wd-title{
+  font-size: 24px;
+  line-height: 24px;
+  /* font-weight: bold !important; */
+  padding-bottom: 10px;
+  /* font-family:cursive; */
+  /* color: white; */
+}
+
+.f26x{
+  font-size: 26px;
+} 
+.fB{
+  font-weight: bold;
+}
+
+.primaryBtn{
+  border: none;
+  width: 100%;
+  border-radius: 5px;
+  padding: 5px 0px 5px 0px ;
+  transition: all 0.3s ease;
+  background-color: #d88fff;
+  color: white;
+  font-family: cursive;
+}
+
+.primaryBtn:hover{
+  background-color: #b35cff;
+}
+
+.save-boxs{
+  /* background-color: #87b3d926; */
+  background-color: rgb(245, 252, 255);
+  /* color: #253a54; */
+  border: 1px solid #eff3f9!important;
+  /* background-color: var(--box-clr); */
+    /* color: var(--white-clr); */
+    border-radius: 10px;
+    /* transition: all 0.6s ease; */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.w150x{
+  width:150px !important;
+}
+
+table{
+  border: 1px solid rgba(0, 0, 0, 0.12)!important;
+}
+
+thead tr,
+th {
+
+  border: 0px solid var(--box-clr) !important;
+  color: var(--box-clr) !important;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.797) !important;
+}
+
+tbody{
+  min-height: 50px;
+  overflow: scroll;
+}
+
+tbody tr,
+td {
+  background-color: rgba(255, 255, 255, 0.797)!important;
+  border-top: 1px solid rgba(0, 0, 0, 0.12)!important;
+  background-color: white !important;
+}
+
+.table-container{
+  max-height: 250px;  /* or min-height: 300px if you want it to grow */
+  overflow-y: auto;
+  display: block;
+}
+.table-container table thead{
+  position: sticky;
+  top: 0
+}
+
+.center {
+  position: absolute;
+  left: 41%;
+  top: 41%;
+  width: 300px;
+  padding: 10px;
+}

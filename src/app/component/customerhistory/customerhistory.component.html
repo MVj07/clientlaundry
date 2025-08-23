@@ -1,0 +1,68 @@
+<app-header></app-header>
+<section class="py-5">
+    <div class="">
+        
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 py-3">
+                <div class="save-boxs px-4 py-4">
+                    <div class="">
+                        <div class="col-lg-4 py-2">
+                            <h1 class="wd-title">Customers</h1>
+                            <div class="search-container px-2">
+                                <form (ngSubmit)="onSearch()">
+                                    <input type="text" placeholder="Search..." class="search-input" name="search" [(ngModel)]="searchTerm" />
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <!-- <th>Kuri</th> -->
+                                <th>Mobile</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let item of customers | paginate:{ itemsPerPage: 5, currentPage: p }" class="">
+                            <td class="text-center">
+                                <div class="p-2">
+                                    {{item.name}}
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="p-2">
+                                    {{item.address}}
+                                </div>
+                            </td>
+                            <!-- <td class="text-center">
+                                <div class="p-2">
+                                    {{item.kuri}}
+                                </div>
+                            </td> -->
+                            <td class="text-center">
+                                <div class="p-2">
+                                    {{item.mobile}}
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="p-2">
+                                    <button class="primaryBtn w150x fN" [routerLink]="['/edit-order', item._id]">Create Order</button>
+                                </div>
+                            </td>
+                        </tbody>
+                    </table>
+                    <div class="pagination justify-content-center">
+                        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+
+            <!-- example -->
+
+        </div>
+
+    </div>
+</section>
