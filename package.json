@@ -1,10 +1,16 @@
 {
   "name": "laundryandbook",
   "version": "0.0.0",
+
+  "engines": {
+  "node": "20.x",
+  "npm": "10.x"
+},
+
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "node ./node_modules/.bin/ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:laundryandbook": "node dist/laundryandbook/server/server.mjs"
