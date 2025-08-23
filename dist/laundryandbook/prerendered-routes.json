@@ -1,0 +1,14 @@
+{
+  "routes": [
+    "/dailyexpenses",
+    "/delivery",
+    "/deliveryhistory",
+    "/home",
+    "/home1",
+    "/ironing",
+    "/login",
+    "/neworder",
+    "/savepannel",
+    "/washing"
+  ]
+}
