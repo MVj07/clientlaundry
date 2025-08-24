@@ -14,11 +14,11 @@
               <div class="col">
                 <label class="form-label required">Kuri</label>
                 <input formControlName="kuri" type="text" class="form-control" placeholder="Kuri/no" [ngClass]="{
-                                'is-invalid': (submit && form['kuri']?.errors) || (form['kuri']?.invalid && (form['kuri']?.dirty || form['kuri']?.touched))
+                                'is-invalid': (submit && form['kuri']?.errors) || (form['kuri'].invalid && (form['kuri']?.dirty || form['kuri']?.touched))
                                 }">
                 <div *ngIf="
                                     (submit && form['kuri']?.errors) ||
-                                    (form['kuri']?.invalid &&
+                                    (form['kuri'].invalid &&
                                     (form['kuri']?.dirty || form['kuri']?.touched))
                                     " class="invalid-feedback">
                   <span *ngIf="form['kuri'].errors?.['required']">Kuri is required</span>
@@ -27,11 +27,11 @@
               <div class="col">
                 <label class="form-label required">Date</label>
                 <input formControlName="date" type="date" class="form-control" placeholder="" [ngClass]="{
-                  'is-invalid': (submit && form['date']?.errors) || (form['date']?.invalid && (form['date']?.dirty || form['date']?.touched))
+                  'is-invalid': (submit && form['date']?.errors) || (form['date'].invalid && (form['date']?.dirty || form['date']?.touched))
                 }">
                 <div *ngIf="
                                     (submit && form['date']?.errors) ||
-                                    (form['date']?.invalid &&
+                                    (form['date'].invalid &&
                                     (form['date']?.dirty || form['date']?.touched))
                                     " class="invalid-feedback">
                   <span *ngIf="form['date'].errors?.['required']">Date is required</span>
@@ -41,11 +41,11 @@
             <div class="pt-1">
               <label class="form-label required">Customer Name</label>
               <input formControlName="name" type="text" class="form-control" placeholder="Username" [ngClass]="{
-                'is-invalid': (submit && form['name']?.errors) || (form['name']?.invalid && (form['name']?.dirty || form['name']?.touched))
+                'is-invalid': (submit && form['name']?.errors) || (form['name'].invalid && (form['name']?.dirty || form['name']?.touched))
               }">
               <div *ngIf="
                                                   (submit && form['name']?.errors) ||
-                                                  (form['name']?.invalid &&
+                                                  (form['name'].invalid &&
                                                   (form['name']?.dirty || form['name']?.touched))
                                                   " class="invalid-feedback">
                 <span *ngIf="form['name'].errors?.['required']">name is required</span>
@@ -55,11 +55,11 @@
             <div class="pt-1">
               <label class="form-label required">Phone Number</label>
               <input formControlName="mobile" type="text" class="form-control" placeholder="Phone number" [ngClass]="{
-                'is-invalid': (submit && form['mobile']?.errors) || (form['mobile']?.invalid && (form['mobile']?.dirty || form['mobile']?.touched))
+                'is-invalid': (submit && form['mobile']?.errors) || (form['mobile'].invalid && (form['mobile']?.dirty || form['mobile']?.touched))
               }">
               <div *ngIf="
                                                   (submit && form['mobile']?.errors) ||
-                                                  (form['mobile']?.invalid &&
+                                                  (form['mobile'].invalid &&
                                                   (form['mobile']?.dirty || form['mobile']?.touched))
                                                   " class="invalid-feedback">
                 <span *ngIf="form['mobile'].errors?.['required']">mobile is required</span>
@@ -68,11 +68,11 @@
             <div class="pt-1">
               <label class="form-label required">Address</label>
               <input formControlName="address" type="text" class="form-control" placeholder="Address" [ngClass]="{
-                'is-invalid': (submit && form['address']?.errors) || (form['address']?.invalid && (form['address']?.dirty || form['address']?.touched))
+                'is-invalid': (submit && form['address']?.errors) || (form['address'].invalid && (form['address']?.dirty || form['address']?.touched))
               }">
               <div *ngIf="
                                                   (submit && form['address']?.errors) ||
-                                                  (form['address']?.invalid &&
+                                                  (form['address'].invalid &&
                                                   (form['address']?.dirty || form['address']?.touched))
                                                   " class="invalid-feedback">
                 <span *ngIf="form['address'].errors?.['required']">address is required</span>
@@ -86,11 +86,11 @@
                   <label class="required">Choose Items</label><br>
                   <div class="col-5 h-100">
                     <select formControlName="items" class="select-items"
-                      [ngClass]="{'is-invalid': itemSubmit && itemControls['items']?.invalid}">
+                      [ngClass]="{'is-invalid': itemSubmit && itemControls['items'].invalid}">
                       <option [ngValue]="null" disabled>Select</option>
                       <option *ngFor="let item of orditems" [ngValue]="item">{{ item.name }}</option>
                     </select>
-                    <div *ngIf="itemSubmit && itemControls['items']?.invalid" class="invalid-feedback">
+                    <div *ngIf="itemSubmit && itemControls['items'].invalid" class="invalid-feedback">
                       Item is required
                     </div>
                   </div>
@@ -99,9 +99,9 @@
                     <div class="d-flex align-items-center">
                       <label class="form-label required">Qty:&nbsp;</label>
                       <input formControlName="quantity" type="number" class="form-control qty-box" placeholder="Qty"
-                        [ngClass]="{'is-invalid': itemSubmit && itemControls['quantity']?.invalid}">
+                        [ngClass]="{'is-invalid': itemSubmit && itemControls['quantity'].invalid}">
                     </div>
-                    <div *ngIf="itemSubmit && itemControls['quantity']?.invalid" class="invalid-feedback">
+                    <div *ngIf="itemSubmit && itemControls['quantity'].invalid" class="invalid-feedback">
                       Valid quantity is required
                     </div>
                   </div>
@@ -110,9 +110,9 @@
                     <div class="d-flex align-items-center">
                       <label class="form-label required">Amount:&nbsp;</label>
                       <input formControlName="amount" type="number" class="form-control" placeholder="Amount"
-                        [ngClass]="{'is-invalid': itemSubmit && itemControls['amount']?.invalid}">
+                        [ngClass]="{'is-invalid': itemSubmit && itemControls['amount'].invalid}">
                     </div>
-                    <div *ngIf="itemSubmit && itemControls['amount']?.invalid" class="invalid-feedback">
+                    <div *ngIf="itemSubmit && itemControls['amount'].invalid" class="invalid-feedback">
                       Valid amount is required
                     </div>
                   </div>
