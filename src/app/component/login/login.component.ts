@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { LoginService } from '../../services/login/login.service';
 import { Router } from '@angular/router';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginComponent {
   constructor(
     private readonly fb: FormBuilder,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private storageService: StorageService
   ){
   this.registerForm = this.fb.group({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -28,7 +30,7 @@ export class LoginComponent {
         next: (res) => {
           console.log('Login Success:', res);
           if (res.status){
-            localStorage.setItem('authToken', res.token);
+            this.storageService.setItem('authToken', res.token);
             this.router.navigate(['/home'])
           }
         },

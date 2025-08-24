@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { StorageService } from '../storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class newOrderService {
     private apiUrl = 'https://laundry-fju0.onrender.com'; // Change to your actual API URL
     // private apiUrl = 'http://localhost:5000'
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private storageService: StorageService) { }
 
     getAllItems(): Observable<any> {
-        const token = localStorage.getItem('authToken'); // or sessionStorage
+        const token = this.storageService.getItem('authToken'); // or sessionStorage
         const headers = {
             Authorization: `Bearer ${token}`
         };
@@ -18,7 +19,7 @@ export class newOrderService {
     }
     
     newOrder(data: any): Observable<any>{
-        const token = localStorage.getItem('authToken');
+        const token = this.storageService.getItem('authToken');
         const headers={
             Authorization: `Bearer ${token}`
         }
@@ -26,7 +27,7 @@ export class newOrderService {
     }
     
     getAllOrders(status:string, page: number, limit: number): Observable<any>{
-        const token = localStorage.getItem('authToken'); // or sessionStorage
+        const token = this.storageService.getItem('authToken'); // or sessionStorage
         const headers = {
             Authorization: `Bearer ${token}`
         };
@@ -34,7 +35,7 @@ export class newOrderService {
         return this.http.get(`${this.apiUrl}/order`, {headers, params});
     }
     deleteOrder(id:any):Observable<any>{
-        const token = localStorage.getItem('authToken'); // or sessionStorage
+        const token = this.storageService.getItem('authToken'); // or sessionStorage
         const headers = {
             Authorization: `Bearer ${token}`
         };
@@ -42,7 +43,7 @@ export class newOrderService {
     }
     
     updateOrder(data:any):Observable<any>{
-        const token = localStorage.getItem('authToken'); // or sessionStorage
+        const token = this.storageService.getItem('authToken'); // or sessionStorage
         const headers = {
             Authorization: `Bearer ${token}`
         };

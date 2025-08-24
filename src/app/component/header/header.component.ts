@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-header',
@@ -8,10 +9,11 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent {
   constructor(
-    private router: Router
+    private router: Router,
+    private storageService: StorageService
   ){}
   logout():void{
-    localStorage.removeItem('authToken')
+    this.storageService.removeItem('authToken')
     this.router.navigate(['/login'])
   }
 }
