@@ -9,7 +9,7 @@
 
   "scripts": {
     "ng": "ng",
-    "start": "node dist/laundryandbook/server/main.js ",
+    "start": "node dist/laundryandbook/server/main.server.js ",
     "build": "ng build --configuration production && ng run laundryandbook:server:production",  
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
