@@ -64,7 +64,7 @@ export class SavepannelComponent {
       orderId,
       type: 'status',
       kuri,
-      status: 'washing'
+      status: 'confirm'
     }
     this.orderService.updateOrder(data).subscribe({
       next: (res) => {

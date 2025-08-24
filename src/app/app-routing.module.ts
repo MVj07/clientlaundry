@@ -14,15 +14,15 @@ import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: 'edit-order/:id', component: NeworderComponent },
-  { path: 'login', component: LoginComponent, canActivate:[authGuard] },
-  { path: 'home1', component: HomeComponent },
+  { path: '', component: LoginComponent, canActivate:[authGuard] },
+  { path: 'home', component: HomeComponent },
   { path: 'neworder', component: NeworderComponent },
   { path: 'savepannel', component: SavepannelComponent },
   { path: 'washing', component: WashingComponent },
   { path: 'ironing', component: IroningComponent },
   { path: 'delivery', component: DeliveryComponent },
   { path: 'deliveryhistory', component: DeliveryhistoryComponent },
-  { path: 'home', component: CustomerhistoryComponent },
+  { path: 'customerhistory', component: CustomerhistoryComponent },
   { path: 'dailyexpenses', component: DailyexpensesComponent }
 ];
 
