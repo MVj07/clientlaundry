@@ -1,6 +1,5 @@
 {
-  "root": "dist/laundryandbook/browser",
-  "routes": {
-    "/**": "index.html"
-  }
+  "routes": [
+    { "source": "**", "destination": "/index.html" }
+  ]
 }
