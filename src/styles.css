@@ -57,9 +57,9 @@ body{
   border-radius: 5px;
   padding: 5px 0px 5px 0px ;
   transition: all 0.3s ease;
-  background-color: #d88fff;
+  background-color: #d17aff;
   color: white;
-  font-family: cursive;
+  /* font-family: cursive; */
 }
 
 .primaryBtn:hover{
