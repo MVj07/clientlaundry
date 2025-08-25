@@ -18,6 +18,7 @@ import { CustomerhistoryComponent } from './component/customerhistory/customerhi
 import { DailyexpensesComponent } from './component/dailyexpenses/dailyexpenses.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     HttpClientModule,
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })
