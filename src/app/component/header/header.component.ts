@@ -14,6 +14,6 @@ export class HeaderComponent {
   ){}
   logout():void{
     this.storageService.removeItem('authToken')
-    this.router.navigate(['/login'])
+    this.router.navigate(['/'])
   }
 }
