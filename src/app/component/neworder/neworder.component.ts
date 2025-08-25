@@ -3,6 +3,7 @@ import { newOrderService } from '../../services/newOrder/newOrder.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../../services/customer/customer.service';
+import { LoginService } from '../../services/login/login.service';
 
 @Component({
   selector: 'app-neworder',
@@ -23,7 +24,8 @@ export class NeworderComponent {
     private newOrderService: newOrderService,
     private customerService: CustomerService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authservice: LoginService
   ) { }
   ngOnInit(): void {
     this.newOrderForm = this.fb.group({
@@ -50,6 +52,10 @@ export class NeworderComponent {
       },
       error: (err) => {
       // alert('Order failed')
+      if (err.status === 401 || err.status === 403) {
+          this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
+          return;
+        }
       return;
     },
     })

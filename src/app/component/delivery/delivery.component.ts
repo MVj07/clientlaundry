@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
+import { authService } from '../../services/authenticate/auth.service';
+import { LoginService } from '../../services/login/login.service';
 
 @Component({
   selector: 'app-delivery',
@@ -15,7 +17,8 @@ export class DeliveryComponent {
   limit: number = 5;
   totalItems: number = 0;
   constructor(
-    private orderService: newOrderService
+    private orderService: newOrderService,
+    private authservice: LoginService
   ) { }
   getOrders() {
     this.orderService.getAllOrders(this.status, this.page, this.limit).subscribe({
@@ -28,7 +31,11 @@ export class DeliveryComponent {
       error: (err) => {
         // alert('Order failed')
         this.isLoading = false;
-        return;
+        console.error('customer Error:', err);
+          if (err.status === 401 || err.status === 403) {
+          this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
+          return;
+        }
       },
     })
   }

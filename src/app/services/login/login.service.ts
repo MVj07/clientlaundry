@@ -16,6 +16,6 @@ export class LoginService {
   
   logOut():void{
     this.storageService.removeItem('authToken')
-    this.router.navigate(['/login'])
+    this.router.navigate(['/'])
   }
 }
