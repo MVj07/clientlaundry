@@ -52,10 +52,10 @@ export class NeworderComponent {
       },
       error: (err) => {
       // alert('Order failed')
-      if (err.status === 401 || err.status === 403) {
-          this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
-          return;
-        }
+      // if (err.status === 401 || err.status === 403) {
+      //     this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
+      //     return;
+      //   }
       return;
     },
     })
@@ -128,29 +128,36 @@ export class NeworderComponent {
   }
 
   addOrder() {
-    this.itemSubmit = true;
-    if (this.itemForm.invalid) return;
+  this.itemSubmit = true;
+  if (this.itemForm.invalid) return;
 
-    const formValue = this.itemForm.value;
-    console.log(formValue)
-    const orderData = {
-      id: formValue.items._id,
-      name: formValue.items.name,
-      qty: formValue.quantity,
-      price: formValue.amount
-    };
-    console.log(orderData)
+  const formValue = this.itemForm.value;
+  const orderData = {
+    id: formValue.items._id,
+    name: formValue.items.name,
+    qty: formValue.quantity,
+    price: formValue.amount
+  };
 
-    this.orders.push(orderData);
-
-    // (Optional) Reset form or part of it
-    this.itemForm.patchValue({
-      items: null,
-      quantity: 1,
-      amount: 0
-    });
-    this.itemSubmit = false
+  // ✅ Check for duplicate id
+  const exists = this.orders.some(order => order.id === orderData.id);
+  if (exists) {
+    alert("This item is already added to the order list.");
+    this.itemSubmit = false;
+    return;
   }
+
+  this.orders.push(orderData);
+
+  // Reset form fields
+  this.itemForm.patchValue({
+    items: null,
+    quantity: 1,
+    amount: 0
+  });
+  this.itemSubmit = false;
+}
+
 
   getTotalAmount(): number {
   return this.orders.reduce((sum, order) => sum + (order.qty * order.price), 0);

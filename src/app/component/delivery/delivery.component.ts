@@ -32,10 +32,10 @@ export class DeliveryComponent {
         // alert('Order failed')
         this.isLoading = false;
         console.error('customer Error:', err);
-          if (err.status === 401 || err.status === 403) {
-          this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
-          return;
-        }
+        //   if (err.status === 401 || err.status === 403) {
+        //   this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
+        //   return;
+        // }
       },
     })
   }
@@ -64,7 +64,7 @@ export class DeliveryComponent {
       orderId,
       type: 'status',
       kuri,
-      status: 'delivered'
+      status: 'invoice'
     }
     this.orderService.updateOrder(data).subscribe({
       next: (res) => {

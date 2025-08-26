@@ -28,11 +28,11 @@ export class newOrderService {
     
     getAllOrders(status:string, page: number, limit: number): Observable<any>{
         const token = this.storageService.getItem('authToken'); // or sessionStorage
-        const headers = {
-            Authorization: `Bearer ${token}`
-        };
+        // const headers = {
+        //     Authorization: `Bearer ${token}`
+        // };
         const params=new HttpParams().set('page', page).set('limit', limit).set('status', status)
-        return this.http.get(`${this.apiUrl}/order`, {headers, params});
+        return this.http.get(`${this.apiUrl}/order`, { params});
     }
     deleteOrder(id:any):Observable<any>{
         const token = this.storageService.getItem('authToken'); // or sessionStorage

@@ -19,7 +19,7 @@ export class HomeComponent {
     private orderService: newOrderService,
     private authservice: LoginService
   ) { }
-  getOrders() {
+  async getOrders() {
     this.orderService.getAllOrders(this.status, this.page, this.limit).subscribe({
       next: (res) => {
         console.log(res.data)
@@ -30,10 +30,10 @@ export class HomeComponent {
       error: (err) => {
         // alert('Order failed')
         this.isLoading = false;
-        if (err.status === 401 || err.status === 403) {
-          this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
-          return;
-        }
+        // if (err.status === 401 || err.status === 403) {
+        //   this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
+        //   return;
+        // }
         return;
       },
     })

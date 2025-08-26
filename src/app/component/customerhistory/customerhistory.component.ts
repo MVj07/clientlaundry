@@ -23,10 +23,10 @@ export class CustomerhistoryComponent {
       },
       error: (err) => {
           console.error('customer Error:', err);
-          if (err.status === 401 || err.status === 403) {
-          this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
-          return;
-        }
+        //   if (err.status === 401 || err.status === 403) {
+        //   this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
+        //   return;
+        // }
         }
     })
   }

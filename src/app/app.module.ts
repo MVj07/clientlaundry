@@ -16,9 +16,11 @@ import { DeliveryComponent } from './component/delivery/delivery.component';
 import { DeliveryhistoryComponent } from './component/deliveryhistory/deliveryhistory.component';
 import { CustomerhistoryComponent } from './component/customerhistory/customerhistory.component';
 import { DailyexpensesComponent } from './component/dailyexpenses/dailyexpenses.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { InvoiceComponent } from './component/invoice/invoice.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     DeliveryComponent,
     DeliveryhistoryComponent,
     CustomerhistoryComponent,
-    DailyexpensesComponent
+    DailyexpensesComponent,
+    InvoiceComponent
   ],
   imports: [
     NgxPaginationModule,
@@ -46,7 +49,12 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
   ],
   providers: [
     provideClientHydration(),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

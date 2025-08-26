@@ -8,14 +8,22 @@ import { StorageService } from '../storage.service';
 export class LoginService {
   private apiUrl = 'https://laundry-fju0.onrender.com/login'; // Change to your actual API URL
 
-  constructor(private http: HttpClient, private router: Router, private storageService: StorageService) {}
+  constructor(private http: HttpClient, private router: Router, private storageService: StorageService) { }
 
   loginUser(data: any): Observable<any> {
     return this.http.post(this.apiUrl, data);
   }
-  
-  logOut():void{
+
+  logOut(): void {
     this.storageService.removeItem('authToken')
     this.router.navigate(['/'])
   }
+
+  getToken(): string | null {
+    if (typeof window !== 'undefined' && localStorage) {
+      return localStorage.getItem('authToken'); // or sessionStorage, depending on your implementation
+    }
+    return null;
+  }
+
 }
