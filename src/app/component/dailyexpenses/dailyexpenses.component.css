@@ -1,0 +1,13 @@
+.button-group {
+  display: flex;
+  align-items: center;
+}
+.button-group button {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+.button-group button.active {
+  background-color: #007bff;
+  color: white;
+}

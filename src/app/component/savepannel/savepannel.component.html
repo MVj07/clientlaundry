@@ -89,15 +89,15 @@
                         </div>
 
 
-                        <div class="row pt-3">
-                            <div class="col">
+                        <div class="d-flex justify-content-end gap-2 pt-3">
+                            <!-- <div class="col">
                                 <button class="primaryBtn fN">Edit</button>
+                            </div> -->
+                            <div class="">
+                                <button class="primaryBtn fN w150x" (click)="deleteOrder(order._id)">Delete</button>
                             </div>
-                            <div class="col">
-                                <button class="primaryBtn fN" (click)="deleteOrder(order._id)">Delete</button>
-                            </div>
-                            <div class="col">
-                                <button class="primaryBtn fN"
+                            <div class="">
+                                <button class="primaryBtn fN w150x"
                                     (click)="moveWashing(order._id, order.kuri, order.customerId)">Confirm order</button>
                             </div>
                         </div>
