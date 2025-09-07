@@ -114,6 +114,40 @@
             </div>
           </div>
         </div>
+        <div class="save-boxs px-4 py-4 mt-3">
+          <h1 class="text-center wd-title">All Expenses</h1>
+          <div class="d-flex justify-content-between align-items-center pb-2">
+            <div>
+              <input type="date" class="form-control" [(ngModel)]="selectedDate" (change)="onDateChange()" />
+            </div>
+            <div class="button-group">
+              <!-- <label class="px-2">Select Period:</label> -->
+              <button [class.active]="selected === 'today'">By Date</button>
+              <button [class.active]="selected === 'month'">By Month</button>
+            </div>
+          </div>
+          <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+              <tr class="text-center">
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th>Total Amount</th>
+                <!-- <th>Remove</th> -->
+              </tr>
+            </thead>
+            <tbody
+              *ngFor="let order of dateOrders| paginate:{ itemsPerPage: limit, currentPage: page, totalItems:totalItems }; let i=index">
+              <tr class="text-center">
+                <td>{{order.item}}</td>
+                <td>{{order.quantity}}</td>
+                <td>{{order.unitprice}}</td>
+                <td>{{order.quantity * order.unitprice}}</td>
+                <!-- <td> <button class="table-deletebtn" (click)="removeOrder(i)">Delete</button></td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="col">
 

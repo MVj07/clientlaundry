@@ -16,6 +16,7 @@ export class DailyexpensesComponent {
   newOrderForm!: FormGroup;
   itemForm!: FormGroup;
   orders: any[] = [];
+  dateOrders: any[] = [];
   customerId: string | null = null;
   page: number = 1;
   limit: number = 5;
@@ -24,6 +25,10 @@ export class DailyexpensesComponent {
   p: number = 1;
   options = ["Today", "This Month"];
   selected = 'today';
+  daywiseExpenses: any[] = [];
+  monthwiseExpenses: any[] = [];
+  selectedDate: string = '';
+
   constructor(
     private fb: FormBuilder,
     private expenseService: ExpenseService,
@@ -60,6 +65,13 @@ export class DailyexpensesComponent {
       // amount: [0, Validators.required],
     })
     this.getExpense()
+        this.expenseService.getDaywiseExpenses().subscribe((res:any) => {
+      this.daywiseExpenses = res.data;
+    });
+
+    this.expenseService.getMonthwiseExpenses().subscribe((res:any) => {
+      this.monthwiseExpenses = res.data;
+    });
   }
 
   get form() {
@@ -107,5 +119,19 @@ export class DailyexpensesComponent {
   select(option: string) {
     this.selected = option;
     this.getExpense()
+  }
+  onDateChange() {
+    this.fetchExpenses();
+  }
+  fetchExpenses() {
+    if (!this.selectedDate) return;
+    this.expenseService.getExpensesByDate({"date":this.selectedDate}).subscribe({
+      next: (res) => {
+        this.dateOrders = res.data;
+      },
+      error: (err) => {
+        console.error('Error fetching expenses:', err);
+      }
+    });
   }
 }

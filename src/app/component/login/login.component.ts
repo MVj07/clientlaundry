@@ -19,7 +19,7 @@ export class LoginComponent {
   ){
   this.registerForm = this.fb.group({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(3)]),
   });
   }
 
@@ -31,6 +31,7 @@ export class LoginComponent {
           console.log('Login Success:', res);
           if (res.status){
             this.storageService.setItem('authToken', res.token);
+            this.storageService.setItem('userId', res.user._id);
             this.router.navigate(['/home'])
           }
         },

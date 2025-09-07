@@ -12,6 +12,7 @@ import { CustomerhistoryComponent } from './component/customerhistory/customerhi
 import { DailyexpensesComponent } from './component/dailyexpenses/dailyexpenses.component';
 import { authGuard } from './guards/auth.guard';
 import { InvoiceComponent } from './component/invoice/invoice.component';
+import { SettingsComponent } from './component/settings/settings.component';
 
 const routes: Routes = [
   { path: 'edit-order/:id', component: NeworderComponent },
@@ -26,6 +27,8 @@ const routes: Routes = [
   { path: 'customerhistory', component: CustomerhistoryComponent },
   { path: 'dailyexpenses', component: DailyexpensesComponent },
   { path: 'invoice', component: InvoiceComponent },
+  { path: 'settings', component: SettingsComponent },
+
 ];
 
 @NgModule({

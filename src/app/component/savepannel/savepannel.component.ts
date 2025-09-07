@@ -16,6 +16,7 @@ export class SavepannelComponent {
   page: number = 1;
   limit: number = 5;
   totalItems: number = 0;
+  selectAllChecked = false;
 
   constructor(
     private orderService: newOrderService,
@@ -26,7 +27,7 @@ export class SavepannelComponent {
       next: (res) => {
         console.log(res.data)
         this.orders = res.data
-        this.totalItems = res.meta?.total || 0; 
+        this.totalItems = res.meta?.total || 0;
         this.isLoading = false;
       },
       error: (err) => {
@@ -83,4 +84,22 @@ export class SavepannelComponent {
     this.getOrders();
   }
 
+  toJson(data: any) {
+    return JSON.stringify(data);
+  }
+
+  toggleSelectAll(){
+
+  }
+
+  isSelected(orderId: string): void {
+  // return this.selectedOrders.has(orderId);
+}
+toggleSelection(orderId: string) {
+  // if (this.selectedOrders.has(orderId)) {
+  //   this.selectedOrders.delete(orderId);
+  // } else {
+  //   this.selectedOrders.add(orderId);
+  // }
+}
 }

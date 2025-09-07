@@ -21,6 +21,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { InvoiceComponent } from './component/invoice/invoice.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { SettingsComponent } from './component/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     DeliveryhistoryComponent,
     CustomerhistoryComponent,
     DailyexpensesComponent,
-    InvoiceComponent
+    InvoiceComponent,
+    SettingsComponent
   ],
   imports: [
     NgxPaginationModule,

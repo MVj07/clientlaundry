@@ -1,6 +1,11 @@
 <app-header></app-header>
 <section class="py-5">
+    <div class="d-flex align-items-center justify-content-center gap-2 py-2">
     <h1 class="text-center wd-title">Orders</h1>
+    <button class="btn btn-sm btn-outline-primary" (click)="toggleSelectAll()">
+    {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
+</button>
+</div>
     <div class="">
         <div class="">
             <div class="col-lg-8 offset-lg-2">
@@ -15,6 +20,12 @@
                     </div>
                     <div class="save-boxs mb-3 px-4 py-4"
                         *ngFor="let order of orders |paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <input type="checkbox" [checked]="isSelected(order._id)" (change)="toggleSelection(order._id)">
+                                <!-- <span class="fw-bold">Order ID: {{order._id}}</span> -->
+                            </div>
+                        </div>
                         <div class="row pt-2">
                             <!-- <div class="col">
                             <div><span class="fw-bold">B/No :&nbsp;</span><span>1234</span></div>
@@ -90,9 +101,9 @@
 
 
                         <div class="d-flex justify-content-end gap-2 pt-3">
-                            <!-- <div class="col">
-                                <button class="primaryBtn fN">Edit</button>
-                            </div> -->
+                            <div class="">
+                                <button class="primaryBtn fN w150x" [routerLink]="['/edit-order', order.customerId._id]" [queryParams]="{items: toJson(order.items), kuri: order.kuri, date: order.date, orderId: order._id}">Edit</button>
+                            </div>
                             <div class="">
                                 <button class="primaryBtn fN w150x" (click)="deleteOrder(order._id)">Delete</button>
                             </div>

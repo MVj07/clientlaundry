@@ -12,6 +12,19 @@
               </div> -->
               <h1 class="text-center wd-title">Create Order</h1>
               <div class="col">
+                <label class="form-label required">Bill No</label>
+                <input formControlName="bill" type="text" class="form-control" placeholder="Bill/no" [ngClass]="{
+                                'is-invalid': (submit && form['bill'].errors) || (form['bill'].invalid && (form['bill'].dirty || form['bill'].touched))
+                                }">
+                <div *ngIf="
+                                    (submit && form['bill'].errors) ||
+                                    (form['bill'].invalid &&
+                                    (form['bill'].dirty || form['bill'].touched))
+                                    " class="invalid-feedback">
+                  <span *ngIf="form['bill'].errors?.['required']">Bill is required</span>
+                </div>
+              </div>
+              <div class="col">
                 <label class="form-label required">Kuri</label>
                 <input formControlName="kuri" type="text" class="form-control" placeholder="Kuri/no" [ngClass]="{
                                 'is-invalid': (submit && form['kuri'].errors) || (form['kuri'].invalid && (form['kuri'].dirty || form['kuri'].touched))
@@ -80,54 +93,53 @@
             </div>
           </form>
 
-            <div class="row pt-1">
-              <form [formGroup]="itemForm" (ngSubmit)="addOrder()">
-                <div class="row pt-1">
-                  <label class="required">Choose Items</label><br>
-                  <div class="col-5 h-100">
-                    <select formControlName="items" class="select-items"
-                      [ngClass]="{'is-invalid': itemSubmit && itemControls['items'].invalid}">
-                      <option [ngValue]="null" disabled>Select</option>
-                      <option *ngFor="let item of orditems" [ngValue]="item">{{ item.name }}</option>
-                    </select>
-                    <div *ngIf="itemSubmit && itemControls['items'].invalid" class="invalid-feedback">
-                      Item is required
-                    </div>
-                  </div>
-
-                  <div class="col-2">
-                    <div class="d-flex align-items-center">
-                      <label class="form-label required">Qty:&nbsp;</label>
-                      <input formControlName="quantity" type="number" class="form-control qty-box" placeholder="Qty"
-                        [ngClass]="{'is-invalid': itemSubmit && itemControls['quantity'].invalid}">
-                    </div>
-                    <div *ngIf="itemSubmit && itemControls['quantity'].invalid" class="invalid-feedback">
-                      Valid quantity is required
-                    </div>
-                  </div>
-
-                  <div class="col-3">
-                    <div class="d-flex align-items-center">
-                      <label class="form-label required">Amount:&nbsp;</label>
-                      <input formControlName="amount" type="number" class="form-control" placeholder="Amount"
-                        [ngClass]="{'is-invalid': itemSubmit && itemControls['amount'].invalid}">
-                    </div>
-                    <div *ngIf="itemSubmit && itemControls['amount'].invalid" class="invalid-feedback">
-                      Valid amount is required
-                    </div>
-                  </div>
-
-                  <div class="col-2">
-                    <div class="">
-                      <button type="submit" class="primaryBtn">Add</button>
-                    </div>
+          <div class="row pt-1">
+            <form [formGroup]="itemForm" (ngSubmit)="addOrder()">
+              <div class="row pt-1">
+                <label class="required">Choose Items</label><br>
+                <div class="col-5 h-100">
+                  <select formControlName="items" class="select-items" (change)="onItemsChange($event)">
+                    <option [ngValue]="null" disabled>Select</option>
+                    <option *ngFor="let item of orditems" [ngValue]="item">{{ item.name }}</option>
+                  </select>
+                  <div *ngIf="itemSubmit && itemControls['items'].invalid" class="invalid-feedback">
+                    Item is required
                   </div>
                 </div>
-              </form>
+
+                <div class="col-2">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label required">Qty:&nbsp;</label>
+                    <input formControlName="quantity" type="number" class="form-control qty-box" placeholder="Qty"
+                      [ngClass]="{'is-invalid': itemSubmit && itemControls['quantity'].invalid}">
+                  </div>
+                  <div *ngIf="itemSubmit && itemControls['quantity'].invalid" class="invalid-feedback">
+                    Valid quantity is required
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="d-flex align-items-center">
+                    <label class="form-label required">Amount:&nbsp;</label>
+                    <input formControlName="amount" type="number" class="form-control" placeholder="Amount"
+                      [ngClass]="{'is-invalid': itemSubmit && itemControls['amount'].invalid}">
+                  </div>
+                  <div *ngIf="itemSubmit && itemControls['amount'].invalid" class="invalid-feedback">
+                    Valid amount is required
+                  </div>
+                </div>
+
+                <div class="col-2">
+                  <div class="">
+                    <button type="submit" class="primaryBtn">Add</button>
+                  </div>
+                </div>
+              </div>
+            </form>
 
 
 
-            </div>
+          </div>
 
           <div class="pt-1">
             <label>Items Details:</label>
@@ -145,8 +157,8 @@
                 <tr class="text-center">
                   <td>{{order.name}}</td>
                   <td>{{order.qty}}</td>
-                  <td>{{order.price}}</td>
-                  <td>{{order.qty * order.price}}</td>
+                  <td>{{order.amount}}</td>
+                  <td>{{order.qty * order.amount}}</td>
                   <td> <button class="table-deletebtn" (click)="removeOrder(i)">Delete</button></td>
                 </tr>
               </tbody>
@@ -164,7 +176,8 @@
                   <label class="form-label text-end">Total Amount :</label>
                 </div>
                 <div class="col-7">
-                <input type="text" class="form-control" placeholder="Total amount" [value]="getTotalAmount()" readonly>
+                  <input type="text" class="form-control" placeholder="Total amount" [value]="getTotalAmount()"
+                    readonly>
 
                   <!-- <input type="text" class="form-control" placeholder="Total amount"> -->
                 </div>
