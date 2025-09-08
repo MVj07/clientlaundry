@@ -114,17 +114,19 @@
               <input type="date" class="form-control" [(ngModel)]="selectedDate" (change)="onDateChange()" />
             </div>
             <form (ngSubmit)="submitFilter()" *ngIf="this.selected === 'month' ">
-              <select [(ngModel)]="selectedMonth" name="month" required>
+              <div class="d-flex gap-2">
+              <select class="form-select select-items" [(ngModel)]="selectedMonth" name="month" required>
                 <option value="" disabled>Select Month</option>
                 <option *ngFor="let m of months" [value]="m.value">{{ m.name }}</option>
               </select>
             
-              <select [(ngModel)]="selectedYear" name="year" required>
+              <select class="form-select select-items" [(ngModel)]="selectedYear" name="year" required>
                 <option value="" disabled>Select Year</option>
                 <option *ngFor="let y of years" [value]="y">{{ y }}</option>
               </select>
             
-              <button type="submit">Filter</button>
+              <button type="submit" class="btn btn-primary">Filter</button>
+              </div>
             </form>
             <div class="button-group">
               <!-- <label class="px-2">Select Period:</label> -->
@@ -132,7 +134,8 @@
               <button [class.active]="selected === 'month'" (click)="select('month')">This Month</button>
             </div>
           </div>
-          <table class="table table-striped table-bordered" *ngIf="this.selected === 'today' ">
+          <div *ngIf="this.selected === 'today' ">
+          <table class="table table-striped table-bordered" >
             <thead class="table-dark">
               <tr class="text-center">
                 <th>Item</th>
@@ -151,21 +154,22 @@
                 <td>{{order.quantity * order.unitprice}}</td>
                 <!-- <td> <button class="table-deletebtn" (click)="removeOrder(i)">Delete</button></td> -->
               </tr>
-              <div class="col">
-                <div class="row">
-                  <div class="col-5  d-flex align-items-center justify-content-center">
-                    <label class="form-label text-end">Total Amount :</label>
-                  </div>
-                  <div class="col-7">
-                    <input type="text" class="form-control" placeholder="Total amount" [value]="getTotalAmount()"
-                      readonly>
-  
-                    <!-- <input type="text" class="form-control" placeholder="Total amount"> -->
-                  </div>
-                </div>
-              </div>
             </tbody>
           </table>
+          <div class="col">
+            <div class="row">
+              <div class="col-5  d-flex align-items-center justify-content-center">
+                <label class="form-label text-end">Total Amount :</label>
+              </div>
+              <div class="col-7">
+                <input type="text" class="form-control" placeholder="Total amount" [value]="getTotalAmount()"
+                  readonly>
+
+                <!-- <input type="text" class="form-control" placeholder="Total amount"> -->
+              </div>
+            </div>
+          </div>
+          </div>
           <table class="table table-striped table-bordered" *ngIf="this.selected === 'month' ">
             <thead class="table-dark">
               <tr class="text-center">
@@ -185,21 +189,21 @@
                 <!-- <td>{{order.quantity * order.unitprice}}</td> -->
                 <!-- <td> <button class="table-deletebtn" (click)="removeOrder(i)">Delete</button></td> -->
               </tr>
-              <div class="col" *ngIf="this.selected === 'month' ">
-                <div class="row">
-                  <div class="col-5  d-flex align-items-center justify-content-center">
-                    <label class="form-label text-end">Total Amount :</label>
-                  </div>
-                  <div class="col-7">
-                    <input type="text" class="form-control" placeholder="Total amount" [value]="getTotalAmountmnth()"
-                      readonly>
-  
-                    <!-- <input type="text" class="form-control" placeholder="Total amount"> -->
-                  </div>
-                </div>
-              </div>
             </tbody>
           </table>
+          <div class="col" *ngIf="this.selected === 'month' ">
+            <div class="row">
+              <div class="col-5  d-flex align-items-center justify-content-center">
+                <label class="form-label text-end">Total Amount :</label>
+              </div>
+              <div class="col-7">
+                <input type="text" class="form-control" placeholder="Total amount" [value]="getTotalAmountmnth()"
+                  readonly>
+
+                <!-- <input type="text" class="form-control" placeholder="Total amount"> -->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col">
