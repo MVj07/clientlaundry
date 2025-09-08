@@ -40,6 +40,15 @@
  <li class="nav-item">
           <a class="nav-link fN" aria-current="page" href="/settings">settings</a>
         </li>
+        <li class="nav-item">
+          <input type="text" [(ngModel)]="searchText" placeholder="Search Bill number ">
+          <button (click)="search()">Search</button>
+        </li>
+        <li class="nav-item">
+          <div *ngFor="let order of dateOrdersmnth" >
+            <h4>Search Results: {{order.status}}</h4>
+          </div>
+        </li>
       </ul>
       <div class="d-flex">
         <a class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" (click)="logout()">

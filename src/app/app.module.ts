@@ -22,6 +22,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { InvoiceComponent } from './component/invoice/invoice.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { SettingsComponent } from './component/settings/settings.component';
+import { PackingComponent } from './packing/packing.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { SettingsComponent } from './component/settings/settings.component';
     CustomerhistoryComponent,
     DailyexpensesComponent,
     InvoiceComponent,
-    SettingsComponent
+    SettingsComponent,
+    PackingComponent
   ],
   imports: [
     NgxPaginationModule,
