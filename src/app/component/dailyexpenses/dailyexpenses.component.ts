@@ -17,6 +17,7 @@ export class DailyexpensesComponent {
   itemForm!: FormGroup;
   orders: any[] = [];
   dateOrders: any[] = [];
+  dateOrdersmnth: any[] = [];
   customerId: string | null = null;
   page: number = 1;
   limit: number = 5;
@@ -29,13 +30,51 @@ export class DailyexpensesComponent {
   monthwiseExpenses: any[] = [];
   selectedDate: string = '';
 
+  months = [
+    { name: 'January', value: 1 },
+    { name: 'February', value: 2 },
+    { name: 'March', value: 3 },
+    { name: 'April', value: 4 },
+    { name: 'May', value: 5 },
+    { name: 'June', value: 6 },
+    { name: 'July', value: 7 },
+    { name: 'August', value: 8 },
+    { name: 'September', value: 9 },
+    { name: 'October', value: 10 },
+    { name: 'November', value: 11 },
+    { name: 'December', value: 12 }
+  ];
+
+  years: number[] = [];
+
+  selectedMonth: any;
+  selectedYear: any;
+
   constructor(
     private fb: FormBuilder,
     private expenseService: ExpenseService,
     private route: ActivatedRoute,
     private router: Router,
     private authservice: LoginService
-  ) { }
+  ) {
+    const currentYear = new Date().getFullYear();
+    this.years = Array.from({ length: 20 }, (_, i) => currentYear + i);
+   }
+
+  submitFilter() {
+    const payload = {
+      month: this.selectedMonth,
+      year: this.selectedYear,
+    };
+
+    // this.expenseService.post('http://localhost:3000/api/filter-data', payload)
+    //   .subscribe(response => {
+    //     console.log('Filtered data:', response);
+    //   });
+    this.expenseService.getMonthwiseExpenses(payload).subscribe((res:any) => {
+      this.dateOrdersmnth = res.data;
+    });
+  }
   getExpense(): void {
     this.expenseService.getAllExpense(this.page, this.limit, this.selected).subscribe({
       next: (res) => {
@@ -69,9 +108,9 @@ export class DailyexpensesComponent {
       this.daywiseExpenses = res.data;
     });
 
-    this.expenseService.getMonthwiseExpenses().subscribe((res:any) => {
-      this.monthwiseExpenses = res.data;
-    });
+    // this.expenseService.getMonthwiseExpenses().subscribe((res:any) => {
+    //   this.monthwiseExpenses = res.data;
+    // });
   }
 
   get form() {
@@ -108,7 +147,10 @@ export class DailyexpensesComponent {
   }
 
   getTotalAmount(): number {
-    return this.orders.reduce((sum, order) => sum + (order.quantity * order.unitprice), 0);
+    return this.dateOrders.reduce((sum, order) => sum + (order.quantity * order.unitprice), 0);
+  }
+  getTotalAmountmnth(): number {
+    return this.dateOrdersmnth.reduce((sum, order) => sum + (order.totalAmount), 0);
   }
 
   pageChanged(newPage: number): void {
