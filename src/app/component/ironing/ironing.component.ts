@@ -63,7 +63,7 @@ export class IroningComponent {
       orderId,
       type: 'status',
       kuri,
-      status: 'deliver'
+      status: 'packing'
     }
     this.orderService.updateOrder(data).subscribe({
       next:(res)=>{

@@ -13,6 +13,7 @@ import { DailyexpensesComponent } from './component/dailyexpenses/dailyexpenses.
 import { authGuard } from './guards/auth.guard';
 import { InvoiceComponent } from './component/invoice/invoice.component';
 import { SettingsComponent } from './component/settings/settings.component';
+import { PackingComponent } from './packing/packing.component';
 
 const routes: Routes = [
   { path: 'edit-order/:id', component: NeworderComponent },
@@ -28,7 +29,7 @@ const routes: Routes = [
   { path: 'dailyexpenses', component: DailyexpensesComponent },
   { path: 'invoice', component: InvoiceComponent },
   { path: 'settings', component: SettingsComponent },
-
+  {path: 'packing', component: PackingComponent}
 ];
 
 @NgModule({
