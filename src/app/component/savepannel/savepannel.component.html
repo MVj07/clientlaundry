@@ -1,11 +1,18 @@
 <app-header></app-header>
 <section class="py-5">
-    <div class="d-flex align-items-center justify-content-center gap-2 py-2">
-    <h1 class="text-center wd-title">Orders</h1>
-    <button class="btn btn-sm btn-outline-primary" (click)="toggleSelectAll()">
-    {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
-</button>
-</div>
+    <div class="bg-white col-lg-8 offset-lg-2 mb-2 rounded d-flex justify-content-between align-items-center gap-2 p-3">
+        <div class="d-flex gap-2 align-items-center">
+            <h1 class="wd-title m-0">Orders</h1>
+            <!-- <button class="btn btn-sm btn-outline-primary" (click)="toggleSelectAll()">
+            {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
+        </button> -->
+            <button class="primaryBtn fN py-1 px-2 d-flex gap-1 cursorP" (click)="toggleSelectAll()">
+                <input type="checkbox" class="" [checked]="selectAllChecked" />
+                <small class="text-white">Select All</small>
+            </button>
+        </div>
+        <button *ngIf="selectedOrders.length" class="primaryBtn w150x fN btn-sm py-2 px-2" (click)="bulkUpdate()">Confirm order</button>
+    </div>
     <div class="">
         <div class="">
             <div class="col-lg-8 offset-lg-2">
@@ -22,7 +29,8 @@
                         *ngFor="let order of orders |paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <input type="checkbox" [checked]="isSelected(order._id)" (change)="toggleSelection(order._id)">
+                                <input type="checkbox" [value]="order._id" [checked]="isSelected(order._id)"
+                                    (change)="toggleSelection($event)">
                                 <!-- <span class="fw-bold">Order ID: {{order._id}}</span> -->
                             </div>
                         </div>
@@ -31,11 +39,12 @@
                             <div><span class="fw-bold">B/No :&nbsp;</span><span>1234</span></div>
                         </div> -->
                             <div class="col">
-                                <div><span class="fw-bold">Kuri :&nbsp;</span><span>{{order.kuri}}</span></div>
+                                <div><span class="fw-bold">Kuri :&nbsp;</span><span>{{order.customerId.kuri}}</span>
+                                </div>
                             </div>
                             <div class="col">
-                                <div><span class="fw-bold">Date
-                                        :&nbsp;</span><span>{{order.date | date:"dd-MM-yyyy"}}</span></div>
+                                <div><span class="fw-bold">Bill :&nbsp;</span><span>{{order.bill}}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="row pt-2">
@@ -43,20 +52,26 @@
                                 <div class="">
                                     <span class="fw-bold">Customer Name :
                                         &nbsp;</span><span>{{order.customerId.name}}</span>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div><span class="fw-bold">Date
+                                            :&nbsp;</span><span>{{order.date | date:"dd-MM-yyyy"}}</span></div>
                                 </div>
                             </div>
+                            <div class="row pt-2">
                             <div class="col">
                                 <div class="">
                                     <span class="fw-bold">Phone Number :
                                         &nbsp;</span><span>{{order.customerId.mobile}}</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="address-box pt-2">
+                        <div class="address-box pt-2 col">
                             <p class="fw-bold">Address :</p>
                             <address>
                                 {{order.customerId.address}}
                             </address>
+                        </div>
                         </div>
 
                         <div class="table-container">
@@ -102,14 +117,16 @@
 
                         <div class="d-flex justify-content-end gap-2 pt-3">
                             <div class="">
-                                <button class="primaryBtn fN w150x" [routerLink]="['/edit-order', order.customerId._id]" [queryParams]="{items: toJson(order.items), kuri: order.kuri, date: order.date, orderId: order._id}">Edit</button>
+                                <button class="primaryBtn fN w150x" [routerLink]="['/edit-order', order.customerId._id]"
+                                    [queryParams]="{items: toJson(order.items), kuri: order.customerId.kuri, date: order.date, orderId: order._id, bill: order.bill}">Edit</button>
                             </div>
                             <div class="">
                                 <button class="primaryBtn fN w150x" (click)="deleteOrder(order._id)">Delete</button>
                             </div>
                             <div class="">
                                 <button class="primaryBtn fN w150x"
-                                    (click)="moveWashing(order._id, order.kuri, order.customerId)">Confirm order</button>
+                                    (click)="moveWashing(order._id, order.kuri, order.customerId)">Confirm
+                                    order</button>
                             </div>
                         </div>
                     </div>

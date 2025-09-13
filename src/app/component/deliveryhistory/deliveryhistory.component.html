@@ -1,8 +1,21 @@
 <app-header></app-header>
 <section class="py-5">
-    <h1 class="text-center wd-title">Delivery history</h1>
+    <!-- <h1 class="text-center wd-title">Delivery history</h1> -->
+    <div class="bg-white col-lg-8 offset-lg-2 mb-2 rounded d-flex justify-content-between align-items-center gap-2 p-3">
+        <div class="d-flex gap-2 align-items-center">
+            <h1 class="wd-title m-0">Delivery history</h1>
+            <!-- <button class="btn btn-sm btn-outline-primary" (click)="toggleSelectAll()">
+            {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
+        </button> -->
+            <!-- <button class="btn btn-primary py-1 px-2 d-flex gap-1 cursorP" (click)="toggleSelectAll()">
+                <input type="checkbox" class="" [checked]="selectAllChecked" />
+                <small class="text-white">Select All</small>
+            </button> -->
+        </div>
+        <!-- <button *ngIf="selectedOrders.length" class="btn btn-primary btn-sm py-2 px-2" (click)="bulkUpdate()">Delivered</button> -->
+    </div>
     <div class="">
-        <div class="row">
+        <div class="">
             <div class="col-lg-8 offset-lg-2">
                 <div class="d-flex justify-content-center py-5" *ngIf="isLoading">
                     <div class="spinner-border text-primary" role="status">
@@ -13,17 +26,19 @@
                     <div *ngIf="orders?.length === 0" class="text-center text-muted py-4 fB center">
                         No orders found.
                     </div>
-                    <div class="save-boxs mb-3 px-4 py-4" *ngFor="let order of orders|paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}">
+                    <div class="save-boxs mb-3 px-4 py-4"
+                        *ngFor="let order of orders|paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}">
                         <div class="row pt-2">
                             <!-- <div class="col">
                             <div><span class="fw-bold">B/No :&nbsp;</span><span>1234</span></div>
                         </div> -->
                             <div class="col">
-                                <div><span class="fw-bold">Kuri :&nbsp;</span><span>{{order.kuri}}</span></div>
+                                <div><span class="fw-bold">Kuri :&nbsp;</span><span>{{order.customerId.kuri}}</span>
+                                </div>
                             </div>
                             <div class="col">
-                                <div><span class="fw-bold">Date
-                                        :&nbsp;</span><span>{{order.date|date:"dd-MM-yyyy"}}</span></div>
+                                <div><span class="fw-bold">Bill :&nbsp;</span><span>{{order.bill}}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="row pt-2">
@@ -34,17 +49,23 @@
                                 </div>
                             </div>
                             <div class="col">
+                                <div><span class="fw-bold">Date
+                                        :&nbsp;</span><span>{{order.date | date:"dd-MM-yyyy"}}</span></div>
+                            </div>
+                        </div>
+                        <div class="row pt-2">
+                            <div class="col">
                                 <div class="">
                                     <span class="fw-bold">Phone Number :
                                         &nbsp;</span><span>{{order.customerId.mobile}}</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="address-box pt-2">
-                            <p class="fw-bold">Address :</p>
-                            <address>
-                                {{order.customerId.address}}
-                            </address>
+                            <div class="address-box pt-2 col">
+                                <p class="fw-bold">Address :</p>
+                                <address>
+                                    {{order.customerId.address}}
+                                </address>
+                            </div>
                         </div>
 
                         <div class="table-container">

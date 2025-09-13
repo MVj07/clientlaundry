@@ -73,7 +73,8 @@ export class NeworderComponent {
       this.update = params['orderId']
       this.newOrderForm.patchValue({
         kuri: params['kuri'],
-        date: params['date']
+        date: params['date'],
+        bill: params['bill']
       })
       if (this.update) {
         this.newOrderForm.get('kuri')?.disable();
@@ -81,6 +82,7 @@ export class NeworderComponent {
         this.newOrderForm.get('mobile')?.disable();
         this.newOrderForm.get('address')?.disable();
         this.newOrderForm.get('date')?.disable();
+        this.newOrderForm.get('bill')?.disable();
       }
     })
   }
@@ -92,7 +94,8 @@ export class NeworderComponent {
       this.newOrderForm.patchValue({
         name: data.data.name,
         mobile: data.data.mobile,
-        address: data.data.address
+        address: data.data.address,
+        kuri: data.data.kuri
       });
     });
   }

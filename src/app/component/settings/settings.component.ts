@@ -46,7 +46,7 @@ export class SettingsComponent {
 
   onSubmit() {
     if (!this.passwordsMatch()) {
-      this.error = 'New passwords do not match';
+      this.error = 'New passwords does not match';
       return;
     }
 
@@ -64,11 +64,17 @@ export class SettingsComponent {
         console.log('Login Success:', res);
         if (res) {
           alert(res.message)
+          this.passwords = {
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+          }
+          this.loading = false
         }
       },
       error: (err) => {
         alert(err.error.message)
-
+        this.loading = false
       }
     });
   }
@@ -88,7 +94,7 @@ export class SettingsComponent {
     };
     // this.additems.push(orderData)
     this.orderService.createItems(Array(orderData)).subscribe({
-      next: (res)=>{
+      next: (res) => {
         this.orderForm.patchValue({
           name: "",
           price: 0
@@ -106,7 +112,7 @@ export class SettingsComponent {
 
   deleteItem(index: number) {
     // this.additems.splice(index, 1);
-    this.orderService.deleteItem({itemId: index}).subscribe({
+    this.orderService.deleteItem({ itemId: index }).subscribe({
       next: (res) => {
         if (res) {
           this.listItems()
@@ -124,7 +130,7 @@ export class SettingsComponent {
       next: (res) => {
         if (res) {
           // alert(res.message)
-          this.additems=res.data
+          this.additems = res.data
         }
       },
       error: (err) => {

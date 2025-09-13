@@ -15,6 +15,8 @@ export class InvoiceComponent {
   page: number = 1;
   limit: number = 5;
   totalItems: number = 0;
+  selectAllChecked = false;
+  selectedOrders: any = []
   constructor(
     private orderService: newOrderService,
     private authservice: LoginService
@@ -80,6 +82,42 @@ export class InvoiceComponent {
   pageChanged(newPage: number): void {
     this.page = newPage;
     this.getOrders();
+  }
+
+  bulkUpdate() {
+    this.orderService.bulkUpdate(this.selectedOrders, "delivered").subscribe({
+      next: (res) => {
+        this.getOrders()
+        this.selectedOrders = []
+        alert('Confirmed orders')
+      },
+      error: (err) => {
+        alert('Order update failed')
+        return;
+      }
+    })
+  }
+  isSelected(orderId: string): boolean {
+    return this.selectedOrders.includes(orderId);
+  }
+  toggleSelection(event: any) {
+    if (event.target.checked) {
+      this.selectedOrders.push(event.target.value)
+      if (this.selectedOrders.length === this.orders.length) {
+        this.selectAllChecked = true
+      }
+    } else {
+      this.selectAllChecked = false
+      this.selectedOrders.splice(this.selectedOrders.indexOf(event.target.value), 1)
+    }
+  }
+  toggleSelectAll() {
+    this.selectAllChecked = !this.selectAllChecked
+    if (this.selectAllChecked) {
+      this.selectedOrders = this.orders.map((item: any) => item._id)
+    } else {
+      this.selectedOrders = []
+    }
   }
 
 }

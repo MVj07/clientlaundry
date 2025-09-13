@@ -6,8 +6,8 @@ import { StorageService } from '../storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-  private apiUrl = 'https://laundry-fju0.onrender.com/login';
-  // private apiUrl = 'http://localhost:5000/login';
+  // private apiUrl = 'https://laundry-fju0.onrender.com/login';
+  private apiUrl = 'http://localhost:5000/login';
 
   constructor(private http: HttpClient, private router: Router, private storageService: StorageService) { }
 

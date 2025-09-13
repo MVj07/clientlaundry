@@ -40,12 +40,21 @@
         <li class="nav-item">
           <a class="nav-link fN" aria-current="page" href="/customerhistory">Customer History</a>
         </li>
- <li class="nav-item">
+ <!-- <li class="nav-item">
           <a class="nav-link fN" aria-current="page" href="/settings">settings</a>
-        </li>
+        </li> -->
         <li class="nav-item">
-          <input type="text" [(ngModel)]="searchText" placeholder="Search Bill number ">
-          <button (click)="search()">Search</button>
+          <div class="d-flex align-items-center justify-content-between gap-2">
+            <div class="">
+              <form (ngSubmit)="search()">
+                <input type="text" name="searchText" class="form-control" [(ngModel)]="searchText" placeholder="Search Bill number ">
+                <!-- <button class="btn btn-sm btn-primary mt-1 border" (click)="search()">Search</button> -->
+              </form>
+            </div>
+            <div class="border p-1 rounded" *ngIf="dateOrdersmnth">
+              <span>{{dateOrdersmnth.status===''?"Save pannel":dateOrdersmnth.status}}</span>
+            </div>
+          </div>
         </li>
         <li class="nav-item">
           <div *ngFor="let order of dateOrdersmnth" >
@@ -53,11 +62,24 @@
           </div>
         </li>
       </ul>
-      <div class="d-flex">
+      <div class="d-flex align-items-center">
+        <!-- User Icon with Dropdown -->
+        <div class="dropdown">
+          <button class="btn btn-light border rounded-circle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-4"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+            <li><a class="dropdown-item" href="/settings"><i class="bi bi-gear me-2"></i> Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- <div class="d-flex">
         <a class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" (click)="logout()">
           <i class="bi bi-box-arrow-right me-1"></i> Logout
         </a>
-      </div>
+      </div> -->
       <!-- <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
         <button class="btn btn-outline-success" type="submit">Search</button>

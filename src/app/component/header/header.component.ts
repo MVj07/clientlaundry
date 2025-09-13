@@ -19,6 +19,7 @@ export class HeaderComponent {
   ){}
 
   search() {
+    // event.preventDefault();
     const payload = { search: this.searchText };
   
     this.orderService.overallsearch(payload).subscribe((res:any) => {

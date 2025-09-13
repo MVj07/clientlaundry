@@ -5,8 +5,8 @@ import { StorageService } from '../storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class newOrderService {
-    private apiUrl = 'https://laundry-fju0.onrender.com'; // Change to your actual API URL
-    // private apiUrl = 'http://localhost:5000'
+    // private apiUrl = 'https://laundry-fju0.onrender.com'; // Change to your actual API URL
+    private apiUrl = 'http://localhost:5000'
 
     constructor(private http: HttpClient, private storageService: StorageService) { }
 
@@ -50,6 +50,15 @@ export class newOrderService {
         return this.http.put(this.apiUrl+'/order', data, {headers})
     }
 
+    bulkUpdate(data: any, status: string):Observable<any>{
+        let payload={orderIds: data, status}
+        const token = this.storageService.getItem('authToken');
+        const headers = {
+            Authorization: `Bearer ${token}`
+        }
+        return this.http.put(this.apiUrl+'/order/bulkUpdate', payload, {headers})
+    }
+
   changePassword(data:any): Observable<any>{
         const token = this.storageService.getItem('authToken'); // or sessionStorage
      const headers = {
@@ -77,6 +86,6 @@ export class newOrderService {
      const headers = {
             Authorization: `Bearer ${token}`
         };
-    return this.http.post(this.apiUrl + '/items/search', data,{headers});
+    return this.http.post(this.apiUrl + '/order/search', data,{headers});
   }
 }
