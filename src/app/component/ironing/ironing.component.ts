@@ -11,7 +11,7 @@ export class IroningComponent {
   orders: any
   status: any = 'ironing'
   isLoading = true;
-  p:number=1
+  p: number = 1
   page: number = 1;
   limit: number = 5;
   totalItems: number = 0;
@@ -61,18 +61,18 @@ export class IroningComponent {
 
   moveWashing(orderId: string, kuri: any, customerId: any) {
     const data = {
-      customerId:customerId._id,
+      customerId: customerId._id,
       orderId,
       type: 'status',
       kuri,
       status: 'packing'
     }
     this.orderService.updateOrder(data).subscribe({
-      next:(res)=>{
+      next: (res) => {
         this.getOrders()
         alert('Order updated successfully')
       },
-      error: (err)=>{
+      error: (err) => {
         alert('Order update failed')
         return;
       }
@@ -112,11 +112,13 @@ export class IroningComponent {
     }
   }
   toggleSelectAll() {
-    this.selectAllChecked = !this.selectAllChecked
-    if (this.selectAllChecked) {
-      this.selectedOrders = this.orders.map((item: any) => item._id)
-    } else {
-      this.selectedOrders = []
+    if (this.orders?.length) {
+      this.selectAllChecked = !this.selectAllChecked
+      if (this.selectAllChecked) {
+        this.selectedOrders = this.orders.map((item: any) => item._id)
+      } else {
+        this.selectedOrders = []
+      }
     }
   }
 

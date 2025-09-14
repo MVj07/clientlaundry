@@ -8,10 +8,10 @@ import { LoginService } from '../services/login/login.service';
   styleUrl: './packing.component.css'
 })
 export class PackingComponent {
-orders: any
+  orders: any
   status: any = 'packing'
   isLoading = true;
-  p:number=1
+  p: number = 1
   page: number = 1;
   limit: number = 5;
   totalItems: number = 0;
@@ -26,7 +26,7 @@ orders: any
       next: (res) => {
         console.log(res.data)
         this.orders = res.data
-        this.totalItems = res.meta?.total || 0; 
+        this.totalItems = res.meta?.total || 0;
         this.isLoading = false;
       },
       error: (err) => {
@@ -112,11 +112,13 @@ orders: any
     }
   }
   toggleSelectAll() {
-    this.selectAllChecked = !this.selectAllChecked
-    if (this.selectAllChecked) {
-      this.selectedOrders = this.orders.map((item: any) => item._id)
-    } else {
-      this.selectedOrders = []
+    if (this.orders?.length) {
+      this.selectAllChecked = !this.selectAllChecked
+      if (this.selectAllChecked) {
+        this.selectedOrders = this.orders.map((item: any) => item._id)
+      } else {
+        this.selectedOrders = []
+      }
     }
   }
 

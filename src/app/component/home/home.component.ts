@@ -112,11 +112,13 @@ export class HomeComponent {
     }
   }
   toggleSelectAll() {
+    if (this.orders?.length){
     this.selectAllChecked = !this.selectAllChecked
     if (this.selectAllChecked) {
       this.selectedOrders = this.orders.map((item: any) => item._id)
     } else {
       this.selectedOrders = []
+    }
     }
   }
 

@@ -12,7 +12,7 @@ export class DeliveryComponent {
   orders: any
   status: any = 'deliver'
   isLoading = true;
-  p:number=1
+  p: number = 1
   page: number = 1;
   limit: number = 5;
   totalItems: number = 0;
@@ -113,11 +113,13 @@ export class DeliveryComponent {
     }
   }
   toggleSelectAll() {
-    this.selectAllChecked = !this.selectAllChecked
-    if (this.selectAllChecked) {
-      this.selectedOrders = this.orders.map((item: any) => item._id)
-    } else {
-      this.selectedOrders = []
+    if (this.orders?.length) {
+      this.selectAllChecked = !this.selectAllChecked
+      if (this.selectAllChecked) {
+        this.selectedOrders = this.orders.map((item: any) => item._id)
+      } else {
+        this.selectedOrders = []
+      }
     }
   }
 

@@ -7,12 +7,12 @@
             <!-- <button class="btn btn-sm btn-outline-primary" (click)="toggleSelectAll()">
             {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
         </button> -->
-            <button class="primaryBtn w150x fN py-1 px-2 d-flex gap-1 cursorP" (click)="toggleSelectAll()">
+            <div class="primaryBtn w150x fN py-1 px-2 d-flex gap-1 cursorP" (click)="toggleSelectAll()">
                 <input type="checkbox" class="" [checked]="selectAllChecked" />
                 <small class="text-white">Select All</small>
-            </button>
+            </div>
         </div>
-        <button *ngIf="selectedOrders.length" class="primaryBtn w150x fN btn-sm py-2 px-2" (click)="bulkUpdate()">Move to
+        <button *ngIf="selectedOrders?.length" class="primaryBtn w150x fN btn-sm py-2 px-2" (click)="bulkUpdate()">Move to
             washing</button>
     </div>
     <div class="">
