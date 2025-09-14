@@ -51,10 +51,10 @@ export class SavepannelComponent {
     this.orderService.deleteOrder(id).subscribe({
       next: (res) => {
         this.getOrders()
-        alert('Order deleted successfully')
+        window.alert('Order deleted successfully')
       },
       error: (err) => {
-        alert('Order deleted failed')
+        window.alert('Order deleted failed')
         return;
       },
     })
@@ -71,10 +71,10 @@ export class SavepannelComponent {
     this.orderService.updateOrder(data).subscribe({
       next: (res) => {
         this.getOrders()
-        alert('Order updated successfully')
+        window.alert('Order updated successfully')
       },
       error: (err) => {
-        alert('Order update failed')
+        window.alert('Order update failed')
         return;
       }
     })
@@ -85,10 +85,10 @@ export class SavepannelComponent {
       next: (res)=>{
         this.getOrders()
         this.selectedOrders=[]
-        alert('Confirmed orders')
+        window.alert('Confirmed orders')
       },
       error: (err) => {
-        alert('Order update failed')
+        window.alert('Order update failed')
         return;
       }
     })
