@@ -1,0 +1,127 @@
+<div class="layout">
+
+    <!-- LEFT SIDE -->
+    <div class="left-side">
+        <div class="left-content">
+            <h1 class="app-title">LaundryPro SaaS</h1>
+            <p class="app-tagline">Simple, powerful laundry business management.</p>
+            <img src="assets/laundry-illustration.png" class="illustration">
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right-side">
+
+        <!-- SLIDER -->
+        <div class="slider" [class.step2]="currentStep === 2">
+
+            <!-- STEP 1 -->
+            <div class="slide step-1">
+                <h2 class="title">Set Up Your Laundry Business</h2>
+                <p class="subtitle">Enter your shop details</p>
+
+                <form [formGroup]="businessForm">
+                    <!-- your form fields here -->
+                    <div class="row">
+                        <div class="field">
+                            <label class="form-label required">Business Name </label>
+                            <input formControlName="business_name" class="form-control" placeholder="Royal Dry Clean"
+                                [ngClass]="{
+                                'is-invalid': (businesssubmit && form['business_name'].errors) || (form['business_name'].invalid && (form['business_name'].dirty || form['business_name'].touched))
+                            }" />
+                            <div *ngIf=" (businesssubmit && form['business_name'].errors) || (form['business_name'].invalid && (form['business_name'].dirty || form['business_name'].touched)) "
+                                class="invalid-feedback"> <span
+                                    *ngIf="form['business_name'].errors?.['required']">Business
+                                    name is required</span> </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="form-label required">Owner Name</label>
+                            <input formControlName="owner_name" placeholder="Ravi Kumar" class="form-control" [ngClass]="{
+                                'is-invalid': (businesssubmit && form['owner_name'].errors) || (form['owner_name'].invalid && (form['owner_name'].dirty || form['owner_name'].touched))
+                            }" />
+                            <div *ngIf=" (businesssubmit && form['owner_name'].errors) || (form['owner_name'].invalid && (form['owner_name'].dirty || form['owner_name'].touched)) "
+                                class="invalid-feedback"> <span *ngIf="form['owner_name'].errors?.['required']">Owner
+                                    name
+                                    is required</span> </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="field">
+                            <label class="form-label required">Mobile *</label>
+                            <input formControlName="mobile" placeholder="9876543210" class="form-control" [ngClass]="{
+                                'is-invalid': (businesssubmit && form['mobile'].errors) || (form['mobile'].invalid && (form['mobile'].dirty || form['mobile'].touched))
+                            }" />
+                            <div *ngIf=" (businesssubmit && form['mobile'].errors) || (form['mobile'].invalid && (form['mobile'].dirty || form['mobile'].touched)) "
+                                class="invalid-feedback"> <span *ngIf="form['mobile'].errors?.['required']">Mobile is
+                                    required</span> </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="form-label required">City *</label>
+                            <input formControlName="city" placeholder="Madurai" class="form-control" [ngClass]="{
+                                'is-invalid': (businesssubmit && form['city'].errors) || (form['city'].invalid && (form['city'].dirty || form['city'].touched))
+                            }" />
+                            <div *ngIf=" (businesssubmit && form['city'].errors) || (form['city'].invalid && (form['city'].dirty || form['city'].touched)) "
+                                class="invalid-feedback"> <span *ngIf="form['city'].errors?.['required']">City is
+                                    required</span> </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="field full">
+                            <label class="form-label required">Full Address *</label>
+                            <textarea formControlName="address" rows="2" placeholder="No. 12, Anna Nagar, Madurai"
+                                class="form-control"></textarea>
+                            <div *ngIf=" (businesssubmit && form['address'].errors) || (form['address'].invalid && (form['address'].dirty || form['address'].touched)) "
+                                class="invalid-feedback"> <span *ngIf="form['address'].errors?.['required']">Address is
+                                    required</span> </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="field">
+                            <label class="form-label">GST Number (optional)</label>
+                            <input formControlName="gst_no" placeholder="GST12345X9" class="form-control" />
+                        </div>
+
+                        <div class="field">
+                            <label class="form-label">Logo Upload (optional)</label>
+                            <input type="file" (change)="onFileSelected($event)" class="form-control" />
+                        </div>
+                    </div>
+                    <button type="button" class="primaryBtn mt-3" (click)="goNext()">
+                        Next →
+                    </button>
+                </form>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="slide step-2">
+                <h2 class="title">Setup Your Workflow</h2>
+                <p class="subtitle">Define how orders move</p>
+
+                <!-- <div class="workflow-box" *ngFor="let wf of workflows; let i = index">
+                    <input class="form-control" [(ngModel)]="wf.name" placeholder="Step name">
+                    <input class="form-control mt-2" [(ngModel)]="wf.identifier" placeholder="Identifier">
+                </div> -->
+                <div *ngFor="let step of steps; let i = index; trackBy: trackByIndex" class="p-2">
+                    <div class="d-flex">
+                        <input [(ngModel)]="steps[i]" placeholder="Step name" class="form-control" />
+                        <span *ngIf="i!==0">
+                            <button (click)="Remove(i)" class="btn btn-danger">-</button>
+                        </span>
+                    </div>
+                </div>
+                <button (click)="addStep()" class="btn">+ Add Step</button>
+                <!-- <button (click)="save()">Save Workflow</button> -->
+
+                <button class="btn btn-light mt-3" (click)="goBack()">← Back</button>
+                <button class="btn primaryBtn" (click)="submit()">Save</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

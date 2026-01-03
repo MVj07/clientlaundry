@@ -40,10 +40,10 @@
                             <!-- <div class="col">
                             <div><span class="fw-bold">B/No :&nbsp;</span><span>1234</span></div>
                         </div> -->
-                            <div class="col">
+                            <!-- <div class="col">
                                 <div><span class="fw-bold">Kuri :&nbsp;</span><span>{{order.customerId.kuri}}</span>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col">
                                 <div><span class="fw-bold">Bill :&nbsp;</span><span>{{order.bill}}</span>
                                 </div>
@@ -125,8 +125,8 @@
                                 <button class="primaryBtn fN w150x" (click)="deleteOrder(order._id)">Delete</button>
                             </div>
                             <div class="">
-                                <button class="primaryBtn fN w150x"
-                                    (click)="moveWashing(order._id, order.kuri, order.customerId)">Move to
+                                <button class="primaryBtn fN px-2"
+                                    (click)="moveWashing(order._id, order.kuri, order.customerId)">Generate Bill & Move to
                                     delivery</button>
                             </div>
                         </div>

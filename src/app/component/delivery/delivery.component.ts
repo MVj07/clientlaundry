@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
 import { authService } from '../../services/authenticate/auth.service';
 import { LoginService } from '../../services/login/login.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-delivery',
@@ -20,9 +21,10 @@ export class DeliveryComponent {
   selectedOrders: any = []
   constructor(
     private orderService: newOrderService,
-    private authservice: LoginService
+    private authservice: LoginService,
+    private toast: ToastrService
   ) { }
-  getOrders() {
+  async getOrders() {
     this.orderService.getAllOrders(this.status, this.page, this.limit).subscribe({
       next: (res) => {
         console.log(res.data)
@@ -38,6 +40,7 @@ export class DeliveryComponent {
         //   this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
         //   return;
         // }
+        return;
       },
     })
   }
@@ -51,10 +54,12 @@ export class DeliveryComponent {
     this.orderService.deleteOrder(id).subscribe({
       next: (res) => {
         this.getOrders()
-        alert('Order deleted successfully')
+        this.toast.success('Order deleted successfully')
+        // window.alert('Order deleted successfully')
       },
       error: (err) => {
-        alert('Order deleted failed')
+        this.toast.error('Order deleted failed')
+        // window.alert('Order deleted failed')
         return;
       },
     })
@@ -71,10 +76,12 @@ export class DeliveryComponent {
     this.orderService.updateOrder(data).subscribe({
       next: (res) => {
         this.getOrders()
-        alert('Order updated successfully')
+        this.toast.success('Order updated successfully')
+        // alert('Order updated successfully')
       },
       error: (err) => {
-        alert('Order update failed')
+        this.toast.error('Order update failed')
+        // alert('Order update failed')
         return;
       }
     })
@@ -90,10 +97,12 @@ export class DeliveryComponent {
       next: (res) => {
         this.getOrders()
         this.selectedOrders = []
-        alert('Confirmed orders')
+        this.toast.success('Confirmed orders')
+        // alert('Confirmed orders')
       },
       error: (err) => {
-        alert('Order update failed')
+        this.toast.error('Order update failed')
+        // alert('Order update failed')
         return;
       }
     })

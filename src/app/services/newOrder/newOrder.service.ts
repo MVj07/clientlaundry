@@ -5,8 +5,8 @@ import { StorageService } from '../storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class newOrderService {
-    private apiUrl = 'https://laundry-fju0.onrender.com'; // Change to your actual API URL
-    // private apiUrl = 'http://localhost:5000'
+    // private apiUrl = 'https://laundry-fju0.onrender.com'; // Change to your actual API URL
+    private apiUrl = 'http://localhost:5000'
 
     constructor(private http: HttpClient, private storageService: StorageService) { }
 
@@ -87,5 +87,13 @@ export class newOrderService {
             Authorization: `Bearer ${token}`
         };
     return this.http.post(this.apiUrl + '/order/search', data,{headers});
+  }
+  
+  getBill(data: any): Observable<any>{
+    const token = this.storageService.getItem('authToken'); // or sessionStorage
+     const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        return this.http.post(this.apiUrl + `/order/generate-invoice/${data.orderId}`, {headers}, {responseType: 'blob'})
   }
 }

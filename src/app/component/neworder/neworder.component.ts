@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../../services/customer/customer.service';
 import { LoginService } from '../../services/login/login.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-neworder',
@@ -26,12 +27,13 @@ export class NeworderComponent {
     private customerService: CustomerService,
     private route: ActivatedRoute,
     private router: Router,
-    private authservice: LoginService
+    private authservice: LoginService,
+    private toaster: ToastrService
   ) { }
   ngOnInit(): void {
     this.newOrderForm = this.fb.group({
-      kuri: ['', Validators.required],
-      bill: ['', Validators.required],
+      // kuri: ['', Validators.required],
+      // bill: ['', Validators.required],
       date: ['', Validators.required],
       name: ['', Validators.required],
       mobile: ['', Validators.required],
@@ -123,7 +125,7 @@ export class NeworderComponent {
       customerName: formValue.name,
       phoneNumber: formValue.mobile,
       address: formValue.address,
-      status: '',
+      status: 'confirm',
       type: 'item',
       items: this.orders.map(order => ({
         _id: order.id,
@@ -140,10 +142,12 @@ export class NeworderComponent {
           this.itemForm.reset();
           this.submit = false;
           this.orders = []
-          alert('Order successfully')
+          // alert('Order successfully')
+          this.toaster.success('Order success', 'success')
         },
         error: (err) => {
-          alert('Order failed')
+          // alert('Order failed')
+          this.toaster.error('Order failed')
           return;
         },
       })
@@ -155,11 +159,13 @@ export class NeworderComponent {
           this.itemForm.reset();
           this.submit = false;
           this.orders = []
-          alert(res.message)
+          // alert(res.message)
+          this.toaster.success(res.message)
           this.router.navigate(['/savepannel']);
         },
         error: (err) => {
-          alert('Order update failed')
+          // alert('Order update failed')
+          this.toaster.error('Order update failed')
           return;
         },
       })

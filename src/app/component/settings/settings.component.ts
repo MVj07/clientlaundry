@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-settings',
@@ -26,6 +27,7 @@ export class SettingsComponent {
   constructor(
     private orderService: newOrderService,
     private fb: FormBuilder,
+    private toast: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -63,7 +65,8 @@ export class SettingsComponent {
       next: (res) => {
         console.log('Login Success:', res);
         if (res) {
-          alert(res.message)
+          // alert(res.message)
+          this.toast.success(res.message)
           this.passwords = {
             currentPassword: '',
             newPassword: '',
@@ -73,7 +76,8 @@ export class SettingsComponent {
         }
       },
       error: (err) => {
-        alert(err.error.message)
+        // alert(err.error.message)
+        this.toast.error(err.error.message)
         this.loading = false
       }
     });
@@ -101,11 +105,13 @@ export class SettingsComponent {
         })
         if (res) {
           this.listItems()
-          alert(res.message)
+          // alert(res.message)
+          this.toast.success(res.message)
         }
       },
       error: (err) => {
-        alert(err.error.message)
+        // alert(err.error.message)
+        this.toast.error(err.error.message)
       }
     })
   }
@@ -116,11 +122,13 @@ export class SettingsComponent {
       next: (res) => {
         if (res) {
           this.listItems()
-          alert(res.message)
+          // alert(res.message)
+          this.toast.success(res.message)
         }
       },
       error: (err) => {
-        alert(err.error.message)
+        // alert(err.error.message)
+        this.toast.error(err.error.message)
       }
     })
   }
@@ -134,7 +142,8 @@ export class SettingsComponent {
         }
       },
       error: (err) => {
-        alert(err.error.message)
+        // alert(err.error.message)
+        this.toast.error(err.error.message)
       }
     })
   }

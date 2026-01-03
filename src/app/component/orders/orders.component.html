@@ -1,0 +1,160 @@
+<!-- <p>orders works!</p> -->
+<app-header></app-header>
+<button *ngIf="showCreateWorkflow" class="btn btn-primary position-absolute top-50" style="right: 45%;"
+    routerLink="/create-workflow">
+    Create Workflow
+</button>
+
+<div class="container-fluid kanban-container" *ngIf="!showCreateWorkflow">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Orders</h2>
+
+        <div class="search-box">
+            <input type="text" placeholder="Search orders..." class="form-control" />
+        </div>
+    </div>
+
+    <!-- Kanban Board -->
+    <div class="kanban-board">
+
+        <!-- Column -->
+        <div class="kanban-column" *ngFor="let workflow of workflows; let i = index">
+            <h5 class="column-title">{{ workflow.name }}</h5>
+            <hr />
+
+            <div cdkDropList [cdkDropListDisabled]="true" [cdkDropListData]="getOrdersByStatus(workflow.indentifier)"
+                class="kanban-list">
+                <div class="kanban-card" *ngFor="let order of getOrdersByStatus(workflow.indentifier)" cdkDrag>
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between">
+                        <div class="fw-bold">#{{ order.bill }}</div>
+                        <!-- <div class="border p-2 rounded cursorP" (click)="deleteOrder(order._id)">
+                            🗑
+                        </div> -->
+                        <div class="d-flex gap-1">
+                        <div class="border p-2 rounded cursorP" style="line-height: 10px;"
+                            (click)="deleteOrder(order._id)">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div *ngIf="i==workflows.length-1" class="border p-2 rounded cursorP" style="line-height: 10px;">
+                            <!-- ↓ -->
+                            <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" (click)="generateInvoice(order._id, order.customerId._id)"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.5"
+                                    d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15"
+                                    stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M12 3V16M12 16L16 11.625M12 16L8 11.625" stroke="#1C274C" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="text-muted small">
+                        {{ order.date | date: 'dd-MM-yyyy' }}
+                    </div>
+
+                    <div class="text-muted small">Name: {{ order.customerId.name }}</div>
+                    <div class="text-muted small">Mobile: {{ order.customerId.mobile }}</div>
+
+                    <!-- Items -->
+                    <div class="text-muted small mt-1">
+                        Items:
+                        <ul class="m-0 px-3">
+                            <li *ngFor="let item of order.items" class="d-flex justify-content-between">
+                                <span>{{ item.name }}</span>
+                                <span>x{{ item.qty }}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="fw-semibold mt-2 text-end">
+                        Total: ₹{{ order.billAmount }}
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-flex gap-1 mt-2">
+                        <button class="btn btn-sm btn-danger w-100" *ngIf="i > 0"
+                            (click)="moveWashing(order._id, 0, order.customerId._id, workflows[i - 1].indentifier)">
+                            Previous
+                        </button>
+
+                        <button class="btn btn-sm btn-primary w-100" *ngIf="i < workflows.length - 1"
+                            (click)="moveWashing(order._id, 0, order.customerId._id, workflows[i + 1].indentifier)">
+                            Next
+                        </button>
+                        <button class="btn btn-sm btn-primary w-100" *ngIf="i == workflows.length - 1"
+                            (click)="moveWashing(order._id, 0, order.customerId._id, 'delivered')">
+                            Finish
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="kanban-column" *ngFor="let workflow of workflows">
+            <h5 class="column-title">{{ workflow.name }}</h5>
+            <hr />
+
+            <div cdkDropList [cdkDropListDisabled]="true" [cdkDropListData]="orders" class="kanban-list"
+                (cdkDropListDropped)="onDrop($event, 'washing')">
+                <ng-container *ngFor="let order of orders">
+                    <div class="kanban-card" *ngIf="order.status === workflow.indentifier" cdkDrag>
+                        <div class="d-flex justify-content-between">
+                            <div class="fw-bold">{{ order.bill }}</div>
+                            <div class="border p-2 rounded cursorP" (click)="deleteOrder(order._id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z">
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-muted small">Order Date: {{ order.date | date: "dd-MM-yyyy" }}</div>
+                        <div class="text-muted small">
+                            Name:
+                            {{ order.customerId.name }}
+                        </div>
+                        <div class="text-muted small">
+                            Mobile:
+                            {{ order.customerId.mobile }}
+                        </div>
+                        <div class="text-muted small">
+                            Items:
+                            <ul class="m-0 px-3" *ngFor="let item of order.items">
+                                <li style="list-style-type: none;" class="d-flex justify-content-between">
+                                    <span>{{item.name}}</span>
+                                    <span>- {{item.qty}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="fw-semibold mt-2 text-end">Total: ₹{{ order.billAmount }}</div>
+                        <div class="d-flex justify-content-between gap-1">
+                            <button class="btn btn-sm btn-danger mt-2 w-100"
+                                (click)="moveWashing(order._id, '1', order.customerId._id, 'confirm')">
+                                Previous
+                            </button>
+                            <button class="btn btn-sm btn-primary mt-2 w-100"
+                                (click)="moveWashing(order._id, '1', order.customerId._id, 'ironing')">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+
+            </div>
+        </div> -->
+
+
+
+    </div>
+</div>

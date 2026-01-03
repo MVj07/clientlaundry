@@ -6,13 +6,17 @@ import { StorageService } from '../storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-  private apiUrl = 'https://laundry-fju0.onrender.com/login';
-  // private apiUrl = 'http://localhost:5000/login';
+  // private apiUrl = 'https://laundry-fju0.onrender.com/login';
+  private apiUrl = 'http://localhost:5000';
 
   constructor(private http: HttpClient, private router: Router, private storageService: StorageService) { }
+  
+  signup(data: any): Observable<any>{
+   return this.http.post(this.apiUrl+'/create', data) 
+  }
 
   loginUser(data: any): Observable<any> {
-    return this.http.post(this.apiUrl, data);
+    return this.http.post(this.apiUrl+'/login', data);
   }
 
   logOut(): void {

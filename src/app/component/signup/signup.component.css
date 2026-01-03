@@ -1,0 +1,45 @@
+section {
+  height: 100vh;
+}
+
+.login-container {
+  max-width: 850px;
+  width: 100%;
+}
+
+.login-card {
+  display: flex;
+  background-color: #fff;
+}
+
+.login-left {
+  flex: 1;
+  background: #253a54;
+  color: #fff;
+}
+
+.brand-text {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.login-form {
+  flex: 1;
+  background: #f9f9f9;
+}
+
+.form-control {
+  border-radius: 12px;
+  border: 1px solid #d1d1d1;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #1976d2, #42a5f5);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #1565c0, #1e88e5);
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+}

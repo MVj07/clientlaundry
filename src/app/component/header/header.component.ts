@@ -11,12 +11,18 @@ import { newOrderService } from '../../services/newOrder/newOrder.service';
 export class HeaderComponent {
 
   searchText: string = '';
-  dateOrdersmnth :any
+  dateOrdersmnth :any;
+  storeName: any = 'Laundry'
   constructor(
     private router: Router,
     private storageService: StorageService,
     private orderService: newOrderService
   ){}
+
+  ngOnInit(){
+    const store=this.storageService.getItem('store')
+    this.storeName=store
+  }
 
   search() {
     // event.preventDefault();

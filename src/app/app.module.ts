@@ -23,6 +23,13 @@ import { InvoiceComponent } from './component/invoice/invoice.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { SettingsComponent } from './component/settings/settings.component';
 import { PackingComponent } from './packing/packing.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { BusinessSetupComponent } from './app/business-setup/business-setup.component';
+import { SignupComponent } from './component/signup/signup.component';
+import { OrdersComponent } from './component/orders/orders.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { WorkflowComponent } from './component/workflow/workflow.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +47,11 @@ import { PackingComponent } from './packing/packing.component';
     DailyexpensesComponent,
     InvoiceComponent,
     SettingsComponent,
-    PackingComponent
+    PackingComponent,
+    BusinessSetupComponent,
+    SignupComponent,
+    OrdersComponent,
+    WorkflowComponent
   ],
   imports: [
     NgxPaginationModule,
@@ -50,6 +61,13 @@ import { PackingComponent } from './packing/packing.component';
     ReactiveFormsModule,
     RouterLink,
     HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true
+    }),
+    DragDropModule
   ],
   providers: [
     provideClientHydration(),

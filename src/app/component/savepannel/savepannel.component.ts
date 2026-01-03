@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
 import { authService } from '../../services/authenticate/auth.service';
 import { LoginService } from '../../services/login/login.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-savepannel',
@@ -10,7 +11,7 @@ import { LoginService } from '../../services/login/login.service';
 })
 export class SavepannelComponent {
   orders: any
-  status: any = ''
+  status: any = 'confirm'
   isLoading = true;
   p: number = 1;
   page: number = 1;
@@ -21,7 +22,8 @@ export class SavepannelComponent {
 
   constructor(
     private orderService: newOrderService,
-    private authservice: LoginService
+    private authservice: LoginService,
+    private toast: ToastrService
   ) { }
   getOrders() {
     this.orderService.getAllOrders(this.status, this.page, this.limit).subscribe({
@@ -51,30 +53,44 @@ export class SavepannelComponent {
     this.orderService.deleteOrder(id).subscribe({
       next: (res) => {
         this.getOrders()
-        window.alert('Order deleted successfully')
+        this.toast.success('Order deleted successfully')
+        // window.alert('Order deleted successfully')
       },
       error: (err) => {
-        window.alert('Order deleted failed')
+        this.toast.error('Order deleted failed')
+        // window.alert('Order deleted failed')
         return;
       },
     })
   }
 
   moveWashing(orderId: string, kuri: any, customerId: any) {
+    const workflow = localStorage.getItem('workflow')
+    let workflows = []
+    if (workflow){
+      workflows=JSON.parse(workflow)
+    }
+    const firstWorkflow=workflows.find((item:any)=>{
+      return item.order==0
+    })
+    console.log(firstWorkflow)
     const data = {
       customerId: customerId._id,
       orderId,
       type: 'status',
       kuri,
-      status: 'confirm'
+      // status: 'washing'
+      status: firstWorkflow.indentifier
     }
     this.orderService.updateOrder(data).subscribe({
       next: (res) => {
         this.getOrders()
-        window.alert('Order updated successfully')
+        this.toast.success('Order updated successfully')
+        // window.alert('Order updated successfully')
       },
       error: (err) => {
-        window.alert('Order update failed')
+        this.toast.error('Order update failed')
+        // window.alert('Order update failed')
         return;
       }
     })
@@ -85,10 +101,12 @@ export class SavepannelComponent {
       next: (res)=>{
         this.getOrders()
         this.selectedOrders=[]
-        window.alert('Confirmed orders')
+        this.toast.success('Confirmed orders')
+        // window.alert('Confirmed orders')
       },
       error: (err) => {
-        window.alert('Order update failed')
+        this.toast.error('Order update failed')
+        // window.alert('Order update failed')
         return;
       }
     })

@@ -5,6 +5,7 @@ import { CustomerService } from '../../services/customer/customer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { ExpenseService } from '../../services/expense/expense.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dailyexpenses',
@@ -20,7 +21,7 @@ export class DailyexpensesComponent {
   dateOrdersmnth: any[] = [];
   customerId: string | null = null;
   page: number = 1;
-  limit: number = 5;
+  limit: number = 10;
   totalItems: number = 0;
   isLoading = true;
   p: number = 1;
@@ -49,17 +50,32 @@ export class DailyexpensesComponent {
 
   selectedMonth: any;
   selectedYear: any;
+  showPopup = false;
+
 
   constructor(
     private fb: FormBuilder,
     private expenseService: ExpenseService,
     private route: ActivatedRoute,
     private router: Router,
-    private authservice: LoginService
+    private authservice: LoginService,
+    private toast: ToastrService
   ) {
     const currentYear = new Date().getFullYear();
     this.years = Array.from({ length: 20 }, (_, i) => currentYear + i);
    }
+   openPopup() {
+  this.showPopup = true;
+}
+
+closePopup() {
+  this.showPopup = false;
+}
+
+confirm() {
+  console.log('Confirmed');
+  this.closePopup();
+}
 
   submitFilter() {
     const payload = {
@@ -79,7 +95,8 @@ export class DailyexpensesComponent {
     this.expenseService.getAllExpense(this.page, this.limit, this.selected).subscribe({
       next: (res) => {
         console.log(res.data)
-        this.orders = res.data
+        // this.orders = res.data
+        this.dateOrders = res.data
         this.totalItems = res.meta.total
         this.isLoading = false;
       },
@@ -133,10 +150,12 @@ export class DailyexpensesComponent {
         this.newOrderForm.reset();
         this.submit = false;
         this.getExpense()
-        alert('Order successfully')
+        this.toast.success('Order successfully')
+        // alert('Order successfully')
       },
       error: (err) => {
-        alert('Order failed')
+        this.toast.error('Order failed')
+        // alert('Order failed')
         return;
       },
     })
@@ -160,7 +179,15 @@ export class DailyexpensesComponent {
 
   select(option: string) {
     this.selected = option;
+    if(option==='today'){
     this.getExpense()
+    }else{
+      const today=new Date()
+      console.log(today.getMonth()+1, today.getFullYear())
+      this.selectedMonth=today.getMonth()+1
+      this.selectedYear=today.getFullYear()
+      this.submitFilter()
+    }
   }
   onDateChange() {
     this.fetchExpenses();

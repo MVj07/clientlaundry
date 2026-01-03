@@ -1,0 +1,101 @@
+<!-- <p>signup works!</p> -->
+
+<section class="vh-100 d-flex align-items-center justify-content-center bg-gradient">
+  <div class="login-container">
+    <div class="login-card shadow-lg rounded-4 overflow-hidden">
+
+      <!-- LEFT SIDE -->
+      <div class="login-left d-flex align-items-center justify-content-center">
+        <h1 class="brand-text">Create Account</h1>
+      </div>
+
+      <!-- RIGHT SIDE (Signup Form) -->
+      <div class="login-form p-4">
+        <h2 class="text-center mb-4">Sign Up</h2>
+
+        <form [formGroup]="signupForm" (ngSubmit)="signup()">
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Full Name</label>
+            <input type="text" formControlName="name" class="form-control" placeholder="Enter your name" [ngClass]="{
+                  'is-invalid': (submit && form['name'].errors) || (form['name'].invalid && (form['name'].dirty || form['name'].touched))
+                }">
+            <div *ngIf="
+                                                  (submit && form['name'].errors) ||
+                                                  (form['name'].invalid &&
+                                                  (form['name'].dirty || form['name'].touched))
+                                                  " class="invalid-feedback">
+              <span *ngIf="form['name'].errors?.['required']">name is required</span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Username</label>
+            <input type="text" formControlName="username" class="form-control" placeholder="Enter your name" [ngClass]="{
+                  'is-invalid': (submit && form['username'].errors) || (form['username'].invalid && (form['username'].dirty || form['username'].touched))
+                }">
+            <div *ngIf="
+                                                  (submit && form['username'].errors) ||
+                                                  (form['username'].invalid &&
+                                                  (form['username'].dirty || form['username'].touched))
+                                                  " class="invalid-feedback">
+              <span *ngIf="form['username'].errors?.['required']">username is required</span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" formControlName="email" class="form-control" placeholder="Enter email" [ngClass]="{
+                  'is-invalid': (submit && form['email'].errors) || (form['email'].invalid && (form['email'].dirty || form['email'].touched))
+                }">
+          <div *ngIf="
+                                                  (submit && form['email'].errors) ||
+                                                  (form['email'].invalid &&
+                                                  (form['email'].dirty || form['email'].touched))
+                                                  " class="invalid-feedback">
+              <span *ngIf="form['email'].errors?.['required']">email is required</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Password</label>
+            <input type="password" formControlName="password" class="form-control" placeholder="Create password" [ngClass]="{
+                  'is-invalid': (submit && form['password'].errors) || (form['password'].invalid && (form['password'].dirty || form['password'].touched))
+                }">
+            <div *ngIf="
+                                                              (submit && form['password'].errors) ||
+                                                              (form['password'].invalid &&
+                                                              (form['password'].dirty || form['password'].touched))
+                                                              " class="invalid-feedback">
+              <span *ngIf="form['password'].errors?.['required']">password is required</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Confirm Password</label>
+            <input type="password" formControlName="confirmpassword" class="form-control" placeholder="Create password" [ngClass]="{
+                  'is-invalid': (submit && form['confirmpassword'].errors) || (form['confirmpassword'].invalid && (form['confirmpassword'].dirty || form['confirmpassword'].touched))
+                }">
+            <div *ngIf="
+                                                              (submit && form['confirmpassword'].errors) ||
+                                                              (form['confirmpassword'].invalid &&
+                                                              (form['confirmpassword'].dirty || form['confirmpassword'].touched))
+                                                              " class="invalid-feedback">
+              <span *ngIf="form['confirmpassword'].errors?.['required']">confirmpassword is required</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold">
+            Sign Up
+          </button>
+
+          <p class="text-center mt-3">
+            Already have an account?
+            <a routerLink="/" class="text-primary fw-semibold">Login</a>
+          </p>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

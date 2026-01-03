@@ -1,7 +1,4 @@
 section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
 }
 
@@ -11,29 +8,24 @@ section {
 }
 
 .login-card {
-  background-color: #fff;
   display: flex;
-  flex-direction: row;
+  background-color: #fff;
 }
 
-.login-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.login-image {
+.login-left {
   flex: 1;
+  background: #253a54;
+  color: #fff;
+}
+
+.brand-text {
+  font-size: 32px;
+  font-weight: bold;
 }
 
 .login-form {
   flex: 1;
-  background-color: #f9f9f9;
-}
-
-.login-form h2 {
-  font-weight: bold;
-  color: #253a54;
+  background: #f9f9f9;
 }
 
 .form-control {
@@ -44,7 +36,6 @@ section {
 .btn-primary {
   background: linear-gradient(90deg, #1976d2, #42a5f5);
   border: none;
-  transition: 0.3s ease-in-out;
 }
 
 .btn-primary:hover {

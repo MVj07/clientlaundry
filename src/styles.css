@@ -21,7 +21,8 @@
 
 body{
     /* background-image: linear-gradient(120deg, #70d9ff 70%, transparent 100%); */
-    background-color: #D6CDF2;
+    /* background-color: #b4f5ff; */
+    background-color: white;
     color: #253a54 !important;
       font-family: "Mona Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
       height: 100%;
@@ -108,7 +109,8 @@ td {
 }
 
 .table-container{
-  max-height: 250px;  /* or min-height: 300px if you want it to grow */
+  /* max-height: 250px; */
+    /* or min-height: 300px if you want it to grow */
   overflow-y: auto;
   display: block;
 }
@@ -129,4 +131,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .cursorP{
   cursor: pointer;
+}
+
+.text-align-center{
+  text-align: center;
 }

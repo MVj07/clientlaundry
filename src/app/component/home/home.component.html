@@ -1,146 +1,87 @@
 <app-header></app-header>
-<section class="py-5">
-    <!-- <h1 class="text-center wd-title">Orders Tracking</h1> -->
-    <div class="bg-white col-lg-8 offset-lg-2 mb-2 rounded d-flex justify-content-between align-items-center gap-2 p-3">
-        <div class="d-flex gap-2 align-items-center">
-            <h1 class="wd-title m-0">Confirmed Orders</h1>
-            <!-- <button class="btn btn-sm btn-outline-primary" (click)="toggleSelectAll()">
-            {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
-        </button> -->
-            <div class="primaryBtn w150x fN py-1 px-2 d-flex gap-1 cursorP" (click)="toggleSelectAll()">
-                <input type="checkbox" class="" [checked]="selectAllChecked" />
-                <small class="text-white">Select All</small>
-            </div>
-        </div>
-        <button *ngIf="selectedOrders?.length" class="primaryBtn w150x fN btn-sm py-2 px-2" (click)="bulkUpdate()">Move to
-            washing</button>
+
+<div class="dashboard-container">
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <!-- <div>
+      <h3>{{ businessName }}</h3>
+      <small>{{ today | date:'fullDate' }}</small>
     </div>
-    <div class="">
-        <div class="">
-            <div class="col-lg-8 offset-lg-2">
-                <div class="d-flex justify-content-center py-5" *ngIf="isLoading">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <ng-container *ngIf="!isLoading">
-                    <div *ngIf="orders?.length === 0" class="text-center text-muted py-4 fB center">
-                        No orders found.
-                    </div>
-                    <div class="save-boxs mb-3 px-4 py-4"
-                        *ngFor="let order of orders|paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <input type="checkbox" [value]="order._id" [checked]="isSelected(order._id)"
-                                    (change)="toggleSelection($event)">
-                                <!-- <span class="fw-bold">Order ID: {{order._id}}</span> -->
-                            </div>
-                        </div>
-                        <div class="row pt-2">
-                            <!-- <div class="col">
-                            <div><span class="fw-bold">B/No :&nbsp;</span><span>1234</span></div>
-                        </div> -->
-                            <div class="col">
-                                <div><span class="fw-bold">Kuri :&nbsp;</span><span>{{order.customerId.kuri}}</span>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div><span class="fw-bold">Bill :&nbsp;</span><span>{{order.bill}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row pt-2">
-                            <div class="col">
-                                <div class="">
-                                    <span class="fw-bold">Customer Name :
-                                        &nbsp;</span><span>{{order.customerId.name}}</span>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div><span class="fw-bold">Date
-                                        :&nbsp;</span><span>{{order.date | date:"dd-MM-yyyy"}}</span></div>
-                            </div>
-                        </div>
-                        <div class="row pt-2">
-                            <div class="col">
-                                <div class="">
-                                    <span class="fw-bold">Phone Number :
-                                        &nbsp;</span><span>{{order.customerId.mobile}}</span>
-                                </div>
-                            </div>
-                            <div class="address-box pt-2 col">
-                                <p class="fw-bold">Address :</p>
-                                <address>
-                                    {{order.customerId.address}}
-                                </address>
-                            </div>
-                        </div>
+    <button class="btn btn-outline-danger btn-sm">Logout</button> -->
+  </div>
 
-                        <div class="table-container">
-                            <table class="w-100">
-                                <thead class="">
-                                    <tr>
-                                        <th class="p-2">Product Name</th>
-                                        <th>Qty</th>
-                                        <th>Amount</th>
-                                        <th>Total Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody *ngFor="let item of order.items">
-                                    <tr class="text-center">
-                                        <td class="p-2">{{item.name}}</td>
-                                        <td>{{item.qty}}</td>
-                                        <td>{{item.amount}}</td>
-                                        <td>{{item.qty * item.amount}}</td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="row">
-                            <div class="col">
-
-                            </div>
-                            <div class="col pt-2">
-                                <div class="row">
-                                    <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <label class="form-label text-end">Total Amount :</label>
-                                        <div class="">
-                                            <input type="text" class="form-control" placeholder="Total amount"
-                                                [value]="getOrderTotal(order)" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <div class="d-flex justify-content-end gap-2 pt-3">
-                            <!-- <div class="col">
-                                <button class="primaryBtn">Edit</button>
-                            </div> -->
-                            <div class="">
-                                <button class="primaryBtn w150x" (click)="deleteOrder(order._id)">Delete</button>
-                            </div>
-                            <div class="">
-                                <button class="primaryBtn w150x"
-                                    (click)="moveWashing(order._id, order.kuri, order.customerId)">Move to
-                                    Washing</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="5" [directionLinks]="true"
-                            [autoHide]="true">
-                        </pagination-controls>
-                    </div>
-                </ng-container>
-            </div>
-
-            <!-- example -->
-        </div>
-
+  <!-- KPI Cards -->
+  <div class="row g-3 mt-3">
+    <div class="col-md-3" *ngFor="let card of kpiCards">
+      <div class="card kpi-card" [ngClass]="card.color">
+        <div class="kpi-title">{{ card.title }}</div>
+        <div class="kpi-value">{{ card.value }}</div>
+      </div>
     </div>
-</section>
+  </div>
+
+  <!-- Status Summary -->
+  <div class="row g-3 mt-4">
+    <div class="col-md-3" *ngFor="let status of statusSummary">
+      <div class="card status-card">
+        <div class="status-title">{{ status.label }}</div>
+        <div class="status-count">{{ status.count }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Section -->
+  <div class="row g-3 mt-4">
+
+    <!-- Recent Orders -->
+    <div class="col-md-8">
+      <div class="card p-3">
+        <h5 class="mb-3">Recent Orders</h5>
+
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Bill No</th>
+              <th>Customer</th>
+              <th>Status</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orders">
+              <td class="text-align-center">{{ order.bill }}</td>
+              <td class="text-align-center">{{ order.customerId.name }}</td>
+              <td class="text-align-center">
+                <span class="badge"
+                  [ngClass]="{
+                    'bg-primary': order.status==='washing',
+                    'bg-warning': order.status==='ironing',
+                    'bg-info': order.status==='packing',
+                    'bg-success': order.status==='deliver'
+                  }">
+                  {{ order.status | titlecase }}
+                </span>
+              </td>
+              <td class="text-align-center">₹{{ order.billAmount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-md-4">
+      <div class="card p-3">
+        <h5 class="mb-3">Quick Actions</h5>
+
+        <button class="btn btn-primary w-100 mb-2">➕ New Order</button>
+        <button class="btn btn-success w-100 mb-2">👤 New Customer</button>
+        <button class="btn btn-warning w-100 mb-2">📦 Packing</button>
+        <button class="btn btn-dark w-100">📊 Expenses</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

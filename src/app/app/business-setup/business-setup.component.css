@@ -1,0 +1,59 @@
+.layout {
+  display: flex;
+  height: 100vh;
+  /* overflow: hidden; */
+}
+
+/* LEFT */
+.left-side {
+  width: 50%;
+  background: linear-gradient(135deg, #0666ff, #4ba3ff);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* RIGHT */
+.right-side {
+  width: 50%;
+  position: relative;
+  overflow: hidden;
+  background: #f7f9fc;
+}
+
+/* SLIDER */
+.slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* SLIDES */
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 40px 60px;
+  transition: transform 0.4s ease;
+}
+
+/* DEFAULT */
+.step-1 {
+  transform: translateX(0);
+}
+
+.step-2 {
+  transform: translateX(100%);
+}
+
+/* STEP 2 ACTIVE */
+.slider.step2 .step-1 {
+  transform: translateX(-100%);
+}
+
+.slider.step2 .step-2 {
+  transform: translateX(0);
+}

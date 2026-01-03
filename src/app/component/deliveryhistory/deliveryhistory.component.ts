@@ -13,12 +13,28 @@ export class DeliveryhistoryComponent {
   isLoading = true;
   p:number=1
   page: number = 1;
-  limit: number = 5;
+  limit: number = 10;
   totalItems: number = 0;
+  selected :string[]= []
   constructor(
     private orderService: newOrderService,
     private authservice: LoginService
   ) { }
+  
+  selectAll(event: Event){
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked){
+    this.orders.map((item:any)=>{
+      this.selected.push(item._id)
+    })
+    }else{
+      this.selected=[]
+    }
+  }
+
+  handleSelect(id: any){
+    this.selected.push(id)
+  }
   getOrders() {
     this.orderService.getAllOrders(this.status, this.page, this.limit).subscribe({
       next: (res) => {

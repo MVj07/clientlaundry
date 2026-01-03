@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { newOrderService } from '../services/newOrder/newOrder.service';
 import { LoginService } from '../services/login/login.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-packing',
@@ -19,9 +20,10 @@ export class PackingComponent {
   selectedOrders: any = []
   constructor(
     private orderService: newOrderService,
-    private authservice: LoginService
+    private authservice: LoginService,
+    private toast: ToastrService
   ) { }
-  getOrders() {
+  async getOrders() {
     this.orderService.getAllOrders(this.status, this.page, this.limit).subscribe({
       next: (res) => {
         console.log(res.data)
@@ -50,14 +52,33 @@ export class PackingComponent {
     this.orderService.deleteOrder(id).subscribe({
       next: (res) => {
         this.getOrders()
-        alert('Order deleted successfully')
+        this.toast.success('Order deleted successfully')
+        // window.alert('Order deleted successfully')
       },
       error: (err) => {
-        alert('Order deleted failed')
+        this.toast.error('Order deleted failed')
+        // window.alert('Order deleted failed')
         return;
       },
     })
   }
+
+  generateInvoice(orderId:any, customerId:any) {
+  // this.http.post(`${api}/orders/update`, {
+  //   orderId,
+  //   customerId,
+  //   type: "generate_invoice"
+  // }, { responseType: 'blob' })
+  this.orderService.getBill({orderId: orderId, customerId: customerId})
+  .subscribe((file) => {
+      const blob = new Blob([file], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'invoice.pdf';
+      a.click();
+  });
+}
 
   moveWashing(orderId: string, kuri: any, customerId: any) {
     const data = {
@@ -70,10 +91,13 @@ export class PackingComponent {
     this.orderService.updateOrder(data).subscribe({
       next: (res) => {
         this.getOrders()
-        alert('Order updated successfully')
+        this.generateInvoice(orderId, customerId)
+        this.toast.success('Order updated successfully')
+        // alert('Order updated successfully')
       },
       error: (err) => {
-        alert('Order update failed')
+        this.toast.error('Order update failed')
+        // alert('Order update failed')
         return;
       }
     })
@@ -89,10 +113,12 @@ export class PackingComponent {
       next: (res) => {
         this.getOrders()
         this.selectedOrders = []
-        alert('Confirmed orders')
+        this.toast.success('Confirmed orders')
+        // alert('Confirmed orders')
       },
       error: (err) => {
-        alert('Order update failed')
+        this.toast.error('Order update failed')
+        // alert('Order update failed')
         return;
       }
     })

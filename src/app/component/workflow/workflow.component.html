@@ -1,0 +1,8 @@
+<h2>Create Workflow</h2>
+
+<div *ngFor="let step of steps; let i = index; trackBy: trackByIndex">
+  <input [(ngModel)]="steps[i]" placeholder="Step name" />
+</div>
+
+<button (click)="addStep()">+ Add Step</button>
+<button (click)="save()">Save Workflow</button>
