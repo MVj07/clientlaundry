@@ -1,0 +1,286 @@
+<app-header></app-header>
+
+<section class="billing-section" style="min-height:100vh; background:#f1f5f9; padding: 28px 24px;">
+  <div class="container-fluid px-0">
+
+    <!-- Page Title -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h2 class="fw-bold m-0" style="font-family:'Outfit',sans-serif; font-size:22px; color:#0f172a;">💳 Billing & Payment</h2>
+        <p class="text-secondary small m-0 mt-1">Search an existing order to collect payment and generate invoice.</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- LEFT: Search & Order Selection -->
+      <div class="col-lg-5">
+        <div class="billing-card h-100">
+          <h6 class="section-title mb-3">🔍 Find Order</h6>
+
+          <!-- Search Input -->
+          <div class="position-relative mb-3">
+            <div class="search-input-wrap">
+              <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input
+                type="text"
+                class="form-control billing-search"
+                placeholder="Bill No, Customer Name, or Phone..."
+                [(ngModel)]="searchTerm"
+                (input)="searchOrders()"
+                autocomplete="off"
+              />
+              <button *ngIf="searchTerm" class="btn btn-sm clear-btn" (click)="clearSelection()">✕</button>
+            </div>
+            <div class="text-secondary small mt-1 ms-1" *ngIf="searching">Searching...</div>
+          </div>
+
+          <!-- Search Results Dropdown -->
+          <div *ngIf="searchResults && searchResults.length > 0" class="search-results-list mb-3">
+            <div class="results-header d-flex justify-content-between align-items-center">
+              <span *ngIf="isDefaultView">📋 Unpaid Orders — {{ searchResults.length }} pending</span>
+              <span *ngIf="!isDefaultView">{{ searchResults.length }} result(s) found</span>
+              <span *ngIf="isDefaultView" class="text-primary small cursorP" style="font-size:10px; font-weight:600;" (click)="loadUnpaidOrders()">↻ Refresh</span>
+            </div>
+            <div *ngFor="let order of searchResults" class="result-item" (click)="selectOrder(order)">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="fw-bold text-dark" style="font-size:14px;">
+                    #{{ order.bill }} — {{ order.customerId?.name || 'Unknown' }}
+                  </div>
+                  <div class="text-secondary" style="font-size:12px;">
+                    📞 {{ order.customerId?.mobile || '—' }} &nbsp;|&nbsp; ₹{{ order.billAmount }}
+                  </div>
+                </div>
+                <div class="d-flex flex-column align-items-end gap-1">
+                  <span class="badge text-capitalize {{ getWorkflowBadgeClass(order.status) }}" style="font-size:10px;">{{ order.status }}</span>
+                  <span class="billing-badge {{ getStatusBadgeClass(order.paymentStatus || 'unpaid') }}">{{ order.paymentStatus || 'unpaid' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No results -->
+          <div *ngIf="!searching && searchTerm && searchResults.length === 0" class="text-center text-muted py-3 small">
+            No orders found for "{{ searchTerm }}"
+          </div>
+
+          <!-- Loading state -->
+          <div *ngIf="searching" class="text-center text-muted py-3 small">
+            <span class="spinner-border spinner-border-sm me-1" role="status"></span> Loading orders...
+          </div>
+
+          <!-- Empty default state — no unpaid orders -->
+          <div *ngIf="!searching && !searchTerm && searchResults.length === 0" class="billing-empty-state">
+            <div class="empty-icon">🎉</div>
+            <p class="fw-semibold text-success mb-1">All caught up!</p>
+            <p class="text-muted small">No unpaid orders at the moment.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Order Details + Payment -->
+      <div class="col-lg-7">
+
+        <!-- Placeholder when no order selected -->
+        <div *ngIf="!selectedOrder" class="billing-card h-100 d-flex align-items-center justify-content-center" style="min-height: 400px;">
+          <div class="text-center text-muted">
+            <div style="font-size:52px; margin-bottom:16px;">💳</div>
+            <p class="fw-semibold fs-6 text-secondary">Select an order from the left panel to begin billing</p>
+          </div>
+        </div>
+
+        <!-- Order loaded -->
+        <div *ngIf="selectedOrder" class="d-flex flex-column gap-3">
+
+          <!-- Order Header Card -->
+          <div class="billing-card">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <h5 class="fw-bold m-0" style="font-family:'Outfit',sans-serif; color:#0f172a;">Order #{{ selectedOrder.bill }}</h5>
+                  <span class="billing-badge {{ getStatusBadgeClass(selectedOrder.paymentStatus || 'unpaid') }}">
+                    {{ selectedOrder.paymentStatus || 'Unpaid' | titlecase }}
+                  </span>
+                  <span class="badge text-capitalize {{ getWorkflowBadgeClass(selectedOrder.status) }}">{{ selectedOrder.status }}</span>
+                </div>
+                <div class="text-secondary small">
+                  📅 {{ selectedOrder.date | date:'dd MMM yyyy' }} &nbsp;|&nbsp;
+                  🗓️ Due: {{ selectedOrder.dueDate | date:'dd MMM yyyy' }}
+                </div>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary" style="border-radius:8px; font-size:12px;" (click)="clearSelection()">
+                ✕ Change Order
+              </button>
+            </div>
+          </div>
+
+          <!-- Customer & Items Row -->
+          <div class="row g-3">
+
+            <!-- Customer Info -->
+            <div class="col-md-5">
+              <div class="billing-card h-100">
+                <h6 class="section-title mb-3">👤 Customer</h6>
+                <div class="info-row"><span class="info-label">Name</span><span class="info-val">{{ selectedOrder.customerId?.name || '—' }}</span></div>
+                <div class="info-row"><span class="info-label">Phone</span><span class="info-val">{{ selectedOrder.customerId?.mobile || '—' }}</span></div>
+                <div class="info-row" *ngIf="selectedOrder.customerId?.whatsapp"><span class="info-label">WhatsApp</span><span class="info-val">{{ selectedOrder.customerId.whatsapp }}</span></div>
+                <div class="info-row" *ngIf="selectedOrder.customerId?.address"><span class="info-label">Address</span><span class="info-val">{{ selectedOrder.customerId.address }}</span></div>
+                <div class="info-row" *ngIf="selectedOrder.specialInstructions"><span class="info-label">Notes</span><span class="info-val text-warning">{{ selectedOrder.specialInstructions }}</span></div>
+              </div>
+            </div>
+
+            <!-- Order Items (read-only) -->
+            <div class="col-md-7">
+              <div class="billing-card h-100">
+                <h6 class="section-title mb-3">🧺 Order Items <small class="text-muted fw-normal">(read-only)</small></h6>
+                <div class="items-table-wrap">
+                  <table class="table table-sm items-table mb-0">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-end">Rate</th>
+                        <th class="text-end">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of selectedOrder.items">
+                        <td class="fw-medium">{{ item.name }}</td>
+                        <td class="text-center">{{ item.qty }}</td>
+                        <td class="text-end">₹{{ item.amount }}</td>
+                        <td class="text-end fw-semibold">₹{{ item.qty * item.amount }}</td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr class="table-light">
+                        <td colspan="3" class="fw-bold text-end">Bill Total</td>
+                        <td class="fw-bold text-end text-dark">₹{{ selectedOrder.billAmount }}</td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Collection Card -->
+          <div class="billing-card" *ngIf="!paymentDone">
+            <h6 class="section-title mb-3">💵 Collect Payment</h6>
+            <form [formGroup]="paymentForm">
+
+              <div class="row g-3 mb-3">
+
+                <!-- Payment Method -->
+                <div class="col-md-4">
+                  <label class="billing-label">Payment Method</label>
+                  <select formControlName="paymentMethod" class="form-select billing-input">
+                    <option value="cash">💵 Cash</option>
+                    <option value="upi">📱 UPI / QR Scan</option>
+                    <option value="card">💳 Card</option>
+                    <option value="cheque">🏦 Cheque</option>
+                  </select>
+                </div>
+
+                <!-- Discount -->
+                <div class="col-md-4">
+                  <label class="billing-label">Discount (₹)</label>
+                  <div class="input-group">
+                    <span class="input-group-text billing-addon">₹</span>
+                    <input type="number" formControlName="discount" class="form-control billing-input" placeholder="0" min="0" />
+                  </div>
+                </div>
+
+                <!-- Paid Amount -->
+                <div class="col-md-4">
+                  <label class="billing-label">Paid Amount (₹)</label>
+                  <div class="input-group">
+                    <span class="input-group-text billing-addon">₹</span>
+                    <input type="number" formControlName="paidAmount" class="form-control billing-input" placeholder="0.00" min="0" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Summary Row -->
+              <div class="payment-summary-row mb-3">
+                <div class="summary-item">
+                  <span class="summary-label">Bill Total</span>
+                  <span class="summary-val">₹{{ selectedOrder.billAmount }}</span>
+                </div>
+                <div class="summary-divider">−</div>
+                <div class="summary-item">
+                  <span class="summary-label">Discount</span>
+                  <span class="summary-val text-warning">₹{{ paymentForm.get('discount')?.value || 0 }}</span>
+                </div>
+                <div class="summary-divider">=</div>
+                <div class="summary-item">
+                  <span class="summary-label">Final Amount</span>
+                  <span class="summary-val fw-bold text-dark">₹{{ finalAmount }}</span>
+                </div>
+                <div class="summary-divider">−</div>
+                <div class="summary-item">
+                  <span class="summary-label">Paid</span>
+                  <span class="summary-val text-success">₹{{ paymentForm.get('paidAmount')?.value || 0 }}</span>
+                </div>
+                <div class="summary-divider">=</div>
+                <div class="summary-item">
+                  <span class="summary-label">Balance Due</span>
+                  <span class="summary-val fw-bold" [class.text-danger]="balanceDue > 0" [class.text-success]="balanceDue === 0">₹{{ balanceDue }}</span>
+                </div>
+              </div>
+
+              <!-- Payment Status Preview -->
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="text-secondary small fw-semibold">Payment Status will be marked:</span>
+                <span class="billing-badge {{ getStatusBadgeClass(expectedPaymentStatus) }}">{{ expectedPaymentStatus | titlecase }}</span>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="d-flex gap-2">
+                <button
+                  type="button"
+                  class="btn btn-success px-4 py-2 fw-bold"
+                  style="border-radius:10px; background:#10b981; border:none; font-size:14px;"
+                  [disabled]="processing || paymentForm.invalid"
+                  (click)="recordPayment()"
+                >
+                  <span *ngIf="processing" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  ✅ Record Payment
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary px-4 py-2 fw-semibold"
+                  style="border-radius:10px; font-size:14px;"
+                  (click)="downloadInvoice()"
+                >
+                  🖨️ Download Invoice
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Payment Confirmed Card -->
+          <div class="billing-card text-center py-5" *ngIf="paymentDone">
+            <div style="font-size:52px; margin-bottom:12px;">✅</div>
+            <h5 class="fw-bold text-success mb-1">Payment Recorded!</h5>
+            <p class="text-secondary mb-3">
+              Order #{{ selectedOrder.bill }} marked as
+              <span class="billing-badge {{ getStatusBadgeClass(selectedOrder.paymentStatus) }} ms-1">{{ selectedOrder.paymentStatus | titlecase }}</span>
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn btn-outline-primary px-4 py-2 fw-semibold" style="border-radius:10px; font-size:14px;" (click)="downloadInvoice()">
+                🖨️ Download Invoice
+              </button>
+              <button class="btn btn-outline-secondary px-4 py-2 fw-semibold" style="border-radius:10px; font-size:14px;" (click)="clearSelection()">
+                + New Billing
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

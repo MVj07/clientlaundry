@@ -11,6 +11,9 @@ import { LoginService } from '../../services/login/login.service';
 export class SignupComponent {
   constructor(private fb: FormBuilder, private toast: ToastrService, private userService: LoginService) { }
   submit: any = false;
+  showPassword = false;
+  showConfirmPassword = false;
+  loading = false;
 
   signupForm = this.fb.group({
     name: ['', Validators.required],
@@ -32,13 +35,15 @@ export class SignupComponent {
         this.toast.error('Password and Confirm password not same.')
         return;
       }
+      this.loading = true;
       this.userService.signup(this.signupForm.value).subscribe({
         next: (res)=>{
           this.toast.success('User created')
-
+          this.loading = false;
         }, error: (err)=>{
           console.log(err)
           this.toast.error(err.error.message)
+          this.loading = false;
           return
         }
       })

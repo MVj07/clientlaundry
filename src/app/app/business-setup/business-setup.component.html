@@ -1,127 +1,181 @@
 <div class="layout">
 
-    <!-- LEFT SIDE -->
-    <div class="left-side">
-        <div class="left-content">
-            <h1 class="app-title">LaundryPro SaaS</h1>
-            <p class="app-tagline">Simple, powerful laundry business management.</p>
-            <img src="assets/laundry-illustration.png" class="illustration">
+  <!-- LEFT BRANDING SIDEBAR -->
+  <div class="left-side">
+    <div class="left-content w-100 px-5">
+      <!-- Logo Drop Container -->
+      <div class="logo-container mb-4">
+        <div class="logo-circle">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22a7 7 0 0 0 5-11.97l-5-5.91-5 5.91A7 7 0 0 0 12 22z"/>
+          </svg>
         </div>
+      </div>
+      
+      <h1 class="app-title fw-bold">LaundryPro SaaS</h1>
+      <p class="app-tagline text-secondary-light">Setting up your professional wash workflows.</p>
+
+      <!-- Steps Timeline Indicators -->
+      <div class="setup-timeline mt-5">
+        <!-- Step 1 Indicator -->
+        <div class="timeline-item d-flex align-items-center mb-4" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
+          <div class="timeline-number-circle d-flex align-items-center justify-content-center me-3">
+            <span *ngIf="currentStep === 1">1</span>
+            <svg *ngIf="currentStep > 1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div>
+            <h6 class="mb-0 fw-bold timeline-label">Shop Details</h6>
+            <span class="small text-muted">Register your store profile</span>
+          </div>
+        </div>
+
+        <!-- Step 2 Indicator -->
+        <div class="timeline-item d-flex align-items-center" [class.active]="currentStep === 2">
+          <div class="timeline-number-circle d-flex align-items-center justify-content-center me-3">
+            <span>2</span>
+          </div>
+          <div>
+            <h6 class="mb-0 fw-bold timeline-label">Operational Workflow</h6>
+            <span class="small text-muted">Define the status queue steps</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- RIGHT SIDE -->
-    <div class="right-side">
+  <!-- RIGHT ACTION SETUP AREA -->
+  <div class="right-side d-flex align-items-center justify-content-center">
+    
+    <div class="slider-wrapper w-100 px-5" style="max-width: 600px;">
+      
+      <div class="slider" [class.step2]="currentStep === 2">
+        
+        <!-- STEP 1: BUSINESS DETAILS -->
+        <div class="slide step-1">
+          <h2 class="title fw-bold text-dark mb-1">Set Up Your Laundry Business</h2>
+          <p class="subtitle text-secondary mb-4">Enter your shop profile information</p>
 
-        <!-- SLIDER -->
-        <div class="slider" [class.step2]="currentStep === 2">
-
-            <!-- STEP 1 -->
-            <div class="slide step-1">
-                <h2 class="title">Set Up Your Laundry Business</h2>
-                <p class="subtitle">Enter your shop details</p>
-
-                <form [formGroup]="businessForm">
-                    <!-- your form fields here -->
-                    <div class="row">
-                        <div class="field">
-                            <label class="form-label required">Business Name </label>
-                            <input formControlName="business_name" class="form-control" placeholder="Royal Dry Clean"
-                                [ngClass]="{
-                                'is-invalid': (businesssubmit && form['business_name'].errors) || (form['business_name'].invalid && (form['business_name'].dirty || form['business_name'].touched))
-                            }" />
-                            <div *ngIf=" (businesssubmit && form['business_name'].errors) || (form['business_name'].invalid && (form['business_name'].dirty || form['business_name'].touched)) "
-                                class="invalid-feedback"> <span
-                                    *ngIf="form['business_name'].errors?.['required']">Business
-                                    name is required</span> </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="form-label required">Owner Name</label>
-                            <input formControlName="owner_name" placeholder="Ravi Kumar" class="form-control" [ngClass]="{
-                                'is-invalid': (businesssubmit && form['owner_name'].errors) || (form['owner_name'].invalid && (form['owner_name'].dirty || form['owner_name'].touched))
-                            }" />
-                            <div *ngIf=" (businesssubmit && form['owner_name'].errors) || (form['owner_name'].invalid && (form['owner_name'].dirty || form['owner_name'].touched)) "
-                                class="invalid-feedback"> <span *ngIf="form['owner_name'].errors?.['required']">Owner
-                                    name
-                                    is required</span> </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="field">
-                            <label class="form-label required">Mobile *</label>
-                            <input formControlName="mobile" placeholder="9876543210" class="form-control" [ngClass]="{
-                                'is-invalid': (businesssubmit && form['mobile'].errors) || (form['mobile'].invalid && (form['mobile'].dirty || form['mobile'].touched))
-                            }" />
-                            <div *ngIf=" (businesssubmit && form['mobile'].errors) || (form['mobile'].invalid && (form['mobile'].dirty || form['mobile'].touched)) "
-                                class="invalid-feedback"> <span *ngIf="form['mobile'].errors?.['required']">Mobile is
-                                    required</span> </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="form-label required">City *</label>
-                            <input formControlName="city" placeholder="Madurai" class="form-control" [ngClass]="{
-                                'is-invalid': (businesssubmit && form['city'].errors) || (form['city'].invalid && (form['city'].dirty || form['city'].touched))
-                            }" />
-                            <div *ngIf=" (businesssubmit && form['city'].errors) || (form['city'].invalid && (form['city'].dirty || form['city'].touched)) "
-                                class="invalid-feedback"> <span *ngIf="form['city'].errors?.['required']">City is
-                                    required</span> </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="field full">
-                            <label class="form-label required">Full Address *</label>
-                            <textarea formControlName="address" rows="2" placeholder="No. 12, Anna Nagar, Madurai"
-                                class="form-control"></textarea>
-                            <div *ngIf=" (businesssubmit && form['address'].errors) || (form['address'].invalid && (form['address'].dirty || form['address'].touched)) "
-                                class="invalid-feedback"> <span *ngIf="form['address'].errors?.['required']">Address is
-                                    required</span> </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="field">
-                            <label class="form-label">GST Number (optional)</label>
-                            <input formControlName="gst_no" placeholder="GST12345X9" class="form-control" />
-                        </div>
-
-                        <div class="field">
-                            <label class="form-label">Logo Upload (optional)</label>
-                            <input type="file" (change)="onFileSelected($event)" class="form-control" />
-                        </div>
-                    </div>
-                    <button type="button" class="primaryBtn mt-3" (click)="goNext()">
-                        Next →
-                    </button>
-                </form>
-            </div>
-
-            <!-- STEP 2 -->
-            <div class="slide step-2">
-                <h2 class="title">Setup Your Workflow</h2>
-                <p class="subtitle">Define how orders move</p>
-
-                <!-- <div class="workflow-box" *ngFor="let wf of workflows; let i = index">
-                    <input class="form-control" [(ngModel)]="wf.name" placeholder="Step name">
-                    <input class="form-control mt-2" [(ngModel)]="wf.identifier" placeholder="Identifier">
-                </div> -->
-                <div *ngFor="let step of steps; let i = index; trackBy: trackByIndex" class="p-2">
-                    <div class="d-flex">
-                        <input [(ngModel)]="steps[i]" placeholder="Step name" class="form-control" />
-                        <span *ngIf="i!==0">
-                            <button (click)="Remove(i)" class="btn btn-danger">-</button>
-                        </span>
-                    </div>
+          <form [formGroup]="businessForm" class="space-y-4">
+            <!-- Row 1: Name and Owner -->
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary">Business Name *</label>
+                <input formControlName="business_name" class="form-control" placeholder="e.g. Royal Dry Clean"
+                       [ngClass]="{ 'is-invalid': (businesssubmit && form['business_name'].errors) || (form['business_name'].invalid && (form['business_name'].dirty || form['business_name'].touched)) }" />
+                <div *ngIf="(businesssubmit && form['business_name'].errors) || (form['business_name'].invalid && (form['business_name'].dirty || form['business_name'].touched))" class="invalid-feedback">
+                  <span *ngIf="form['business_name'].errors?.['required']">Business name is required</span>
                 </div>
-                <button (click)="addStep()" class="btn">+ Add Step</button>
-                <!-- <button (click)="save()">Save Workflow</button> -->
+              </div>
 
-                <button class="btn btn-light mt-3" (click)="goBack()">← Back</button>
-                <button class="btn primaryBtn" (click)="submit()">Save</button>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary">Owner Name *</label>
+                <input formControlName="owner_name" placeholder="e.g. Ravi Kumar" class="form-control" 
+                       [ngClass]="{ 'is-invalid': (businesssubmit && form['owner_name'].errors) || (form['owner_name'].invalid && (form['owner_name'].dirty || form['owner_name'].touched)) }" />
+                <div *ngIf="(businesssubmit && form['owner_name'].errors) || (form['owner_name'].invalid && (form['owner_name'].dirty || form['owner_name'].touched))" class="invalid-feedback">
+                  <span *ngIf="form['owner_name'].errors?.['required']">Owner name is required</span>
+                </div>
+              </div>
             </div>
 
+            <!-- Row 2: Mobile and City -->
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary">Mobile *</label>
+                <input formControlName="mobile" placeholder="e.g. 9876543210" class="form-control" 
+                       [ngClass]="{ 'is-invalid': (businesssubmit && form['mobile'].errors) || (form['mobile'].invalid && (form['mobile'].dirty || form['mobile'].touched)) }" />
+                <div *ngIf="(businesssubmit && form['mobile'].errors) || (form['mobile'].invalid && (form['mobile'].dirty || form['mobile'].touched))" class="invalid-feedback">
+                  <span *ngIf="form['mobile'].errors?.['required']">Mobile is required</span>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary">City *</label>
+                <input formControlName="city" placeholder="e.g. Madurai" class="form-control" 
+                       [ngClass]="{ 'is-invalid': (businesssubmit && form['city'].errors) || (form['city'].invalid && (form['city'].dirty || form['city'].touched)) }" />
+                <div *ngIf="(businesssubmit && form['city'].errors) || (form['city'].invalid && (form['city'].dirty || form['city'].touched))" class="invalid-feedback">
+                  <span *ngIf="form['city'].errors?.['required']">City is required</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3: Address -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-secondary">Full Address *</label>
+              <textarea formControlName="address" rows="2" placeholder="Enter complete business location address"
+                        class="form-control" [ngClass]="{ 'is-invalid': (businesssubmit && form['address'].errors) || (form['address'].invalid && (form['address'].dirty || form['address'].touched)) }"></textarea>
+              <div *ngIf="(businesssubmit && form['address'].errors) || (form['address'].invalid && (form['address'].dirty || form['address'].touched))" class="invalid-feedback">
+                <span *ngIf="form['address'].errors?.['required']">Address is required</span>
+              </div>
+            </div>
+
+            <!-- Row 4: GST and Logo -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary">GST Number (optional)</label>
+                <input formControlName="gst_no" placeholder="e.g. GST12345X9" class="form-control" />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary">Logo (optional)</label>
+                <input type="file" (change)="onFileSelected($event)" class="form-control file-input" />
+              </div>
+            </div>
+
+            <!-- Step 1 Button -->
+            <button type="button" class="primaryBtn py-2 d-flex align-items-center justify-content-center gap-2" (click)="goNext()">
+              <span>Next Step</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          </form>
         </div>
+
+        <!-- STEP 2: WORKFLOW SETUP -->
+        <div class="slide step-2">
+          <h2 class="title fw-bold text-dark mb-1">Define Your Workflow Steps</h2>
+          <p class="subtitle text-secondary mb-4">Define how orders transition inside your shop</p>
+
+          <div class="workflow-builder mb-4">
+            <div *ngFor="let step of steps; let i = index; trackBy: trackByIndex" class="workflow-step-row mb-3 d-flex align-items-center gap-2">
+              <div class="step-badge d-flex align-items-center justify-content-center fw-bold">
+                {{ i + 1 }}
+              </div>
+              <input [(ngModel)]="steps[i]" placeholder="Enter workflow step name (e.g. Washing, Ironing)" class="form-control" />
+              <button *ngIf="i !== 0" (click)="Remove(i)" class="btn btn-outline-danger border-0 p-2" title="Remove step">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+              </button>
+            </div>
+            
+            <button (click)="addStep()" class="btn btn-outline-primary d-flex align-items-center gap-2 mt-2 px-3 border-dashed" style="border-style: dashed; font-size: 14px; border-radius: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Add Workflow Step</span>
+            </button>
+          </div>
+
+          <!-- Step 2 Buttons -->
+          <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-outline-secondary py-2 px-4" style="border-radius: 8px;" (click)="goBack()">
+              ← Back
+            </button>
+            <button class="primaryBtn py-2 d-flex align-items-center justify-content-center gap-2" [disabled]="loading" (click)="submit()">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span>{{ loading ? 'Saving Profile...' : 'Save & Complete Setup' }}</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </div>
 
 </div>

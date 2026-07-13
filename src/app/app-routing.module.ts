@@ -27,6 +27,7 @@ import { settingsGuard } from './guards/settings.guard';
 import { SignupComponent } from './component/signup/signup.component';
 import { OrdersComponent } from './component/orders/orders.component';
 import { WorkflowComponent } from './component/workflow/workflow.component';
+import { PosComponent } from './component/pos/pos.component';
 
 const routes: Routes = [
   { path: 'edit-order/:id', component: NeworderComponent },
@@ -46,7 +47,8 @@ const routes: Routes = [
   {path: 'business_setup', component: BusinessSetupComponent, canActivate: [businessSetupGuard]},
   {path: 'signup', component: SignupComponent},
   {path: 'orders', component: OrdersComponent},
-  {path: 'create-workflow', component: WorkflowComponent}
+  {path: 'create-workflow', component: WorkflowComponent},
+  {path: 'pos', component: PosComponent}
 ];
 
 @NgModule({

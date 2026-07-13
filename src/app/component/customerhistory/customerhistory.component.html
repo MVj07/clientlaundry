@@ -1,67 +1,109 @@
 <app-header></app-header>
-<section class="py-5">
-    <div class="">
-        
-        <div class="">
-            <div class="col-lg-8 offset-lg-2 py-3">
-                <div class="save-boxs px-4 py-4">
-                    <div class="">
-                        <div class=" py-2">
-                            <h1 class="text-center wd-title">Customers</h1>
-                            <div class="search-container px-2">
-                                <form (ngSubmit)="onSearch()">
-                                    <input type="text" placeholder="Search..." class="search-input" name="search" [(ngModel)]="searchTerm" />
-                                </form>
-                            </div>
 
+<section class="py-5" style="background-color: #f8fafc; min-height: 100vh;">
+    <div class="col-lg-10 offset-lg-1">
+
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h2 class="fw-bold text-dark m-0" style="font-family: 'Outfit', sans-serif;">Customers Directory</h2>
+
+            <!-- Search bar -->
+            <div class="search-box position-relative" style="width: 300px;">
+                <form (ngSubmit)="onSearch()">
+                    <input type="text" placeholder="Search customer name or phone..." class="form-control" name="search"
+                        [(ngModel)]="searchTerm"
+                        style="padding-right: 40px; padding-left: 15px; height: 42px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 14px; font-weight: 500;" />
+                    <button type="submit" class="position-absolute border-0 bg-transparent"
+                        style="right: 12px; top: 50%; transform: translateY(-50%); color: #64748b; padding: 0;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Grid Layout -->
+        <div *ngIf="customers && customers.length > 0" class="customer-grid mb-4">
+            <div *ngFor="let item of customers | paginate:{ itemsPerPage: 6, currentPage: p }" class="customer-card">
+                <div>
+                    <!-- Top section with avatar and name -->
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="customer-avatar">
+                            {{ item.name ? item.name.charAt(0) : 'C' }}
+                        </div>
+                        <div style="min-width: 0; flex-grow: 1;">
+                            <h3 class="customer-name" [title]="item.name">{{ item.name }}</h3>
+                            <span class="badge bg-light text-secondary border mt-1" style="font-size: 11px;"
+                                *ngIf="item.kuri">Kuri: {{ item.kuri }}</span>
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Name</th>
-                                <th>Address</th>
-                                <!-- <th>Kuri</th> -->
-                                <th>Mobile</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody *ngFor="let item of customers | paginate:{ itemsPerPage: 5, currentPage: p }" class="">
-                            <td class="text-center">
-                                <div class="p-2">
-                                    {{item.name}}
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="p-2">
-                                    {{item.address}}
-                                </div>
-                            </td>
-                            <!-- <td class="text-center">
-                                <div class="p-2">
-                                    {{item.kuri}}
-                                </div>
-                            </td> -->
-                            <td class="text-center">
-                                <div class="p-2">
-                                    {{item.mobile}}
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="p-2">
-                                    <button class="primaryBtn w150x fN" [routerLink]="['/edit-order', item._id]" [queryParams]="{kuri: item.kuri}">Create Order</button>
-                                </div>
-                            </td>
-                        </tbody>
-                    </table>
-                    <div class="pagination justify-content-center">
-                        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+                    <!-- Details section -->
+                    <div class="customer-info-row">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                        <span>{{ item.mobile }}</span>
+                    </div>
+
+                    <div class="customer-info-row">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                        <span [title]="item.address || 'No address registered'">{{ item.address || 'No address registered' }}</span>
+                    </div>
+
+                    <!-- Customer Stats Grid -->
+                    <div class="customer-stats-grid">
+                      <div class="stat-item" title="Total Orders">
+                        <span class="stat-val">{{ item.stats?.totalOrders || 0 }}</span>
+                        <span class="stat-lbl">Total</span>
+                      </div>
+                      <div class="stat-item text-success" title="Delivered Orders">
+                        <span class="stat-val">{{ item.stats?.deliveredOrders || 0 }}</span>
+                        <span class="stat-lbl">Deliv</span>
+                      </div>
+                      <div class="stat-item text-warning" title="Pending Orders">
+                        <span class="stat-val">{{ item.stats?.pendingOrders || 0 }}</span>
+                        <span class="stat-lbl">Pend</span>
+                      </div>
+                      <div class="stat-item text-danger" title="Pending Amount (Not Delivered)">
+                        <span class="stat-val">₹{{ item.stats?.pendingAmount || 0 }}</span>
+                        <span class="stat-lbl">Unpaid</span>
+                      </div>
                     </div>
                 </div>
+
+                <!-- Footer Action -->
+                <button class="primaryBtn create-order-btn d-flex align-items-center justify-content-center gap-2"
+                    [routerLink]="['/edit-order', item._id]" [queryParams]="{kuri: item.kuri}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    <span>Create Order</span>
+                </button>
             </div>
+        </div>
 
-            <!-- example -->
+        <!-- No customers fallback -->
+        <div *ngIf="!customers || customers.length === 0"
+            class="bg-white border rounded-3 p-5 text-center text-muted fw-semibold shadow-sm"
+            style="border-color: #e2e8f0 !important;">
+            No customers registered yet.
+        </div>
 
+        <!-- Pagination Wrapper -->
+        <div class="d-flex justify-content-center mt-4" *ngIf="customers && customers.length > 0">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
         </div>
 
     </div>

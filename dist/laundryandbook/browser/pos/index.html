@@ -1,0 +1,327 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <title>Tracker</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Intel+One+Mono:ital,wght@0,300..700;1,300..700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><link rel="modulepreload" href="chunk-F3H3XGEQ.js"><style ng-app-id="ng">
+
+.pos-section[_ngcontent-ng-c3116002165] {
+  font-family: "Outfit", sans-serif;
+}
+.pos-item-card[_ngcontent-ng-c3116002165] {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    border-color 0.15s;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+.pos-item-card[_ngcontent-ng-c3116002165]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  border-color: #cbd5e1;
+}
+.pos-item-avatar[_ngcontent-ng-c3116002165] {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      135deg,
+      #eff6ff 0%,
+      #dbeafe 100%);
+  color: #2563eb;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.pos-item-title[_ngcontent-ng-c3116002165] {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pos-item-price[_ngcontent-ng-c3116002165] {
+  font-weight: 700;
+  font-size: 15px;
+  color: #1e293b;
+}
+.pos-add-btn[_ngcontent-ng-c3116002165] {
+  background-color: #f1f5f9;
+  border: none;
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 12.5px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: background-color 0.15s;
+}
+.pos-item-card[_ngcontent-ng-c3116002165]:hover   .pos-add-btn[_ngcontent-ng-c3116002165] {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+.customer-info-form[_ngcontent-ng-c3116002165]   .form-label[_ngcontent-ng-c3116002165] {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+.customer-info-form[_ngcontent-ng-c3116002165]   .form-control[_ngcontent-ng-c3116002165], .customer-info-form[_ngcontent-ng-c3116002165]   .form-select[_ngcontent-ng-c3116002165] {
+  border: 1px solid #cbd5e1;
+  height: 38px;
+}
+.customer-info-form[_ngcontent-ng-c3116002165]   .form-control[_ngcontent-ng-c3116002165]:focus, .customer-info-form[_ngcontent-ng-c3116002165]   .form-select[_ngcontent-ng-c3116002165]:focus {
+  border-color: #93c5fd !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+.hover-item[_ngcontent-ng-c3116002165] {
+  transition: background-color 0.15s ease;
+}
+.hover-item[_ngcontent-ng-c3116002165]:hover {
+  background-color: #f1f5f9 !important;
+  cursor: pointer;
+}
+.btn-cart-adjust[_ngcontent-ng-c3116002165] {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #475569;
+  transition: background-color 0.15s;
+}
+.btn-cart-adjust[_ngcontent-ng-c3116002165]:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+.cart-row[_ngcontent-ng-c3116002165] {
+  align-items: center;
+}
+.catalog-grid-container[_ngcontent-ng-c3116002165]::-webkit-scrollbar {
+  width: 4px;
+}
+.catalog-grid-container[_ngcontent-ng-c3116002165]::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+}
+/*# sourceMappingURL=pos.component.css.map */</style><style ng-app-id="ng">
+
+.sidebar[_ngcontent-ng-c868477246] {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #0f172a;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #1e293b;
+  z-index: 1000;
+  padding: 24px 0;
+  box-sizing: border-box;
+}
+.sidebar-brand[_ngcontent-ng-c868477246] {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  margin-bottom: 30px;
+}
+.brand-logo[_ngcontent-ng-c868477246] {
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.brand-name[_ngcontent-ng-c868477246] {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  font-family:
+    "Outfit",
+    "Inter",
+    sans-serif;
+}
+.sidebar-search[_ngcontent-ng-c868477246] {
+  padding: 0 16px;
+}
+.search-input[_ngcontent-ng-c868477246] {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 10px 40px 10px 14px !important;
+  font-size: 13px !important;
+}
+.search-input[_ngcontent-ng-c868477246]::placeholder {
+  color: #64748b !important;
+}
+.search-btn[_ngcontent-ng-c868477246] {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #64748b;
+  padding: 0;
+  cursor: pointer;
+}
+.search-badge[_ngcontent-ng-c868477246] {
+  background-color: #1e293b;
+  color: #38bdf8;
+  border: 1px solid #334155;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.sidebar-nav[_ngcontent-ng-c868477246] {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+.nav-item[_ngcontent-ng-c868477246] {
+  width: 100%;
+}
+.nav-link[_ngcontent-ng-c868477246] {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 24px;
+  color: #94a3b8 !important;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+}
+.nav-link[_ngcontent-ng-c868477246]:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+.nav-link.active[_ngcontent-ng-c868477246] {
+  color: #ffffff !important;
+  background-color: #1e293b;
+  border-left-color: #38bdf8;
+}
+.nav-link[_ngcontent-ng-c868477246]   svg[_ngcontent-ng-c868477246] {
+  color: inherit;
+}
+.sidebar-footer[_ngcontent-ng-c868477246] {
+  padding: 24px;
+  border-top: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.user-profile[_ngcontent-ng-c868477246] {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.avatar[_ngcontent-ng-c868477246] {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+.user-details[_ngcontent-ng-c868477246] {
+  display: flex;
+  flex-direction: column;
+}
+.user-role[_ngcontent-ng-c868477246] {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+.logout-btn[_ngcontent-ng-c868477246] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.logout-btn[_ngcontent-ng-c868477246]:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+}
+/*# sourceMappingURL=header.component.css.map */</style></head>
+<body class="mat-typography"><!--nghm-->
+  <!-- Bootstrap JS + Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <app-root _nghost-ng-c1933515739="" ng-version="17.3.12" ngh="2" ng-server-context="ssg"><router-outlet _ngcontent-ng-c1933515739=""></router-outlet><app-pos _nghost-ng-c3116002165="" ngh="1"><app-header _ngcontent-ng-c3116002165="" _nghost-ng-c868477246="" ngh="0"><div _ngcontent-ng-c868477246="" class="sidebar"><div _ngcontent-ng-c868477246="" class="sidebar-brand"><div _ngcontent-ng-c868477246="" class="brand-logo"><svg _ngcontent-ng-c868477246="" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path _ngcontent-ng-c868477246="" d="M12 22a7 7 0 0 0 5-11.97l-5-5.91-5 5.91A7 7 0 0 0 12 22z"></path></svg></div><span _ngcontent-ng-c868477246="" class="brand-name"><!--ngetn--><!--ngetn--></span></div><div _ngcontent-ng-c868477246="" class="sidebar-search px-3 mb-4"><form _ngcontent-ng-c868477246="" novalidate="" class="position-relative ng-untouched ng-pristine ng-valid"><input _ngcontent-ng-c868477246="" type="text" name="searchText" placeholder="Search Bill No..." class="form-control search-input ng-untouched ng-pristine ng-valid" ng-reflect-name="searchText" ng-reflect-model="" value=""><button _ngcontent-ng-c868477246="" type="submit" class="search-btn"><svg _ngcontent-ng-c868477246="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle _ngcontent-ng-c868477246="" cx="11" cy="11" r="8"></circle><line _ngcontent-ng-c868477246="" x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button></form><!--bindings={}--></div><ul _ngcontent-ng-c868477246="" class="sidebar-nav"><li _ngcontent-ng-c868477246="" class="nav-item"><a _ngcontent-ng-c868477246="" routerlink="/home" routerlinkactive="active" class="nav-link" ng-reflect-router-link="/home" ng-reflect-router-link-active="active" href="/home"><svg _ngcontent-ng-c868477246="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect _ngcontent-ng-c868477246="" x="3" y="3" width="7" height="9"></rect><rect _ngcontent-ng-c868477246="" x="14" y="3" width="7" height="5"></rect><rect _ngcontent-ng-c868477246="" x="14" y="12" width="7" height="9"></rect><rect _ngcontent-ng-c868477246="" x="3" y="16" width="7" height="5"></rect></svg><span _ngcontent-ng-c868477246="">Dashboard</span></a></li><li _ngcontent-ng-c868477246="" class="nav-item"><a _ngcontent-ng-c868477246="" routerlink="/pos" routerlinkactive="active" class="nav-link active" ng-reflect-router-link="/pos" ng-reflect-router-link-active="active" href="/pos"><svg _ngcontent-ng-c868477246="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect _ngcontent-ng-c868477246="" x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line _ngcontent-ng-c868477246="" x1="12" y1="4" x2="12" y2="20"></line><line _ngcontent-ng-c868477246="" x1="2" y1="12" x2="22" y2="12"></line></svg><span _ngcontent-ng-c868477246="">POS Terminal</span></a></li><li _ngcontent-ng-c868477246="" class="nav-item"><a _ngcontent-ng-c868477246="" routerlink="/savepannel" routerlinkactive="active" class="nav-link" ng-reflect-router-link="/savepannel" ng-reflect-router-link-active="active" href="/savepannel"><svg _ngcontent-ng-c868477246="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path _ngcontent-ng-c868477246="" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline _ngcontent-ng-c868477246="" points="14 2 14 8 20 8"></polyline><line _ngcontent-ng-c868477246="" x1="16" y1="13" x2="8" y2="13"></line><line _ngcontent-ng-c868477246="" x1="16" y1="17" x2="8" y2="17"></line><polyline _ngcontent-ng-c868477246="" points="10 9 9 9 8 9"></polyline></svg><span _ngcontent-ng-c868477246="">Save Orders</span></a></li><li _ngcontent-ng-c868477246="" class="nav-item"><a _ngcontent-ng-c868477246="" routerlink="/orders" routerlinkactive="active" class="nav-link" ng-reflect-router-link="/orders" ng-reflect-router-link-active="active" href="/orders"><svg _ngcontent-ng-c868477246="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect _ngcontent-ng-c868477246="" x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line _ngcontent-ng-c868477246="" x1="9" y1="3" x2="9" y2="21"></line><line _ngcontent-ng-c868477246="" x1="15" y1="3" x2="15" y2="21"></line><line _ngcontent-ng-c868477246="" x1="3" y1="9" x2="21" y2="9"></line><line _ngcontent-ng-c868477246="" x1="3" y1="15" x2="21" y2="15"></line></svg><span _ngcontent-ng-c868477246="">Tracking Board</span></a></li><li _ngcontent-ng-c868477246="" class="nav-item"><a _ngcontent-ng-c868477246="" routerlink="/deliveryhistory" routerlinkactive="active" class="nav-link" ng-reflect-router-link="/deliveryhistory" ng-reflect-router-link-active="active" href="/deliveryhistory"><svg _ngcontent-ng-c868477246="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle _ngcontent-ng-c868477246="" cx="12" cy="12" r="10"></circle><polyline _ngcontent-ng-c868477246="" points="12 6 12 12 16 14"></polyline></svg><span _ngcontent-ng-c868477246="">Delivery History</span></a></li><li _ngcontent-ng-c868477246="" class="nav-item"><a _ngcontent-ng-c868477246="" routerlink="/dailyexpenses" routerlinkactive="active" class="nav-link" ng-reflect-router-link="/dailyexpenses" ng-reflect-router-link-active="active" href="/dailyexpenses"><svg _ngcontent-ng-c868477246="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line _ngcontent-ng-c868477246="" x1="12" y1="1" x2="12" y2="23"></line><path _ngcontent-ng-c868477246="" d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg><span _ngcontent-ng-c868477246="">Expenses</span></a></li><li _ngcontent-ng-c868477246="" class="nav-item"><a _ngcontent-ng-c868477246="" routerlink="/customerhistory" routerlinkactive="active" class="nav-link" ng-reflect-router-link="/customerhistory" ng-reflect-router-link-active="active" href="/customerhistory"><svg _ngcontent-ng-c868477246="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path _ngcontent-ng-c868477246="" d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle _ngcontent-ng-c868477246="" cx="9" cy="7" r="4"></circle><path _ngcontent-ng-c868477246="" d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path _ngcontent-ng-c868477246="" d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span _ngcontent-ng-c868477246="">Customer History</span></a></li><li _ngcontent-ng-c868477246="" class="nav-item"><a _ngcontent-ng-c868477246="" routerlink="/settings" routerlinkactive="active" class="nav-link" ng-reflect-router-link="/settings" ng-reflect-router-link-active="active" href="/settings"><svg _ngcontent-ng-c868477246="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle _ngcontent-ng-c868477246="" cx="12" cy="12" r="3"></circle><path _ngcontent-ng-c868477246="" d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span _ngcontent-ng-c868477246="">Settings</span></a></li></ul><div _ngcontent-ng-c868477246="" class="sidebar-footer"><div _ngcontent-ng-c868477246="" class="user-profile mb-3"><div _ngcontent-ng-c868477246="" class="avatar"><svg _ngcontent-ng-c868477246="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path _ngcontent-ng-c868477246="" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle _ngcontent-ng-c868477246="" cx="12" cy="7" r="4"></circle></svg></div><div _ngcontent-ng-c868477246="" class="user-details"><span _ngcontent-ng-c868477246="" class="user-role">Operator</span></div></div><button _ngcontent-ng-c868477246="" class="logout-btn w-100"><svg _ngcontent-ng-c868477246="" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path _ngcontent-ng-c868477246="" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline _ngcontent-ng-c868477246="" points="16 17 21 12 16 7"></polyline><line _ngcontent-ng-c868477246="" x1="21" y1="12" x2="9" y2="12"></line></svg><span _ngcontent-ng-c868477246="">Logout</span></button></div></div></app-header><section _ngcontent-ng-c3116002165="" class="pos-section py-4" style="background-color: #f8fafc; min-height: 100vh;"><div _ngcontent-ng-c3116002165="" class="container-fluid px-4"><div _ngcontent-ng-c3116002165="" class="d-flex justify-content-between align-items-center mb-3"><h2 _ngcontent-ng-c3116002165="" class="fw-bold text-dark m-0" style="font-family: 'Outfit', sans-serif; font-size: 24px;">POS Terminal Billing</h2><button _ngcontent-ng-c3116002165="" routerlink="/savepannel" class="btn btn-outline-secondary btn-sm" style="border-radius: 8px;" tabindex="0" ng-reflect-router-link="/savepannel"> View Saved Drafts </button></div><div _ngcontent-ng-c3116002165="" class="row g-4"><div _ngcontent-ng-c3116002165="" class="col-lg-7"><div _ngcontent-ng-c3116002165="" class="bg-white border rounded-3 p-3 shadow-sm h-100 d-flex flex-column" style="border-color: #e2e8f0 !important; min-height: 70vh;"><div _ngcontent-ng-c3116002165="" class="mb-3 position-relative"><input _ngcontent-ng-c3116002165="" type="text" placeholder="🔍 Search catalog services (e.g. Silk Saree, Shirt)..." class="form-control catalog-search ng-untouched ng-pristine ng-valid" style="padding-left: 36px; border-radius: 10px; height: 42px; border: 1.5px solid #cbd5e1; font-weight: 500;" ng-reflect-model="" value=""></div><div _ngcontent-ng-c3116002165="" class="catalog-grid-container flex-grow-1" style="overflow-y: auto; max-height: 60vh; padding-right: 4px;"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><div _ngcontent-ng-c3116002165="" class="text-center py-5 text-muted fw-semibold"> No service items found matching your search. </div><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--></div></div></div><div _ngcontent-ng-c3116002165="" class="col-lg-5"><div _ngcontent-ng-c3116002165="" class="bg-white border rounded-3 p-3 shadow-sm d-flex flex-column h-100" style="border-color: #e2e8f0 !important; min-height: 70vh;"><h5 _ngcontent-ng-c3116002165="" class="fw-bold text-dark mb-3 border-bottom pb-2" style="font-family: 'Outfit', sans-serif; border-bottom-color: #f1f5f9 !important;"> Cart Details &amp; Checkout </h5><form _ngcontent-ng-c3116002165="" novalidate="" class="customer-info-form mb-4 ng-untouched ng-pristine ng-invalid" ng-reflect-form="[object Object]"><div _ngcontent-ng-c3116002165="" class="mb-3 position-relative"><label _ngcontent-ng-c3116002165="" class="form-label text-secondary small fw-bold">Customer Name</label><input _ngcontent-ng-c3116002165="" formcontrolname="name" type="text" placeholder="Enter customer name" autocomplete="off" class="form-control ng-untouched ng-pristine ng-invalid" style="border-radius: 8px; padding: 8px 12px; font-size: 13.5px;" ng-reflect-name="name" ng-reflect-ng-class="[object Object]" value=""><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></div><div _ngcontent-ng-c3116002165="" class="row g-2 mb-3"><div _ngcontent-ng-c3116002165="" class="col-md-6 position-relative"><label _ngcontent-ng-c3116002165="" class="form-label text-secondary small fw-bold">Phone Number</label><input _ngcontent-ng-c3116002165="" formcontrolname="mobile" type="text" placeholder="Phone number" autocomplete="off" class="form-control ng-untouched ng-pristine ng-invalid" style="border-radius: 8px; padding: 8px 12px; font-size: 13.5px;" ng-reflect-name="mobile" ng-reflect-ng-class="[object Object]" value=""><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></div><div _ngcontent-ng-c3116002165="" class="col-md-6"><div _ngcontent-ng-c3116002165="" class="d-flex justify-content-between align-items-center mb-1"><label _ngcontent-ng-c3116002165="" class="form-label text-secondary small fw-bold m-0">WhatsApp</label><div _ngcontent-ng-c3116002165="" class="form-check m-0"><input _ngcontent-ng-c3116002165="" type="checkbox" id="sameAsPhonePos" formcontrolname="sameAsPhone" class="form-check-input cursorP ng-untouched ng-pristine ng-valid" ng-reflect-name="sameAsPhone"><label _ngcontent-ng-c3116002165="" for="sameAsPhonePos" class="form-check-label text-secondary cursorP" style="font-size: 10px; font-weight: 600;">Same</label></div></div><input _ngcontent-ng-c3116002165="" formcontrolname="whatsapp" type="text" placeholder="WhatsApp number" class="form-control ng-untouched ng-pristine ng-valid" style="border-radius: 8px; padding: 8px 12px; font-size: 13.5px;" ng-reflect-name="whatsapp" value=""></div></div><div _ngcontent-ng-c3116002165="" class="mb-3"><label _ngcontent-ng-c3116002165="" class="form-label text-secondary small fw-bold">Delivery Address</label><input _ngcontent-ng-c3116002165="" formcontrolname="address" type="text" placeholder="Street address, building name" class="form-control ng-untouched ng-pristine ng-invalid" style="border-radius: 8px; padding: 8px 12px; font-size: 13.5px;" ng-reflect-name="address" ng-reflect-ng-class="[object Object]" value=""></div><div _ngcontent-ng-c3116002165="" class="row g-2 mb-3"><div _ngcontent-ng-c3116002165="" class="col-md-6"><label _ngcontent-ng-c3116002165="" class="form-label text-secondary small fw-bold">Order Date</label><input _ngcontent-ng-c3116002165="" formcontrolname="date" type="date" class="form-control ng-untouched ng-pristine ng-valid" style="border-radius: 8px; padding: 8px 12px; font-size: 13.5px;" ng-reflect-name="date" value="2026-07-13"></div><div _ngcontent-ng-c3116002165="" class="col-md-6"><label _ngcontent-ng-c3116002165="" class="form-label text-secondary small fw-bold">Due Date</label><input _ngcontent-ng-c3116002165="" formcontrolname="dueDate" type="date" class="form-control ng-untouched ng-pristine ng-valid" style="border-radius: 8px; padding: 8px 12px; font-size: 13.5px;" ng-reflect-name="dueDate" ng-reflect-ng-class="[object Object]" value="2026-07-14"></div></div><div _ngcontent-ng-c3116002165="" class="mb-2"><label _ngcontent-ng-c3116002165="" class="form-label text-secondary small fw-bold">Special Requests</label><textarea _ngcontent-ng-c3116002165="" formcontrolname="specialInstructions" placeholder="Damage notes, delicate fabrics, ironing only requests..." rows="1" class="form-control ng-untouched ng-pristine ng-valid" style="border-radius: 8px; padding: 8px 12px; font-size: 13px;" ng-reflect-name="specialInstructions"></textarea></div></form><div _ngcontent-ng-c3116002165="" class="flex-grow-1 mb-3" style="max-height: 250px; overflow-y: auto; border: 1px solid #f1f5f9; border-radius: 12px; padding: 10px;"><div _ngcontent-ng-c3116002165="" class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom" style="border-bottom-color: #f1f5f9 !important;"><span _ngcontent-ng-c3116002165="" class="fw-bold text-dark" style="font-size: 14px;">Shopping Cart Items</span><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></div><div _ngcontent-ng-c3116002165="" class="text-center py-4 text-muted small fw-semibold"> 🛒 Add service items from the catalog on the left to begin billing. </div><!--bindings={
+  "ng-reflect-ng-if-else": "[object Object]"
+}--><!--container--></div><div _ngcontent-ng-c3116002165="" class="pt-3 border-top mt-auto" style="border-top-color: #f1f5f9 !important;"><div _ngcontent-ng-c3116002165="" class="d-flex justify-content-between align-items-center mb-3"><span _ngcontent-ng-c3116002165="" class="fw-bold text-secondary" style="font-size: 14px;">Grand Total:</span><span _ngcontent-ng-c3116002165="" class="fs-4 fw-bold text-dark">₹0</span></div><div _ngcontent-ng-c3116002165="" class="row g-2 mb-3"><div _ngcontent-ng-c3116002165="" class="col-12"><select _ngcontent-ng-c3116002165="" class="form-select ng-untouched ng-pristine ng-valid" style="border-radius: 8px; font-size: 13.5px; height: 38px;" ng-reflect-form="[object Object]"><option _ngcontent-ng-c3116002165="" value="cash" ng-reflect-value="cash">💵 Cash Payment</option><option _ngcontent-ng-c3116002165="" value="upi" ng-reflect-value="upi">📱 UPI / QR Scan</option><option _ngcontent-ng-c3116002165="" value="card" ng-reflect-value="card">💳 Credit/Debit Card</option></select></div></div><div _ngcontent-ng-c3116002165="" class="row g-2"><div _ngcontent-ng-c3116002165="" class="col-6"><button _ngcontent-ng-c3116002165="" type="button" class="btn btn-outline-secondary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-1" style="border-radius: 10px; height: 44px; font-size: 14px;"> Hold Draft ⏳ </button></div><div _ngcontent-ng-c3116002165="" class="col-6"><button _ngcontent-ng-c3116002165="" type="button" class="btn btn-success w-100 py-2 fw-bold d-flex align-items-center justify-content-center gap-1" style="border-radius: 10px; height: 44px; font-size: 14px; background-color: #10b981; border: none;"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><span _ngcontent-ng-c3116002165="">Pay &amp; Print 🚀</span></button></div></div></div></div></div></div></div></section></app-pos><!--container--></app-root>
+<script src="polyfills.js" type="module"></script><script src="main.js" type="module"></script>
+
+
+
+
+<div class="overlay-container" aria-live="polite"><div id="toast-container" class="toast-top-right toast-container"><div class="ng-tns-c969959638-0 ng-star-inserted ng-trigger ng-trigger-flyInOut ngx-toastr toast-error" toast-component="" style="opacity: 1;" ngh="3"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><!--bindings={}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><div role="alert" class="ng-tns-c969959638-0 toast-message ng-star-inserted" aria-label="Failed to load items catalog" style=""> Failed to load items catalog </div><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--></div></div></div><script id="ng-state" type="application/json">{"__nghData__":[{"t":{"14":"t5"},"c":{"14":[]}},{"t":{"14":"t24","15":"t25","25":"t26","31":"t27","62":"t28","63":"t29","64":"t30","87":"t31"},"c":{"14":[],"15":[{"i":"t25","r":1}],"25":[],"31":[],"62":[],"63":[{"i":"t30","r":1}],"64":[],"87":[]}},{"c":{"0":[{"i":"c3116002165","r":1}]}},{"t":{"0":"t32","1":"t33","2":"t34","3":"t35","4":"t36"},"c":{"0":[],"1":[],"2":[],"3":[{"i":"t35","r":1}],"4":[]}}]}</script></body></html>

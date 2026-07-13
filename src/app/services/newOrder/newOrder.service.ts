@@ -10,6 +10,14 @@ export class newOrderService {
 
     constructor(private http: HttpClient, private storageService: StorageService) { }
 
+    getById(id:any):Observable<any>{
+        const token = this.storageService.getItem('authToken'); // or sessionStorage
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        return this.http.get(this.apiUrl+'/order/'+id, {headers});
+    }
+
     getAllItems(): Observable<any> {
         const token = this.storageService.getItem('authToken'); // or sessionStorage
         const headers = {
@@ -26,12 +34,19 @@ export class newOrderService {
         return this.http.post(this.apiUrl+'/order', data, {headers})
     }
     
-    getAllOrders(status:string, page: number, limit: number): Observable<any>{
+    getAllOrders(status:string, page: number, limit: number, filters?: any): Observable<any>{
         const token = this.storageService.getItem('authToken'); // or sessionStorage
         // const headers = {
         //     Authorization: `Bearer ${token}`
         // };
-        const params=new HttpParams().set('page', page).set('limit', limit).set('status', status)
+        let params = new HttpParams().set('page', page).set('limit', limit).set('status', status);
+        if (filters) {
+            if (filters.customerName) params = params.set('customerName', filters.customerName);
+            if (filters.mobile) params = params.set('mobile', filters.mobile);
+            if (filters.date) params = params.set('date', filters.date);
+            if (filters.month) params = params.set('month', filters.month);
+            if (filters.year) params = params.set('year', filters.year);
+        }
         return this.http.get(`${this.apiUrl}/order`, { params});
     }
     deleteOrder(id:any):Observable<any>{
@@ -95,5 +110,29 @@ export class newOrderService {
             Authorization: `Bearer ${token}`
         };
         return this.http.post(this.apiUrl + `/order/generate-invoice/${data.orderId}`, {headers}, {responseType: 'blob'})
+  }
+
+  getDashboardMetrics(): Observable<any> {
+    const token = this.storageService.getItem('authToken');
+    const headers = {
+        Authorization: `Bearer ${token}`
+    };
+    return this.http.get(this.apiUrl + '/order/dashboard-metrics', { headers });
+  }
+
+  barcodeUpdate(payload: { bill: string, status?: string }): Observable<any> {
+    const token = this.storageService.getItem('authToken');
+    const headers = {
+        Authorization: `Bearer ${token}`
+    };
+    return this.http.put(this.apiUrl + '/order/barcode-update', payload, { headers });
+  }
+
+  recordPayment(data: { orderId: string, paymentMethod: string, paidAmount: number, discount: number }): Observable<any> {
+    const token = this.storageService.getItem('authToken');
+    const headers = {
+        Authorization: `Bearer ${token}`
+    };
+    return this.http.post(this.apiUrl + '/order/record-payment', data, { headers });
   }
 }

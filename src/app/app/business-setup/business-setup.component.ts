@@ -15,9 +15,10 @@ export class BusinessSetupComponent {
   selectedLogo: File | null = null;
   businesssubmit: boolean = false;
   step=1
-  currentStep = 2;
+  currentStep = 1;
   workflows: any[] = [];
   steps: string[] = ['washing'];
+  loading = false;
 
   addStep() {
     if(this.steps.length<=8){
@@ -106,6 +107,7 @@ removeWorkflow(index: number) {
       return;
     }
 
+    this.loading = true;
     this.businessService.create(formData).subscribe({
       next: (res)=>{
         this.businessForm.reset()
@@ -114,25 +116,22 @@ removeWorkflow(index: number) {
         this.businessService.createWorkflow({'workflows':this.steps}).subscribe({
           next: (res)=>{
             this.toaster.success('Company created successfully')
-            localStorage.setItem('workflow', JSON.stringify(res.data.data))
+            localStorage.setItem('workflow', JSON.stringify(res.data))
+            this.loading = false;
             this.router.navigate(['/home'])
           },error: (err) => {
-          // alert('Order failed')
-          this.toaster.error('Order failed')
-          return;
-        },
+            this.toaster.error('Order failed')
+            this.loading = false;
+            return;
+          },
         })
       },
       error: (err) => {
-          // alert('Order failed')
-          this.toaster.error('Order failed')
-          return;
-        },
+        this.toaster.error('Order failed')
+        this.loading = false;
+        return;
+      },
     })
-    // Call API here
     console.log("Submitted:", this.businessForm.value);
-
-    // redirect to dashboard
-    // this.router.navigate(['/dashboard']);
   }
 }

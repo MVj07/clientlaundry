@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ElementRef } from '@angular/core';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,12 +15,18 @@ export class NeworderComponent {
   orditems: any = []
   submit: boolean = false;
   itemSubmit: boolean = false;
+  loading: boolean = false;
   newOrderForm!: FormGroup;
   itemForm!: FormGroup;
   orders: any[] = [];
   customerId: string | null = null;
   p: number = 1
   update: any = null
+  
+  suggestions: any[] = [];
+  showSuggestions: boolean = false;
+  activeField: 'name' | 'mobile' | null = null;
+
   constructor(
     private fb: FormBuilder,
     private newOrderService: newOrderService,
@@ -28,25 +34,61 @@ export class NeworderComponent {
     private route: ActivatedRoute,
     private router: Router,
     private authservice: LoginService,
-    private toaster: ToastrService
+    private toaster: ToastrService,
+    private eRef: ElementRef
   ) { }
   ngOnInit(): void {
     this.newOrderForm = this.fb.group({
-      // kuri: ['', Validators.required],
-      // bill: ['', Validators.required],
       date: ['', Validators.required],
+      dueDate: ['', Validators.required],
+      specialInstructions: [''],
       name: ['', Validators.required],
       mobile: ['', Validators.required],
       address: ['', Validators.required],
-      // items: ['', Validators.required],
-      // quantity: [1, Validators.required],
-      // amount: [0, Validators.required],
+      whatsapp: [''],
+      sameAsPhone: [false]
     })
 
     this.itemForm = this.fb.group({
       items: [null, Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
       amount: [0, [Validators.required, Validators.min(1)]]
+    });
+
+    this.newOrderForm.get('mobile')?.valueChanges.subscribe(val => {
+      if (this.newOrderForm.get('sameAsPhone')?.value) {
+        this.newOrderForm.get('whatsapp')?.setValue(val, { emitEvent: false });
+      }
+    });
+
+    this.newOrderForm.get('sameAsPhone')?.valueChanges.subscribe(checked => {
+      if (checked) {
+        const phone = this.newOrderForm.get('mobile')?.value;
+        this.newOrderForm.get('whatsapp')?.setValue(phone, { emitEvent: false });
+        this.newOrderForm.get('whatsapp')?.disable();
+      } else {
+        this.newOrderForm.get('whatsapp')?.enable();
+      }
+    });
+
+    this.newOrderForm.get('name')?.valueChanges.subscribe(val => {
+      if (this.newOrderForm.get('name')?.dirty && val && val.length >= 2) {
+        this.fetchSuggestions(val, 'name');
+      } else {
+        if (this.activeField === 'name') {
+          this.showSuggestions = false;
+        }
+      }
+    });
+
+    this.newOrderForm.get('mobile')?.valueChanges.subscribe(val => {
+      if (this.newOrderForm.get('mobile')?.dirty && val && val.length >= 2) {
+        this.fetchSuggestions(val, 'mobile');
+      } else {
+        if (this.activeField === 'mobile') {
+          this.showSuggestions = false;
+        }
+      }
     });
 
     this.newOrderService.getAllItems().subscribe({
@@ -70,12 +112,25 @@ export class NeworderComponent {
       }
     })
     this.route.queryParams.subscribe(params => {
-      console.log(JSON.parse(params['items']), params['date'])
-      this.orders = JSON.parse(params['items'])
+      if (params['items']) {
+        try {
+          this.orders = JSON.parse(params['items'])
+          console.log(this.orders, params['date'])
+        } catch (e) {
+          console.error('Error parsing items JSON from query params', e);
+          this.orders = []
+        }
+      } else {
+        this.orders = []
+      }
       this.update = params['orderId']
+      const dateVal = params['date'] ? params['date'].split('T')[0] : '';
+      const dueDateVal = params['dueDate'] ? params['dueDate'].split('T')[0] : '';
       this.newOrderForm.patchValue({
         kuri: params['kuri'],
-        date: params['date'],
+        date: dateVal,
+        dueDate: dueDateVal,
+        specialInstructions: params['specialInstructions'] || '',
         bill: params['bill']
       })
       if (this.update) {
@@ -93,12 +148,17 @@ export class NeworderComponent {
     // Fetch the order details using the service
     this.customerService.getById(customerId).subscribe(data => {
       console.log(data)
+      const cust = data.data;
       this.newOrderForm.patchValue({
-        name: data.data.name,
-        mobile: data.data.mobile,
-        address: data.data.address,
-        kuri: data.data.kuri
+        name: cust.name,
+        mobile: cust.mobile,
+        address: cust.address,
+        whatsapp: cust.whatsapp || '',
+        sameAsPhone: cust.mobile && cust.whatsapp && cust.mobile === cust.whatsapp
       });
+      if (cust.mobile && cust.whatsapp && cust.mobile === cust.whatsapp) {
+        this.newOrderForm.get('whatsapp')?.disable();
+      }
     });
   }
 
@@ -115,15 +175,19 @@ export class NeworderComponent {
     if (this.newOrderForm.invalid || this.orders.length === 0) {
       return;
     }
-    const formValue = this.newOrderForm.value;
+    this.loading = true;
+    const formValue = this.newOrderForm.getRawValue();
     const orderPayload = {
       customerId: this.customerId,
       orderId: this.update,
       kuri: formValue.kuri,
       bill: formValue.bill,
       date: formValue.date,
+      dueDate: formValue.dueDate,
+      specialInstructions: formValue.specialInstructions || '',
       customerName: formValue.name,
       phoneNumber: formValue.mobile,
+      whatsappNumber: formValue.whatsapp,
       address: formValue.address,
       status: 'confirm',
       type: 'item',
@@ -142,12 +206,14 @@ export class NeworderComponent {
           this.itemForm.reset();
           this.submit = false;
           this.orders = []
+          this.loading = false;
           // alert('Order successfully')
           this.toaster.success('Order success', 'success')
         },
         error: (err) => {
           // alert('Order failed')
           this.toaster.error('Order failed')
+          this.loading = false;
           return;
         },
       })
@@ -159,6 +225,7 @@ export class NeworderComponent {
           this.itemForm.reset();
           this.submit = false;
           this.orders = []
+          this.loading = false;
           // alert(res.message)
           this.toaster.success(res.message)
           this.router.navigate(['/savepannel']);
@@ -166,6 +233,7 @@ export class NeworderComponent {
         error: (err) => {
           // alert('Order update failed')
           this.toaster.error('Order update failed')
+          this.loading = false;
           return;
         },
       })
@@ -218,6 +286,51 @@ export class NeworderComponent {
     this.itemForm.patchValue({
       amount: item.price
     });
+  }
+
+  fetchSuggestions(term: string, field: 'name' | 'mobile') {
+    this.activeField = field;
+    this.customerService.getAll(term).subscribe({
+      next: (res) => {
+        if (res && res.data) {
+          this.suggestions = res.data;
+          this.showSuggestions = this.suggestions.length > 0;
+        } else {
+          this.suggestions = [];
+          this.showSuggestions = false;
+        }
+      },
+      error: () => {
+        this.suggestions = [];
+        this.showSuggestions = false;
+      }
+    });
+  }
+
+  selectCustomer(cust: any) {
+    this.customerId = cust._id;
+    this.newOrderForm.patchValue({
+      name: cust.name,
+      mobile: cust.mobile,
+      whatsapp: cust.whatsapp || '',
+      address: cust.address || '',
+      sameAsPhone: cust.mobile && cust.whatsapp && cust.mobile === cust.whatsapp
+    });
+    if (cust.mobile && cust.whatsapp && cust.mobile === cust.whatsapp) {
+      this.newOrderForm.get('whatsapp')?.disable();
+    } else {
+      this.newOrderForm.get('whatsapp')?.enable();
+    }
+    this.showSuggestions = false;
+    this.suggestions = [];
+    this.activeField = null;
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickout(event: any) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.showSuggestions = false;
+    }
   }
 
 }

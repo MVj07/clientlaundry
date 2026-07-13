@@ -8,7 +8,9 @@ export const businessSetupGuard: CanActivateFn = (route, state) => {
       ? localStorage.getItem('authToken')
       : null;
 
-  const profileCompleted = localStorage.getItem("profile"); // "true" or null
+  const profileCompleted = typeof window !== 'undefined' && localStorage
+      ? localStorage.getItem("profile")
+      : null;
 
   // 1️⃣ If no token → redirect to login
   if (!token) {

@@ -1,20 +1,29 @@
-<section class="vh-100 d-flex align-items-center justify-content-center bg-gradient">
+<section class="vh-100 d-flex align-items-center justify-content-center login-section">
   <div class="login-container">
     <div class="login-card shadow-lg rounded-4 overflow-hidden">
 
-      <!-- LEFT SIDE (Branding / Empty) -->
-      <div class="login-left d-flex align-items-center justify-content-center">
-        <h1 class="brand-text">Laundry Service</h1>
+      <!-- LEFT SIDE (Branding panel) -->
+      <div class="login-left d-flex flex-column align-items-center justify-content-center text-center p-5">
+        <div class="brand-logo-container mb-3">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22a7 7 0 0 0 5-11.97l-5-5.91-5 5.91A7 7 0 0 0 12 22z"/>
+          </svg>
+        </div>
+        <h1 class="brand-text">Antigravity</h1>
+        <p class="brand-tagline small text-white-50">State of the art laundry and dry-cleaning automation</p>
       </div>
 
       <!-- RIGHT SIDE (Login Form) -->
-      <div class="login-form p-5">
-        <h2 class="text-center mb-4">Login</h2>
+      <div class="login-form p-5 d-flex flex-column justify-content-center">
+        <div class="mb-4">
+          <h2 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif;">Welcome Back</h2>
+          <p class="text-secondary small">Please enter your account details to access your dashboard.</p>
+        </div>
 
         <form [formGroup]="registerForm" (ngSubmit)="getdata()">
 
           <div class="mb-3">
-            <label class="form-label fw-semibold">Username</label>
+            <label class="form-label">Username</label>
             <input type="text" class="form-control" formControlName="name"
               placeholder="Enter username"
               [ngClass]="{'is-invalid': valuename?.invalid && valuename?.touched}" />
@@ -24,24 +33,37 @@
           </div>
 
           <div class="mb-4">
-            <label class="form-label fw-semibold">Password</label>
-            <input type="password" class="form-control" formControlName="password"
-              placeholder="Enter password"
-              [ngClass]="{'is-invalid': valuepassword?.invalid && valuepassword?.touched}" />
-            <div *ngIf="valuepassword?.invalid && valuepassword?.touched" class="invalid-feedback">
+            <label class="form-label">Password</label>
+            <div class="position-relative">
+              <input [type]="showPassword ? 'text' : 'password'" class="form-control pe-5" formControlName="password"
+                placeholder="Enter password"
+                [ngClass]="{'is-invalid': valuepassword?.invalid && valuepassword?.touched}" />
+              <button type="button" class="btn position-absolute border-0 bg-transparent text-secondary" style="right: 12px; top: 50%; transform: translateY(-50%); padding: 0;"
+                      (click)="showPassword = !showPassword">
+                <svg *ngIf="!showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <svg *ngIf="showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              </button>
+            </div>
+            <div *ngIf="valuepassword?.invalid && valuepassword?.touched" class="invalid-feedback d-block">
               Password must be at least 8 characters long.
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold"
-            [disabled]="registerForm.invalid">
-            Login
+          <button type="submit" class="primaryBtn py-2 mb-3 d-flex align-items-center justify-content-center gap-2" [disabled]="registerForm.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span>{{ loading ? 'Signing In...' : 'Login to Account' }}</span>
           </button>
 
           <!-- SIGNUP LINK -->
-          <p class="text-center mt-3">
-            Don't have an account?
-            <a routerLink="/signup" class="text-primary fw-semibold">Sign up</a>
+          <p class="text-center mt-2 mb-0 small text-secondary">
+            Don't have an account yet?
+            <a routerLink="/signup" class="text-primary fw-semibold text-decoration-none">Sign Up</a>
           </p>
 
         </form>

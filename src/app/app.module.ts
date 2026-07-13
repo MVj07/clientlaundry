@@ -30,6 +30,7 @@ import { SignupComponent } from './component/signup/signup.component';
 import { OrdersComponent } from './component/orders/orders.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { WorkflowComponent } from './component/workflow/workflow.component';
+import { PosComponent } from './component/pos/pos.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { WorkflowComponent } from './component/workflow/workflow.component';
     BusinessSetupComponent,
     SignupComponent,
     OrdersComponent,
-    WorkflowComponent
+    WorkflowComponent,
+    PosComponent
   ],
   imports: [
     NgxPaginationModule,

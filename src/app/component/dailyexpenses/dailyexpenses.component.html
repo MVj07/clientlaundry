@@ -1,239 +1,209 @@
 <app-header></app-header>
-<section class="py-5">
-  <div class="">
-    <div class="form-box ">
-      <div class="col-lg-8 offset-lg-2">
-        <div class="">
-          <div class="d-flex justify-content-between align-items-center pb-2">
-            <h1 class="text-center wd-title">All Expenses</h1>
-            <button class="btn btn-primary" (click)="openPopup()">Open Popup</button>
-          </div>
-          <div class="d-flex justify-content-between align-items-center pb-2">
-            <div *ngIf="this.selected === 'today' ">
-              <input type="date" class="form-control" [(ngModel)]="selectedDate" (change)="onDateChange()" />
-            </div>
-            <form (ngSubmit)="submitFilter()" *ngIf="this.selected === 'month' ">
-              <div class="d-flex gap-2">
-                <select class="form-select select-items" [(ngModel)]="selectedMonth" name="month" required>
-                  <option value="" disabled>Select Month</option>
-                  <option *ngFor="let m of months" [value]="m.value">{{ m.name }}</option>
-                </select>
 
-                <select class="form-select select-items" [(ngModel)]="selectedYear" name="year" required>
-                  <option value="" disabled>Select Year</option>
-                  <option *ngFor="let y of years" [value]="y">{{ y }}</option>
-                </select>
+<section class="py-5" style="background-color: #f8fafc; min-height: 100vh;">
+  <div class="col-lg-10 offset-lg-1">
 
-                <button type="submit" class="primaryBtn w150x fN">Filter</button>
-              </div>
-            </form>
-            <div class="button-group">
-              <!-- <label class="px-2">Select Period:</label> -->
-              <button [class.active]="selected === 'today'" (click)="select('today')">Today</button>
-              <button [class.active]="selected === 'month'" (click)="select('month')">This Month</button>
-            </div>
-          </div>
-          <div *ngIf="this.selected === 'today' ">
-            <table class="table table-striped table-hover" style="border: none !important">
-              <thead class="table-dark">
-                <tr class="text-center">
-                  <th>Item</th>
-                  <th>Qty</th>
-                  <th>Amount</th>
-                  <th>Total Amount</th>
-                  <!-- <th>Remove</th> -->
-                </tr>
-              </thead>
-              <tbody
-                *ngFor="let order of dateOrders| paginate:{ itemsPerPage: limit, currentPage: page, totalItems:totalItems }; let i=index">
-                <tr class="text-center">
-                  <td style="border: none !important">{{order.item}}</td>
-                  <td style="border: none !important">{{order.quantity}}</td>
-                  <td style="border: none !important">{{order.unitprice}}</td>
-                  <td style="border: none !important">{{order.quantity * order.unitprice}}</td>
-                  <!-- <td> <button class="table-deletebtn" (click)="removeOrder(i)">Delete</button></td> -->
-                </tr>
-              </tbody>
-            </table>
-            <div class="d-flex justify-content-center">
-              <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="10" [directionLinks]="true"
-                [autoHide]="true">
-              </pagination-controls>
-            </div>
-            <div class="col">
-              <div class="row">
-                <div class="col-5  d-flex align-items-center justify-content-center">
-                  <label class="form-label text-end">Total Amount :</label>
-                </div>
-                <div class="col-7">
-                  <input type="text" class="form-control" placeholder="Total amount" [value]="getTotalAmount()"
-                    readonly>
+    <!-- Page Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold text-dark m-0" style="font-family: 'Outfit', sans-serif;">Expenses Ledger</h2>
 
-                  <!-- <input type="text" class="form-control" placeholder="Total amount"> -->
-                </div>
-              </div>
-            </div>
+      <button class="primaryBtn d-flex align-items-center gap-2" (click)="openPopup()" style="width: auto;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        <span>Add Expense</span>
+      </button>
+    </div>
+
+    <!-- Period & Date Selection Bar -->
+    <div class="d-flex justify-content-between align-items-center bg-white border p-3 rounded-3 mb-4"
+      style="border-color: #e2e8f0 !important;">
+
+      <!-- Date Filters -->
+      <div class="d-flex gap-2 align-items-center">
+        <!-- Date selector for Daily view -->
+        <div *ngIf="selected === 'today'">
+          <input type="date" class="form-control" [(ngModel)]="selectedDate" (change)="onDateChange()"
+            style="border-radius: 8px;" />
+        </div>
+
+        <!-- Month/Year selectors for Monthly view -->
+        <form (ngSubmit)="submitFilter()" *ngIf="selected === 'month'" class="m-0">
+          <div class="d-flex gap-2">
+            <select class="form-select" [(ngModel)]="selectedMonth" name="month" required
+              style="border-radius: 8px; font-size: 14px;">
+              <option value="" disabled>Month</option>
+              <option *ngFor="let m of months" [value]="m.value">{{ m.name }}</option>
+            </select>
+
+            <select class="form-select" [(ngModel)]="selectedYear" name="year" required
+              style="border-radius: 8px; font-size: 14px;">
+              <option value="" disabled>Year</option>
+              <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+            </select>
+
+            <button type="submit" class="primaryBtn py-2" style="width: auto;">Filter</button>
           </div>
-          <table class="table table-striped table-bordered" *ngIf="this.selected === 'month' ">
-            <thead class="table-dark">
-              <tr class="text-center">
-                <th>Date</th>
-                <th>Item</th>
+        </form>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="period-toggle">
+        <button [class.active]="selected === 'today'" (click)="select('today')">Daily Ledger</button>
+        <button [class.active]="selected === 'month'" (click)="select('month')">Monthly Summary</button>
+      </div>
+
+    </div>
+
+    <!-- Main Card Body -->
+    <div class="bg-white border rounded-3 p-4 shadow-sm" style="border-color: #e2e8f0 !important;">
+
+      <!-- DAILY VIEW -->
+      <div *ngIf="selected === 'today'">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle m-0">
+            <thead>
+              <tr>
+                <th class="text-start ps-3">Item Description</th>
                 <th>Qty</th>
-                <th>Amount</th>
-                <th>Total Amount</th>
-                <!-- <th>Remove</th> -->
+                <th>Unit Price</th>
+                <th class="text-end pe-3">Total Amount</th>
               </tr>
             </thead>
-            <tbody
-              *ngFor="let order of dateOrdersmnth| paginate:{ itemsPerPage: limit, currentPage: page, totalItems:totalItems }; let i=index">
-              <tr class="text-center">
-                <td>{{order.date | date: "dd-MM-yyyy"}}</td>
-                <td>{{order.item}}</td>
-                <td>{{order.quantity}}</td>
-                <td>{{order.unitprice}}</td>
-                <td>{{order.quantity * order.unitprice}}</td>
-                <!-- <td>{{order.unitprice}}</td> -->
-                <!-- <td>{{order.quantity * order.unitprice}}</td> -->
-                <!-- <td> <button class="table-deletebtn" (click)="removeOrder(i)">Delete</button></td> -->
+            <tbody>
+              <tr
+                *ngFor="let order of dateOrders | paginate:{ itemsPerPage: limit, currentPage: page, totalItems:totalItems }; let i=index">
+                <td class="fw-semibold text-dark text-start ps-3">{{ order.item }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>₹{{ order.unitprice }}</td>
+                <td class="text-end pe-3 fw-bold text-dark">₹{{ order.quantity * order.unitprice }}</td>
+              </tr>
+              <tr *ngIf="dateOrders.length === 0">
+                <td colspan="4" class="text-center py-5 text-muted fw-semibold">No expenses recorded for this date.</td>
               </tr>
             </tbody>
           </table>
-          <div class="col" *ngIf="this.selected === 'month' ">
-            <div class="row">
-              <div class="col-5  d-flex align-items-center justify-content-center">
-                <label class="form-label text-end">Total Amount :</label>
-              </div>
-              <div class="col-7">
-                <input type="text" class="form-control" placeholder="Total amount" [value]="getTotalAmountmnth()"
-                  readonly>
-
-                <!-- <input type="text" class="form-control" placeholder="Total amount"> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-
-      </div>
-    </div>
-  </div>
-
-  <div class="popup-overlay" *ngIf="showPopup">
-    <div class="popup-box">
-      <!-- <h3>Confirm Action</h3> -->
-      <!-- <p>Do you want to proceed?</p> -->
-      <!-- <div class="save-boxs px-4 py-4"> -->
-      <form [formGroup]="newOrderForm">
-        <div class="pt-1 row">
-          <!-- <div class="col">
-            <label class="form-label">B/no:</label>
-            <input type="text" class="form-control" placeholder="B/no">
-          </div> -->
-          <h1 class="text-center wd-title">Create Expense</h1>
-          <div class="pt-1">
-            <label class="form-label required">Item</label>
-            <input formControlName="name" type="text" class="form-control" placeholder="Item" [ngClass]="{
-              'is-invalid': (submit && form['name'].errors) || (form['name'].invalid && (form['name'].dirty || form['name'].touched))
-            }">
-            <div *ngIf="
-                                                (submit && form['name'].errors) ||
-                                                (form['name'].invalid &&
-                                                (form['name'].dirty || form['name'].touched))
-                                                " class="invalid-feedback">
-              <span *ngIf="form['name'].errors?.['required']">Item is required</span>
-            </div>
-          </div>
-          <div class="col">
-            <label class="form-label required">Quantity</label>
-            <input formControlName="kuri" type="text" class="form-control" placeholder="Quantiy" [ngClass]="{
-                            'is-invalid': (submit && form['kuri'].errors) || (form['kuri'].invalid && (form['kuri'].dirty || form['kuri'].touched))
-                            }">
-            <div *ngIf="
-                                (submit && form['kuri'].errors) ||
-                                (form['kuri'].invalid &&
-                                (form['kuri'].dirty || form['kuri'].touched))
-                                " class="invalid-feedback">
-              <span *ngIf="form['kuri'].errors?.['required']">Quantiy is required</span>
-            </div>
-          </div>
         </div>
 
-        <div class="pt-1">
-          <label class="form-label required">Unit Price</label>
-          <input formControlName="mobile" type="text" class="form-control" placeholder="Unit price" [ngClass]="{
-            'is-invalid': (submit && form['mobile'].errors) || (form['mobile'].invalid && (form['mobile'].dirty || form['mobile'].touched))
-          }">
-          <div *ngIf="
-                                              (submit && form['mobile'].errors) ||
-                                              (form['mobile'].invalid &&
-                                              (form['mobile'].dirty || form['mobile'].touched))
-                                              " class="invalid-feedback">
-            <span *ngIf="form['mobile'].errors?.['required']">Unit price is required</span>
-          </div>
-        </div>
-      </form>
-      <!-- <div class="pt-1">
-        <div class="d-flex justify-content-between align-items-center py-2">
-          <div>
-            <label>Items Details:</label>
-          </div>
-         
-        </div>
-        <table class="table table-striped table-bordered">
-          <thead class="table-dark">
-            <tr class="text-center">
-              <th>Item</th>
-              <th>Qty</th>
-              <th>Amount</th>
-              <th>Total Amount</th>
-            </tr>
-          </thead>
-          <tbody
-            *ngFor="let order of orders| paginate:{ itemsPerPage: limit, currentPage: page, totalItems:totalItems }; let i=index">
-            <tr class="text-center">
-              <td>{{order.item}}</td>
-              <td>{{order.quantity}}</td>
-              <td>{{order.unitprice}}</td>
-              <td>{{order.quantity * order.unitprice}}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="d-flex justify-content-center">
-          <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="5" [directionLinks]="true"
+        <div class="d-flex justify-content-center mt-4">
+          <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="10" [directionLinks]="true"
             [autoHide]="true">
           </pagination-controls>
         </div>
-      </div> -->
-      <!-- <div class="row ">
-        <div class="col">
+
+        <!-- Total Daily Expense -->
+        <div class="row align-items-center justify-content-end mt-4 pt-3 border-top"
+          style="border-top-color: #f1f5f9 !important;">
+          <div class="col-auto d-flex align-items-center gap-3">
+            <span class="fw-bold text-secondary">Daily Total:</span>
+            <span class="fs-4 fw-bold text-dark">₹{{ getTotalAmount() }}</span>
+          </div>
         </div>
-        <div class="col">
-          <div class="row">
-            <div class="col-5  d-flex align-items-center justify-content-center">
-              <label class="form-label text-end">Total Amount :</label>
+      </div>
+
+      <!-- MONTHLY VIEW -->
+      <div *ngIf="selected === 'month'">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle m-0">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th class="text-start ps-3">Item Description</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th class="text-end pe-3">Total Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let order of dateOrdersmnth | paginate:{ itemsPerPage: limit, currentPage: page, totalItems:totalItems }; let i=index">
+                <td>{{ order.date | date: "dd-MM-yyyy" }}</td>
+                <td class="fw-semibold text-dark text-start ps-3">{{ order.item }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>₹{{ order.unitprice }}</td>
+                <td class="text-end pe-3 fw-bold text-dark">₹{{ order.quantity * order.unitprice }}</td>
+              </tr>
+              <tr *ngIf="dateOrdersmnth.length === 0">
+                <td colspan="5" class="text-center py-5 text-muted fw-semibold">No expenses recorded for this month.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+          <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="10" [directionLinks]="true"
+            [autoHide]="true">
+          </pagination-controls>
+        </div>
+
+        <!-- Total Monthly Expense -->
+        <div class="row align-items-center justify-content-end mt-4 pt-3 border-top"
+          style="border-top-color: #f1f5f9 !important;">
+          <div class="col-auto d-flex align-items-center gap-3">
+            <span class="fw-bold text-secondary">Monthly Total:</span>
+            <span class="fs-4 fw-bold text-dark">₹{{ getTotalAmountmnth() }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- POPUP MODAL -->
+  <div class="popup-overlay" *ngIf="showPopup">
+    <div class="popup-box px-4 py-4" style="max-width: 500px; border-radius: 16px;">
+      <form [formGroup]="newOrderForm">
+        <h4 class="fw-bold text-dark mb-4 text-center" style="font-family: 'Outfit', sans-serif;">Add New Expense</h4>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold text-secondary">Item Name / Description</label>
+          <input formControlName="name" type="text" class="form-control" placeholder="e.g. Detergent, Hangers"
+            [ngClass]="{'is-invalid': (submit && form['name'].errors) || (form['name'].invalid && (form['name'].dirty || form['name'].touched))}"
+            style="border-radius: 8px; font-size: 14px; padding: 10px 14px;" />
+          <div
+            *ngIf="(submit && form['name'].errors) || (form['name'].invalid && (form['name'].dirty || form['name'].touched))"
+            class="invalid-feedback">
+            <span *ngIf="form['name'].errors?.['required']">Item name is required</span>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold text-secondary">Quantity</label>
+            <input formControlName="kuri" type="number" class="form-control" placeholder="Qty"
+              [ngClass]="{'is-invalid': (submit && form['kuri'].errors) || (form['kuri'].invalid && (form['kuri'].dirty || form['kuri'].touched))}"
+              style="border-radius: 8px; font-size: 14px; padding: 10px 14px;" />
+            <div
+              *ngIf="(submit && form['kuri'].errors) || (form['kuri'].invalid && (form['kuri'].dirty || form['kuri'].touched))"
+              class="invalid-feedback">
+              <span *ngIf="form['kuri'].errors?.['required']">Quantity is required</span>
             </div>
-            <div class="col-7">
-              <input type="text" class="form-control" placeholder="Total amount" [value]="getTotalAmount()"
-                readonly>
-  
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-semibold text-secondary">Unit Price (₹)</label>
+            <input formControlName="mobile" type="number" class="form-control" placeholder="Price"
+              [ngClass]="{'is-invalid': (submit && form['mobile'].errors) || (form['mobile'].invalid && (form['mobile'].dirty || form['mobile'].touched))}"
+              style="border-radius: 8px; font-size: 14px; padding: 10px 14px;" />
+            <div
+              *ngIf="(submit && form['mobile'].errors) || (form['mobile'].invalid && (form['mobile'].dirty || form['mobile'].touched))"
+              class="invalid-feedback">
+              <span *ngIf="form['mobile'].errors?.['required']">Unit price is required</span>
             </div>
           </div>
         </div>
-      </div> -->
-      <div class="pt-3 row">
-        <div class="col">
-          <button type="submit" class="primaryBtn mb-1" (click)="formSubmit()">Save</button>
-          <button (click)="closePopup()" class="btn btn-light w-100">Cancel</button>
-        </div>
-      </div>
-      <!-- </div> -->
 
-      <!-- <div class="actions">
-      <button class="btn cancel" (click)="closePopup()">Cancel</button>
-      <button class="btn confirm" (click)="confirm()">Yes</button>
-    </div> -->
+        <!-- Form Submit Actions -->
+        <div class="d-flex flex-column gap-2">
+          <button type="submit" class="primaryBtn py-2 text-center" (click)="formSubmit()">Save Expense</button>
+          <button type="button" (click)="closePopup()"
+            class="btn btn-light w-100 py-2 border fw-semibold text-secondary">Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
 

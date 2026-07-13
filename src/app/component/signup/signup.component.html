@@ -1,97 +1,115 @@
-<!-- <p>signup works!</p> -->
-
-<section class="vh-100 d-flex align-items-center justify-content-center bg-gradient">
-  <div class="login-container">
+<section class="vh-100 d-flex align-items-center justify-content-center login-section">
+  <div class="login-container" style="max-width: 900px;">
     <div class="login-card shadow-lg rounded-4 overflow-hidden">
 
-      <!-- LEFT SIDE -->
-      <div class="login-left d-flex align-items-center justify-content-center">
-        <h1 class="brand-text">Create Account</h1>
+      <!-- LEFT SIDE (Branding panel) -->
+      <div class="login-left d-flex flex-column align-items-center justify-content-center text-center p-5">
+        <div class="brand-logo-container mb-3">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22a7 7 0 0 0 5-11.97l-5-5.91-5 5.91A7 7 0 0 0 12 22z"/>
+          </svg>
+        </div>
+        <h1 class="brand-text">Antigravity</h1>
+        <p class="brand-tagline small text-white-50">Create your operator credentials to initialize your shop profile.</p>
       </div>
 
       <!-- RIGHT SIDE (Signup Form) -->
-      <div class="login-form p-4">
-        <h2 class="text-center mb-4">Sign Up</h2>
+      <div class="login-form p-5 d-flex flex-column justify-content-center">
+        <div class="mb-4">
+          <h2 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif;">Create Account</h2>
+          <p class="text-secondary small">Join the platform to access order management toolsets.</p>
+        </div>
 
         <form [formGroup]="signupForm" (ngSubmit)="signup()">
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold">Full Name</label>
-            <input type="text" formControlName="name" class="form-control" placeholder="Enter your name" [ngClass]="{
-                  'is-invalid': (submit && form['name'].errors) || (form['name'].invalid && (form['name'].dirty || form['name'].touched))
-                }">
-            <div *ngIf="
-                                                  (submit && form['name'].errors) ||
-                                                  (form['name'].invalid &&
-                                                  (form['name'].dirty || form['name'].touched))
-                                                  " class="invalid-feedback">
-              <span *ngIf="form['name'].errors?.['required']">name is required</span>
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Full Name</label>
+              <input type="text" formControlName="name" class="form-control" placeholder="John Doe" [ngClass]="{
+                    'is-invalid': (submit && form['name'].errors) || (form['name'].invalid && (form['name'].dirty || form['name'].touched))
+                  }">
+              <div *ngIf="(submit && form['name'].errors) || (form['name'].invalid && (form['name'].dirty || form['name'].touched))" class="invalid-feedback">
+                <span *ngIf="form['name'].errors?.['required']">Full name is required</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Username</label>
+              <input type="text" formControlName="username" class="form-control" placeholder="johndoe" [ngClass]="{
+                    'is-invalid': (submit && form['username'].errors) || (form['username'].invalid && (form['username'].dirty || form['username'].touched))
+                  }">
+              <div *ngIf="(submit && form['username'].errors) || (form['username'].invalid && (form['username'].dirty || form['username'].touched))" class="invalid-feedback">
+                <span *ngIf="form['username'].errors?.['required']">Username is required</span>
+              </div>
             </div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label fw-semibold">Username</label>
-            <input type="text" formControlName="username" class="form-control" placeholder="Enter your name" [ngClass]="{
-                  'is-invalid': (submit && form['username'].errors) || (form['username'].invalid && (form['username'].dirty || form['username'].touched))
-                }">
-            <div *ngIf="
-                                                  (submit && form['username'].errors) ||
-                                                  (form['username'].invalid &&
-                                                  (form['username'].dirty || form['username'].touched))
-                                                  " class="invalid-feedback">
-              <span *ngIf="form['username'].errors?.['required']">username is required</span>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label fw-semibold">Email</label>
-            <input type="email" formControlName="email" class="form-control" placeholder="Enter email" [ngClass]="{
+            <label class="form-label">Email Address</label>
+            <input type="email" formControlName="email" class="form-control" placeholder="john@example.com" [ngClass]="{
                   'is-invalid': (submit && form['email'].errors) || (form['email'].invalid && (form['email'].dirty || form['email'].touched))
                 }">
-          <div *ngIf="
-                                                  (submit && form['email'].errors) ||
-                                                  (form['email'].invalid &&
-                                                  (form['email'].dirty || form['email'].touched))
-                                                  " class="invalid-feedback">
-              <span *ngIf="form['email'].errors?.['required']">email is required</span>
+            <div *ngIf="(submit && form['email'].errors) || (form['email'].invalid && (form['email'].dirty || form['email'].touched))" class="invalid-feedback">
+              <span *ngIf="form['email'].errors?.['required']">Email is required</span>
             </div>
           </div>
 
-          <div class="mb-4">
-            <label class="form-label fw-semibold">Password</label>
-            <input type="password" formControlName="password" class="form-control" placeholder="Create password" [ngClass]="{
-                  'is-invalid': (submit && form['password'].errors) || (form['password'].invalid && (form['password'].dirty || form['password'].touched))
-                }">
-            <div *ngIf="
-                                                              (submit && form['password'].errors) ||
-                                                              (form['password'].invalid &&
-                                                              (form['password'].dirty || form['password'].touched))
-                                                              " class="invalid-feedback">
-              <span *ngIf="form['password'].errors?.['required']">password is required</span>
+          <div class="row g-2 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">Password</label>
+              <div class="position-relative">
+                <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control pe-5" placeholder="Min 8 characters" [ngClass]="{
+                      'is-invalid': (submit && form['password'].errors) || (form['password'].invalid && (form['password'].dirty || form['password'].touched))
+                    }">
+                <button type="button" class="btn position-absolute border-0 bg-transparent text-secondary" style="right: 12px; top: 50%; transform: translateY(-50%); padding: 0;"
+                        (click)="showPassword = !showPassword">
+                  <svg *ngIf="!showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <svg *ngIf="showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                </button>
+              </div>
+              <div *ngIf="(submit && form['password'].errors) || (form['password'].invalid && (form['password'].dirty || form['password'].touched))" class="invalid-feedback d-block">
+                <span *ngIf="form['password'].errors?.['required']">Password is required</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Confirm Password</label>
+              <div class="position-relative">
+                <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmpassword" class="form-control pe-5" placeholder="Retype password" [ngClass]="{
+                      'is-invalid': (submit && form['confirmpassword'].errors) || (form['confirmpassword'].invalid && (form['confirmpassword'].dirty || form['confirmpassword'].touched))
+                    }">
+                <button type="button" class="btn position-absolute border-0 bg-transparent text-secondary" style="right: 12px; top: 50%; transform: translateY(-50%); padding: 0;"
+                        (click)="showConfirmPassword = !showConfirmPassword">
+                  <svg *ngIf="!showConfirmPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <svg *ngIf="showConfirmPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                </button>
+              </div>
+              <div *ngIf="(submit && form['confirmpassword'].errors) || (form['confirmpassword'].invalid && (form['confirmpassword'].dirty || form['confirmpassword'].touched))" class="invalid-feedback d-block">
+                <span *ngIf="form['confirmpassword'].errors?.['required']">Confirm password is required</span>
+              </div>
             </div>
           </div>
 
-          <div class="mb-4">
-            <label class="form-label fw-semibold">Confirm Password</label>
-            <input type="password" formControlName="confirmpassword" class="form-control" placeholder="Create password" [ngClass]="{
-                  'is-invalid': (submit && form['confirmpassword'].errors) || (form['confirmpassword'].invalid && (form['confirmpassword'].dirty || form['confirmpassword'].touched))
-                }">
-            <div *ngIf="
-                                                              (submit && form['confirmpassword'].errors) ||
-                                                              (form['confirmpassword'].invalid &&
-                                                              (form['confirmpassword'].dirty || form['confirmpassword'].touched))
-                                                              " class="invalid-feedback">
-              <span *ngIf="form['confirmpassword'].errors?.['required']">confirmpassword is required</span>
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold">
-            Sign Up
+          <button type="submit" class="primaryBtn py-2 mb-3 d-flex align-items-center justify-content-center gap-2" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span>{{ loading ? 'Registering...' : 'Register Account' }}</span>
           </button>
 
-          <p class="text-center mt-3">
+          <p class="text-center mt-2 mb-0 small text-secondary">
             Already have an account?
-            <a routerLink="/" class="text-primary fw-semibold">Login</a>
+            <a routerLink="/" class="text-primary fw-semibold text-decoration-none">Login</a>
           </p>
 
         </form>

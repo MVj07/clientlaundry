@@ -10,16 +10,44 @@ import { LoginService } from '../../services/login/login.service';
 export class DeliveryhistoryComponent {
   orders: any
   status: any = 'delivered'
+  overallTotalAmount: number = 0;
   isLoading = true;
   p:number=1
   page: number = 1;
   limit: number = 10;
   totalItems: number = 0;
   selected :string[]= []
+
+  filterCustomer: string = '';
+  filterMobile: string = '';
+  selectedPeriod: string = 'all'; // 'all' | 'today' | 'month'
+  selectedDate: string = '';
+  selectedMonth: any = '';
+  selectedYear: any = '';
+
+  months = [
+    { name: 'January', value: 1 },
+    { name: 'February', value: 2 },
+    { name: 'March', value: 3 },
+    { name: 'April', value: 4 },
+    { name: 'May', value: 5 },
+    { name: 'June', value: 6 },
+    { name: 'July', value: 7 },
+    { name: 'August', value: 8 },
+    { name: 'September', value: 9 },
+    { name: 'October', value: 10 },
+    { name: 'November', value: 11 },
+    { name: 'December', value: 12 }
+  ];
+  years: number[] = [];
+
   constructor(
     private orderService: newOrderService,
     private authservice: LoginService
-  ) { }
+  ) {
+    const currentYear = new Date().getFullYear();
+    this.years = Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
+  }
   
   selectAll(event: Event){
     const checked = (event.target as HTMLInputElement).checked;
@@ -35,25 +63,78 @@ export class DeliveryhistoryComponent {
   handleSelect(id: any){
     this.selected.push(id)
   }
+
+  selectPeriod(period: string) {
+    this.selectedPeriod = period;
+    this.page = 1;
+    if (period === 'today') {
+      this.selectedDate = new Date().toISOString().split('T')[0];
+    } else if (period === 'month') {
+      const today = new Date();
+      this.selectedMonth = today.getMonth() + 1;
+      this.selectedYear = today.getFullYear();
+    }
+    this.getOrders();
+  }
+
+  onFilterChange() {
+    this.page = 1;
+    this.getOrders();
+  }
+
+  onDateChange() {
+    this.page = 1;
+    this.getOrders();
+  }
+
+  onFilterSubmit() {
+    this.page = 1;
+    this.getOrders();
+  }
+
+  resetFilters() {
+    this.filterCustomer = '';
+    this.filterMobile = '';
+    this.selectedPeriod = 'all';
+    this.selectedDate = '';
+    this.selectedMonth = '';
+    this.selectedYear = '';
+    this.page = 1;
+    this.getOrders();
+  }
+
   getOrders() {
-    this.orderService.getAllOrders(this.status, this.page, this.limit).subscribe({
+    this.isLoading = true;
+    const filters: any = {};
+    if (this.filterCustomer.trim()) {
+      filters.customerName = this.filterCustomer.trim();
+    }
+    if (this.filterMobile.trim()) {
+      filters.mobile = this.filterMobile.trim();
+    }
+    
+    if (this.selectedPeriod === 'today' && this.selectedDate) {
+      filters.date = this.selectedDate;
+    } else if (this.selectedPeriod === 'month' && this.selectedMonth && this.selectedYear) {
+      filters.month = this.selectedMonth;
+      filters.year = this.selectedYear;
+    }
+
+    this.orderService.getAllOrders(this.status, this.page, this.limit, filters).subscribe({
       next: (res) => {
         console.log(res.data)
         this.orders = res.data
         this.totalItems = res.meta?.total || 0;
+        this.overallTotalAmount = res.meta?.overallTotalAmount || 0;
         this.isLoading = false;
       },
       error: (err) => {
-        // alert('Order failed')
         this.isLoading = false;
-        // if (err.status === 401 || err.status === 403) {
-        //   this.authservice.logOut(); // You must have a method that clears tokens and navigates to login
-        //   return;
-        // }
         return;
       },
     })
   }
+
   ngOnInit(): void {
     this.getOrders()
   }
@@ -96,6 +177,11 @@ export class DeliveryhistoryComponent {
   pageChanged(newPage: number): void {
     this.page = newPage;
     this.getOrders();
+  }
+
+  getPageTotal(): number {
+    if (!this.orders) return 0;
+    return this.orders.reduce((sum: number, order: any) => sum + (order.billAmount || 0), 0);
   }
 
 }

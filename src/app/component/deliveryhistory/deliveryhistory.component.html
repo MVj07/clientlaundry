@@ -1,79 +1,148 @@
 <app-header></app-header>
 <section class="py-5">
-    <!-- <h1 class="text-center wd-title">Delivery history</h1> -->
-    <div class="bg-white col-lg-8 offset-lg-2 mb-2 rounded d-flex justify-content-between align-items-center gap-2 p-3">
-        <div class="d-flex gap-2 align-items-center">
-            <h1 class="wd-title m-0">Delivery history</h1>
-            <!-- <button class="btn btn-sm btn-outline-primary" (click)="toggleSelectAll()">
-            {{ selectAllChecked ? 'Unselect All' : 'Select All' }}
-        </button> -->
-            <!-- <button class="btn btn-primary py-1 px-2 d-flex gap-1 cursorP" (click)="toggleSelectAll()">
-                <input type="checkbox" class="" [checked]="selectAllChecked" />
-                <small class="text-white">Select All</small>
-            </button> -->
+  <!-- <h1 class="text-center wd-title">Delivery history</h1> -->
+  <div class="bg-white col-lg-10 offset-lg-1 mb-2 rounded border shadow-sm p-3"
+    style="border-color: #e2e8f0 !important;">
+    <div class="d-flex gap-2 align-items-center justify-content-between w-100 flex-wrap">
+      <h1 class="wd-title m-0">Delivery history</h1>
+      <div class="d-flex align-items-center gap-3">
+        <div class="bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-3 fw-bold"
+          style="font-size: 15px;">
+          Overall Total: <span style="font-size: 17px;">₹{{ overallTotalAmount }}</span>
         </div>
-        <!-- <button *ngIf="selectedOrders.length" class="btn btn-primary btn-sm py-2 px-2" (click)="bulkUpdate()">Delivered</button> -->
+        <button class="btn primaryBtn w150x" routerLink="/neworder" style="height: 42px; margin-top: 0;">Add
+          Order</button>
+      </div>
     </div>
+  </div>
+  <!-- Filters Panel -->
+  <div
+    class="bg-white col-lg-10 offset-lg-1 mb-4 border rounded-3 p-3 shadow-sm d-flex justify-content-between align-items-center flex-wrap gap-3"
+    style="border-color: #e2e8f0 !important;">
+
+    <!-- Left: Filter Inputs -->
+    <div class="d-flex gap-2 align-items-center flex-wrap">
+      <!-- Customer Input -->
+      <input type="text" class="form-control" placeholder="Search Customer..." [(ngModel)]="filterCustomer"
+        (input)="onFilterChange()" style="border-radius: 8px; width: 180px; font-size: 14px; height: 38px;" />
+
+      <!-- Mobile Input -->
+      <input type="text" class="form-control" placeholder="Mobile Number..." [(ngModel)]="filterMobile"
+        (input)="onFilterChange()" style="border-radius: 8px; width: 140px; font-size: 14px; height: 38px;" />
+
+      <!-- Daily Date Picker -->
+      <div *ngIf="selectedPeriod === 'today'">
+        <input type="date" class="form-control" [(ngModel)]="selectedDate" (change)="onDateChange()"
+          style="border-radius: 8px; font-size: 14px; height: 38px;" />
+      </div>
+
+      <!-- Monthly Selectors -->
+      <div *ngIf="selectedPeriod === 'month'" class="d-flex gap-2">
+        <select class="form-select" [(ngModel)]="selectedMonth"
+          style="border-radius: 8px; font-size: 14px; width: 110px; height: 38px;">
+          <option value="" disabled>Month</option>
+          <option *ngFor="let m of months" [value]="m.value">{{ m.name }}</option>
+        </select>
+
+        <select class="form-select" [(ngModel)]="selectedYear"
+          style="border-radius: 8px; font-size: 14px; width: 90px; height: 38px;">
+          <option value="" disabled>Year</option>
+          <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+        </select>
+
+        <button (click)="onFilterSubmit()" class="primaryBtn py-0 d-flex align-items-center justify-content-center"
+          style="width: auto; height: 38px; border-radius: 8px; font-size: 13.5px; font-weight: 600;">
+          Filter
+        </button>
+      </div>
+
+      <!-- Reset Button -->
+      <button (click)="resetFilters()"
+        class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+        style="height: 38px; border-radius: 8px; font-size: 14px;">
+        Reset
+      </button>
+    </div>
+
+    <!-- Right: Toggle Switches -->
+    <div class="period-toggle">
+      <button [class.active]="selectedPeriod === 'all'" (click)="selectPeriod('all')">All History</button>
+      <button [class.active]="selectedPeriod === 'today'" (click)="selectPeriod('today')">Daily</button>
+      <button [class.active]="selectedPeriod === 'month'" (click)="selectPeriod('month')">Monthly</button>
+    </div>
+
+  </div>
+  <div class="">
     <div class="">
-        <div class="">
-            <div class="col-lg-8 offset-lg-2">
-                <div class="d-flex justify-content-center py-5" *ngIf="isLoading">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <ng-container *ngIf="!isLoading">
-                    <div *ngIf="orders?.length === 0" class="text-center text-muted py-4 fB center">
-                        No orders found.
-                    </div>
-                    <div class="table-container">
-                        <table class="table table-striped table-hover" style="border: none !important">
-                            <thead>
-                                <tr>
-                                    <th><input type="checkbox" (click)="selectAll($event)"/></th>
-                                    <th>S.No</th>
-                                    <th>Customer</th>
-                                    <th>Bill</th>
-                                    <th>Mobile</th>
-                                    <th>Date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                *ngFor="let order of orders|paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}; let index=index">
-                                <tr class="text-center">
-                                    <td style="border: none">
-                                        <input type="checkbox" [checked]="selected.includes(order._id)" (select)="handleSelect(order._id)"/>
-                                    </td>
-                                    <td style="border: none">{{index+1}}</td>
-                                    <td style="border: none">{{order.customerId.name}}</td>
-                                    <td style="border: none">{{order.bill}}</td>
-                                    <td style="border: none">{{order.customerId.mobile}}</td>
-                                    <td style="border: none">{{order.date | date: "dd/MM/YYYY"}}</td>
-                                    <td style="border: none">
-                                        <div class="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" class="cursorP" (click)="deleteOrder(order._id)"
-                                            viewBox="0 0 24 24">
-                                            <path
-                                                d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z">
-                                            </path>
-                                        </svg>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="10" [directionLinks]="true"
-                            [autoHide]="true">
-                        </pagination-controls>
-                    </div>
-                </ng-container>
-            </div>
-
-            <!-- example -->
+      <div class="col-lg-10 offset-lg-1">
+        <div class="d-flex justify-content-center py-5" *ngIf="isLoading">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
+        <ng-container *ngIf="!isLoading">
+          <div *ngIf="orders?.length === 0" class="text-center text-muted py-4 fB center">
+            No orders found.
+          </div>
+          <div class="table-container">
+            <table class="table table-striped table-hover" style="border: none !important">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" (click)="selectAll($event)" /></th>
+                  <th>S.No</th>
+                  <th>Customer</th>
+                  <th>Bill</th>
+                  <th>Mobile</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody
+                *ngFor="let order of orders|paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}; let index=index">
+                <tr class="text-center">
+                  <td style="border: none">
+                    <input type="checkbox" [checked]="selected.includes(order._id)"
+                      (select)="handleSelect(order._id)" />
+                  </td>
+                  <td style="border: none">{{index+1}}</td>
+                  <td style="border: none">{{order.customerId.name}}</td>
+                  <td style="border: none">{{order.bill}}</td>
+                  <td style="border: none">{{order.customerId.mobile}}</td>
+                  <td style="border: none">₹{{order.billAmount}}</td>
+                  <td style="border: none">{{order.date | date: "dd/MM/YYYY"}}</td>
+                  <td style="border: none">
+                    <div class="">
+                      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" class="cursorP"
+                        (click)="deleteOrder(order._id)" viewBox="0 0 24 24">
+                        <path
+                          d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z">
+                        </path>
+                      </svg>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Page Total and Pagination row -->
+          <div class="row align-items-center justify-content-between mt-4 pt-3 border-top"
+            style="border-top-color: #f1f5f9 !important; margin: 0 0 20px 0;">
+            <div class="col-auto">
+              <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="10" [directionLinks]="true"
+                [autoHide]="true" style="margin: 0;">
+              </pagination-controls>
+            </div>
+            <div class="col-auto d-flex align-items-center gap-3">
+              <span class="fw-bold text-secondary" style="font-size: 14px;">Page Total:</span>
+              <span class="fs-5 fw-bold text-dark">₹{{ getPageTotal() }}</span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
 
+      <!-- example -->
     </div>
+
+  </div>
 </section>

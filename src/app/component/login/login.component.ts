@@ -12,6 +12,8 @@ import { BusinessService } from '../../services/business/business.service';
 })
 export class LoginComponent {
   registerForm: FormGroup;
+  showPassword = false;
+  loading = false;
   constructor(
     private readonly fb: FormBuilder,
     private loginService: LoginService,
@@ -28,6 +30,7 @@ export class LoginComponent {
   getdata() {
     console.log(this.registerForm.value);
     if (this.registerForm.valid) {
+      this.loading = true;
       this.loginService.loginUser(this.registerForm.value).subscribe({
         next: (res) => {
           console.log('Login Success:', res);
@@ -42,18 +45,24 @@ export class LoginComponent {
                   console.log(res)
                   this.storageService.setItem('store', res.data.business_name)
                   this.storageService.setItem('workflow', JSON.stringify(res.data.workflows))
+                  this.loading = false;
                 }, error: (err) => {
                   console.error('Login Error:', err);
+                  this.loading = false;
                 }
               })
               this.router.navigate(['/home'])
             } else {
+              this.loading = false;
               this.router.navigate(['/business_setup'])
             }
+          } else {
+            this.loading = false;
           }
         },
         error: (err) => {
           console.error('Login Error:', err);
+          this.loading = false;
         }
       });
     } else {

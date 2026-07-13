@@ -1,109 +1,127 @@
-/* span, p, address{
-  color:rgb(226, 232, 234) !important ;
+.customer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 10px;
 }
 
-
-.save-boxs{
-    background-color: var(--box-clr);
-    color: var(--white-clr);
-    border-radius: 16px;
-    transition: all 0.6s ease;
-  
-} */
-/* .save-boxs:hover{
-  transform: scale(1.01);
-  
-} */
-p {
-  margin: 0px;
-  padding: 0px;
+.customer-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.006);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  min-height: 200px;
 }
 
-.total-amd {
-  background-color: rgba(255, 255, 255, 0.9);
+.customer-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.01);
+  border-color: #cbd5e1;
 }
 
-.savebox-btnone {
-  border: none;
+.customer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #2563eb;
+  text-transform: uppercase;
+}
+
+.customer-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: #0f172a;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.customer-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 13.5px;
+  color: #64748b;
+}
+
+.customer-info-row svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #94a3b8;
+}
+
+.customer-info-row span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.create-order-btn {
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.863);
-  border-radius: 5px;
-  padding: 5px 0px 5px 0px;
-  transition: all 0.8s ease;
-}
-
-.savebox-btntwo {
-  border: none;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.863);
-  border-radius: 5px;
-  padding: 5px 0px 5px 0px;
-  transition: all 0.8s ease;
-}
-
-.savebox-btnthree {
-  border: none;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.863);
-  border-radius: 5px;
-  padding: 5px 0px 5px 0px;
-  transition: all 0.8s ease;
-}
-
-.savebox-btnone:hover {
-  background-color: var(--green-clr);
-  color: var(--white-clr);
-  transform: scale(1.03);
-}
-
-.savebox-btntwo:hover {
-  background-color: var(--red-clr);
-  color: var(--white-clr);
-  transform: scale(1.03);
-}
-
-.savebox-btnthree:hover {
-  background-color: var(--black-clr);
-  color: var(--white-clr);
-  transform: scale(1.03);
-}
-
-button {
-  font-weight: bold;
-}
-
-.search-input {
-  border: none;
-  width: 80%;
-  padding: 6px 0px 6px 0px;
-  background-color: transparent;
-}
-
-.search-input:focus {
-  outline: none;
-}
-
-.search-btn {
-  border: 1px solid var(--silver-clr);
-  background-color: transparent;
+  margin-top: 20px;
+  height: 40px;
   border-radius: 10px;
-  width: 20%;
-  transition: all 0.8s ease;
-  padding: 3px 0px 3px 0px;
+  font-weight: 600;
+  font-size: 14px;
 }
 
-.search-btn:hover {
-  background-color: var(--box-clr);
-
+.customer-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background-color: #f8fafc;
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+  margin-top: 16px;
+  text-align: center;
 }
 
-.search-btn:hover svg {
-  fill: white;
-
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.search-container {
-  background-color: rgba(255, 255, 255, 0.863);
-  /* border-radius: 10px; */
-  border-bottom: 1px solid var(--silver-clr);
+.stat-val {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: #0f172a;
+}
+
+.stat-item.text-success .stat-val {
+  color: #10b981;
+}
+
+.stat-item.text-warning .stat-val {
+  color: #f59e0b;
+}
+
+.stat-item.text-danger .stat-val {
+  color: #ef4444;
+}
+
+.stat-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  margin-top: 2px;
 }

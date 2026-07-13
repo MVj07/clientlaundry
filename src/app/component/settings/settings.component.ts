@@ -17,6 +17,10 @@ export class SettingsComponent {
   error = '';
   success = '';
   loading = false;
+  loadingItem = false;
+  showCurrentPassword = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
   orderForm!: FormGroup;
   submit: boolean = false;
   orders: any[] = [];
@@ -91,6 +95,7 @@ export class SettingsComponent {
     this.submit = true;
     if (this.orderForm.invalid) return;
 
+    this.loadingItem = true;
     const formValue = this.orderForm.value;
     const orderData = {
       name: formValue.name,
@@ -107,11 +112,13 @@ export class SettingsComponent {
           this.listItems()
           // alert(res.message)
           this.toast.success(res.message)
+          this.loadingItem = false;
         }
       },
       error: (err) => {
         // alert(err.error.message)
         this.toast.error(err.error.message)
+        this.loadingItem = false;
       }
     })
   }

@@ -10,6 +10,20 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class HomeComponent {
   orders: any = []
+  businessName = 'Smart Laundry';
+  today = new Date();
+  workflows: any[] = [];
+  todayDeliveries: any[] = [];
+
+  kpiCards: any[] = [
+    { title: 'Today\'s Orders', value: 0, color: 'gradient-orders' },
+    { title: 'Active Orders', value: 0, color: 'gradient-washing' },
+    { title: 'Today\'s Revenue', value: '₹0', color: 'gradient-packing' },
+    { title: 'Monthly Sales', value: '₹0', color: 'gradient-revenue' }
+  ];
+
+  statusSummary: any[] = [];
+
   constructor(
     private order: newOrderService
   ){}
@@ -18,7 +32,7 @@ export class HomeComponent {
     this.order.getAllOrders("all", 1, 10).subscribe({
       next:(res)=>{
         console.log(res)
-        this.orders = res.data.splice(0,4)
+        this.orders = res.data ? res.data.slice(0, 5) : [];
       },
       error: (err) => {
         return;
@@ -28,7 +42,56 @@ export class HomeComponent {
   }
 
   ngOnInit(){
-    this.getOrders()
+    this.getOrders();
+    
+    const workflowStr = localStorage.getItem('workflow');
+    if (workflowStr) {
+      try {
+        this.workflows = JSON.parse(workflowStr);
+      } catch (e) {
+        this.workflows = [];
+      }
+    }
+    
+    this.loadDashboardMetrics();
+    
+    const storedStore = localStorage.getItem('store');
+    if (storedStore) {
+      this.businessName = storedStore;
+    }
+  }
+
+  loadDashboardMetrics() {
+    this.order.getDashboardMetrics().subscribe({
+      next: (metrics) => {
+        this.todayDeliveries = metrics.todayDeliveries || [];
+        this.kpiCards = [
+          { title: 'Today\'s Orders', value: metrics.todayOrdersCount || 0, color: 'gradient-orders' },
+          { title: 'Active Orders', value: metrics.activeOrdersCount || 0, color: 'gradient-washing' },
+          { title: 'Today\'s Revenue', value: '₹' + (metrics.todayRevenue || 0), color: 'gradient-packing' },
+          { title: 'Monthly Sales', value: '₹' + (metrics.monthlyRevenue || 0), color: 'gradient-revenue' }
+        ];
+
+        if (this.workflows && this.workflows.length > 0) {
+          this.statusSummary = this.workflows.map(wf => {
+            return {
+              label: wf.name,
+              count: metrics.statusCounts?.[wf.indentifier] || 0
+            };
+          });
+        } else {
+          this.statusSummary = [
+            { label: 'Washing', count: metrics.statusCounts?.washing || 0 },
+            { label: 'Ironing', count: metrics.statusCounts?.ironing || 0 },
+            { label: 'Packing', count: metrics.statusCounts?.packing || 0 },
+            { label: 'Delivery', count: metrics.statusCounts?.deliver || metrics.statusCounts?.delivery || 0 }
+          ];
+        }
+      },
+      error: (err) => {
+        console.error('Error loading dashboard metrics', err);
+      }
+    });
   }
   // orders: any
   // status: any = 'confirm'
@@ -150,28 +213,4 @@ export class HomeComponent {
   //   }
   //   }
   // }
-  businessName = 'Smart Laundry';
-  today = new Date();
-
-  kpiCards = [
-    { title: 'Today Orders', value: 24, color: 'bg-primary' },
-    { title: 'Washing', value: 10, color: 'bg-warning' },
-    { title: 'Packing', value: 6, color: 'bg-info' },
-    { title: 'Today Revenue', value: '₹4,250', color: 'bg-success' }
-  ];
-
-  statusSummary = [
-    { label: 'Washing', count: 10 },
-    { label: 'Ironing', count: 8 },
-    { label: 'Packing', count: 6 },
-    { label: 'Delivery', count: 4 }
-  ];
-
-  recentOrders = [
-    { bill: 'INV-101', customer: 'Arun', status: 'washing', amount: 350 },
-    { bill: 'INV-102', customer: 'Kumar', status: 'packing', amount: 480 },
-    { bill: 'INV-103', customer: 'Ravi', status: 'delivery', amount: 220 },
-    { bill: 'INV-104', customer: 'Suresh', status: 'ironing', amount: 300 }
-  ];
-
 }

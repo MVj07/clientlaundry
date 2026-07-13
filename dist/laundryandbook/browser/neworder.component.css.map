@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/component/neworder/neworder.component.css"],
+  "sourcesContent": [".table th {\n  font-size: 11px;\n  text-transform: uppercase;\n  letter-spacing: 0.5px;\n  color: #64748b;\n  border-bottom: 2px solid #f1f5f9;\n  padding: 12px 16px;\n  font-weight: 700;\n  text-align: center;\n}\n\n.table td {\n  padding: 12px;\n  border-bottom: 1px solid #f1f5f9;\n  font-size: 14px;\n  text-align: center;\n}\n\n.product-row {\n  transition: background-color 0.2s ease;\n}\n\n.product-row:hover {\n  background-color: #f8fafc;\n}\n\n.form-label {\n  font-size: 13px;\n  font-weight: 600;\n  color: #475569;\n  margin-bottom: 6px;\n}\n\n.form-control:focus, .form-select:focus {\n  border-color: #93c5fd !important;\n  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;\n}\n\n.hover-item {\n  transition: background-color 0.15s ease;\n}\n.hover-item:hover {\n  background-color: #f1f5f9 !important;\n  cursor: pointer;\n}"],
+  "mappings": ";AAAA,CAAC,MAAM;AACL,aAAW;AACX,kBAAgB;AAChB,kBAAgB;AAChB,SAAO;AACP,iBAAe,IAAI,MAAM;AACzB,WAAS,KAAK;AACd,eAAa;AACb,cAAY;AACd;AAEA,CAXC,MAWM;AACL,WAAS;AACT,iBAAe,IAAI,MAAM;AACzB,aAAW;AACX,cAAY;AACd;AAEA,CAAC;AACC,cAAY,iBAAiB,KAAK;AACpC;AAEA,CAJC,WAIW;AACV,oBAAkB;AACpB;AAEA,CAAC;AACC,aAAW;AACX,eAAa;AACb,SAAO;AACP,iBAAe;AACjB;AAEA,CAAC,YAAY;AAAQ,CAAC,WAAW;AAC/B,gBAAc;AACd,cAAY,EAAE,EAAE,EAAE,IAAI,KAAK,EAAE,EAAE,EAAE,EAAE,GAAG,EAAE;AAC1C;AAEA,CAAC;AACC,cAAY,iBAAiB,MAAM;AACrC;AACA,CAHC,UAGU;AACT,oBAAkB;AAClB,UAAQ;AACV;",
+  "names": []
+}

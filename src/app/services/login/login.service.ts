@@ -10,13 +10,13 @@ export class LoginService {
   private apiUrl = 'http://localhost:5000';
 
   constructor(private http: HttpClient, private router: Router, private storageService: StorageService) { }
-  
-  signup(data: any): Observable<any>{
-   return this.http.post(this.apiUrl+'/create', data) 
+
+  signup(data: any): Observable<any> {
+    return this.http.post(this.apiUrl + '/create', data)
   }
 
   loginUser(data: any): Observable<any> {
-    return this.http.post(this.apiUrl+'/login', data);
+    return this.http.post(this.apiUrl + '/login', data);
   }
 
   logOut(): void {

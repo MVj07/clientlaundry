@@ -1,7 +1,8 @@
 <app-header></app-header>
 <section class="py-5">
     <!-- <h1 class="text-center wd-title">Delivers</h1> -->
-    <div class="bg-white col-lg-8 offset-lg-2 mb-2 rounded d-flex justify-content-between align-items-center gap-2 p-3">
+    <div
+        class="bg-white col-lg-10 offset-lg-1 mb-2 rounded d-flex justify-content-between align-items-center gap-2 p-3">
         <div class="d-flex gap-2 align-items-center">
             <h1 class="wd-title m-0">Delivers</h1>
             <!-- <button class="btn btn-sm btn-outline-primary" (click)="toggleSelectAll()">
@@ -12,12 +13,13 @@
                 <small class="text-white">Select All</small>
             </div>
         </div>
-        <button *ngIf="selectedOrders?.length" class="primaryBtn w150x fN btn-sm py-2 px-2" (click)="bulkUpdate()">Move to
+        <button *ngIf="selectedOrders?.length" class="primaryBtn w150x fN btn-sm py-2 px-2" (click)="bulkUpdate()">Move
+            to
             invoice</button>
     </div>
     <div class="">
         <div class="">
-            <div class="col-lg-8 offset-lg-2">
+            <div class="col-lg-10 offset-lg-1">
                 <div class="d-flex justify-content-center py-5" *ngIf="isLoading">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>

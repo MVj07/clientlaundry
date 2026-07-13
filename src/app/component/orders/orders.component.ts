@@ -11,26 +11,43 @@ import { StorageService } from '../../services/storage.service';
   styleUrl: './orders.component.css'
 })
 export class OrdersComponent {
-  column: any=[]
-  orders: any=[]
-  showCreateWorkflow:any=true
-  workflows:any=[]
+  column: any = []
+  orders: any = []
+  showCreateWorkflow: any = true
+  workflows: any = []
+  showPopup: boolean = false;
+  orderDetails: any = {}
+  barcodeInput: string = '';
   constructor(
     private order: newOrderService,
     private toast: ToastrService,
     private storageService: StorageService
-  ){}
+  ) { }
+
+  openPopUp(id: any) {
+    this.showPopup = true
+    this.order.getById(id).subscribe({
+      next: (res) => {
+        console.log(res.data)
+        this.orderDetails = res.data
+      }
+    })
+  }
+
+  close() {
+    this.showPopup = false
+  }
 
   getOrdersByStatus(status: string) {
     console.log(status)
     console.log(this.orders)
-  return this.orders.filter((o:any) => o.status === status);
-}
+    return this.orders.filter((o: any) => o.status === status);
+  }
 
 
-  getOrders(){
-    this.order.getAllOrders("track", 1, 10).subscribe({
-      next:(res)=>{
+  getOrders() {
+    this.order.getAllOrders("track", 1, 500).subscribe({
+      next: (res) => {
         console.log(res)
         this.orders = res.data
       },
@@ -41,15 +58,29 @@ export class OrdersComponent {
 
   }
 
-  ngOnInit(){
+  isDueToday(dueDateString: any): boolean {
+    if (!dueDateString) return false;
+    const today = new Date();
+    const dueDate = new Date(dueDateString);
+    return today.getFullYear() === dueDate.getFullYear() &&
+      today.getMonth() === dueDate.getMonth() &&
+      today.getDate() === dueDate.getDate();
+  }
+
+  ngOnInit() {
     this.getOrders()
     // this.workflows = this.storageService.getItem('workflo')
-    const workflow=this.storageService.getItem('workflow')
-    if (workflow){
-      if(JSON.parse(workflow).length>0){
-        this.workflows = JSON.parse(workflow)
-        console.log(JSON.parse(workflow))
-        this.showCreateWorkflow = false
+    const workflow = this.storageService.getItem('workflow')
+    if (workflow && workflow !== 'undefined') {
+      try {
+        const parsed = JSON.parse(workflow);
+        if (parsed && parsed.length > 0) {
+          this.workflows = parsed
+          console.log(parsed)
+          this.showCreateWorkflow = false
+        }
+      } catch (e) {
+        console.error('Error parsing workflow JSON', e);
       }
     }
   }
@@ -69,24 +100,24 @@ export class OrdersComponent {
     })
   }
 
-  generateInvoice(orderId:any, customerId:any) {
-  // this.http.post(`${api}/orders/update`, {
-  //   orderId,
-  //   customerId,
-  //   type: "generate_invoice"
-  // }, { responseType: 'blob' })
-  this.order.getBill({orderId: orderId, customerId: customerId})
-  .subscribe((file) => {
-      const blob = new Blob([file], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'invoice.pdf';
-      a.click();
-  });
-}
+  generateInvoice(orderId: any, customerId: any) {
+    // this.http.post(`${api}/orders/update`, {
+    //   orderId,
+    //   customerId,
+    //   type: "generate_invoice"
+    // }, { responseType: 'blob' })
+    this.order.getBill({ orderId: orderId, customerId: customerId })
+      .subscribe((file) => {
+        const blob = new Blob([file], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'invoice.pdf';
+        a.click();
+      });
+  }
 
-  moveWashing(orderId: string, kuri: any, customerId: any, status:any) {
+  moveWashing(orderId: string, kuri: any, customerId: any, status: any) {
     const data = {
       customerId: customerId,
       orderId,
@@ -145,10 +176,10 @@ export class OrdersComponent {
 
   moveOrder(order: any, nextStatus: string) {
     console.log(order, nextStatus)
-  // this.order.updateOrder(order._id, nextStatus).subscribe(() => {
-  //   order.status = nextStatus; // instant UI update
-  // });
-}
+    // this.order.updateOrder(order._id, nextStatus).subscribe(() => {
+    //   order.status = nextStatus; // instant UI update
+    // });
+  }
 
 
   // onDrop(event: CdkDragDrop<any[]>, column: any) {
@@ -165,40 +196,62 @@ export class OrdersComponent {
 
   //   console.log("Order moved to:", column.title);
   // }
-  onDrop(event: CdkDragDrop<any[]>, column: any) {
+  onDrop(event: CdkDragDrop<any[]>, targetWorkflow: any) {
     const draggedOrder = event.item.data;
-    const newStatus = column.status;  // The column user dropped into
+    const newStatus = targetWorkflow.indentifier;
     const oldStatus = draggedOrder.status;
 
-    // ------- Movement Rules -------
-    const allowedTransitions: any = {
-      washing: ["ironing"],      // Only ironing allowed
-      ironing: ["packing"],      // From ironing → packing
-      packing: ["delivery"],     // From packing → delivery
-      delivery: []               // Delivery cannot move forward
-    };
-    // ------------------------------
-
-    // If move is NOT allowed
-    if (!allowedTransitions[oldStatus].includes(newStatus)) {
-      alert(`❌ You can't move order from ${oldStatus} to ${newStatus}`);
+    if (newStatus === oldStatus) {
       return;
     }
 
-    // If allowed, perform the move
-    if (event.previousContainer === event.container) {
-      moveItemInArray(column.orders, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
+    // Dynamic transition validation based on order in the custom workflows list
+    const oldIndex = this.workflows.findIndex((w: any) => w.indentifier === oldStatus);
+    const newIndex = this.workflows.findIndex((w: any) => w.indentifier === newStatus);
+
+    // Permit moving forward by 1 step or backward by 1 step
+    if (oldIndex !== -1 && newIndex !== -1 && Math.abs(newIndex - oldIndex) > 1) {
+      this.toast.warning(`Cannot skip workflow steps! Please move step-by-step.`);
+      return;
     }
 
-    // Update status on the order
-    draggedOrder.status = newStatus;
+    // Call service to update backend status
+    const updateData = {
+      customerId: draggedOrder.customerId._id,
+      orderId: draggedOrder._id,
+      type: 'status',
+      kuri: draggedOrder.customerId.kuri || '',
+      status: newStatus
+    };
+
+    this.order.updateOrder(updateData).subscribe({
+      next: (res) => {
+        // Update local order status
+        draggedOrder.status = newStatus;
+        this.getOrders(); // refresh order list to ensure correct columns
+        this.toast.success(`Order moved to ${targetWorkflow.name}`);
+      },
+      error: (err) => {
+        this.toast.error('Failed to move order');
+      }
+    });
+  }
+
+  onBarcodeSubmit() {
+    if (!this.barcodeInput || !this.barcodeInput.trim()) {
+      return;
+    }
+    const bill = this.barcodeInput.trim();
+    this.order.barcodeUpdate({ bill }).subscribe({
+      next: (res: any) => {
+        this.toast.success(`Order ${bill} updated to status: ${res.data.status}`);
+        this.barcodeInput = '';
+        this.getOrders();
+      },
+      error: (err: any) => {
+        this.toast.error(err.error?.message || 'Failed to update order by barcode');
+      }
+    });
   }
 
 }

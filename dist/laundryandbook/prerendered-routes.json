@@ -1,14 +1,22 @@
 {
   "routes": [
+    "/",
+    "/business_setup",
+    "/create-workflow",
+    "/customerhistory",
     "/dailyexpenses",
     "/delivery",
     "/deliveryhistory",
     "/home",
-    "/home1",
+    "/invoice",
     "/ironing",
-    "/login",
     "/neworder",
+    "/orders",
+    "/packing",
+    "/pos",
     "/savepannel",
+    "/settings",
+    "/signup",
     "/washing"
   ]
 }

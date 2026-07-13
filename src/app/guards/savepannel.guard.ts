@@ -5,11 +5,11 @@ export const savepannelGuard: CanActivateFn = (route, state) => {
   const router = inject(Router)
   
     let token = null
+    let profileCompleted = null
     if (typeof window !== 'undefined' && localStorage) {
       token = localStorage.getItem('authToken');
+      profileCompleted = localStorage.getItem("profile");
     }
-  
-    const profileCompleted = localStorage.getItem("profile");
   
     // 1. If no token → redirect to login
     if (!token) {

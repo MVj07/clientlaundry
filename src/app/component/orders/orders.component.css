@@ -1,48 +1,316 @@
 .kanban-container {
-  padding: 20px;
+  padding: 30px;
+  background-color: #f8fafc;
+  min-height: 100vh;
 }
 
 .kanban-board {
-  display: flex;
-  /* gap: 20px; */
-  overflow-x: auto;
-  justify-content: space-between;
-  gap: 20px
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding-bottom: 20px;
+  align-items: flex-start;
+}
+
+@media (max-width: 1100px) {
+  .kanban-board {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
 }
 
 .kanban-column {
-  background: #f1f1f1;
+  background: #ffffff;
   width: 100%;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  max-height: 600px;
-  min-height: 600px;
-  overflow: auto;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,.02);
+  display: flex;
+  flex-direction: column;
+  max-height: 75vh;
+  box-sizing: border-box;
+}
+
+.column-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.column-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #3b82f6;
 }
 
 .column-title {
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #1e293b;
+  margin: 0;
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
+}
+
+.column-divider {
+  border: 0;
+  border-top: 2px solid #f1f5f9;
+  margin: 0 0 16px 0;
 }
 
 .kanban-list {
-  min-height: 300px;
-  padding-bottom: 10px;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  min-height: 200px;
+}
+
+.kanban-column::-webkit-scrollbar,
+.kanban-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.kanban-column::-webkit-scrollbar-thumb,
+.kanban-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
 }
 
 .kanban-card {
   background: #ffffff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  margin-bottom: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,.02);
+  margin-bottom: 14px;
   cursor: grab;
-  border-left: 4px solid #1976d2;
+  border-left: 4px solid #3b82f6;
+  transition: all .2s;
+}
+
+.kanban-card.due-today {
+  background: #fef2f2 !important;
+  border-color: #fee2e2 !important;
+  border-left: 5px solid #ef4444 !important;
+}
+
+.kanban-card:active {
+  cursor: grabbing;
 }
 
 .kanban-card:hover {
-  /* transform: scale(1.01); */
-  transition: ease-in-out 0.8s;  
-   background-color: rgb(226, 247, 255);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px -3px rgba(0,0,0,.06);
+  border-color: #cbd5e1;
+  background-color: #fafbfd;
+}
+
+.btn-card-action {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  padding: 6px;
+  border-radius: 8px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  cursor: pointer;
+}
+
+.btn-card-action:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.btn-card-action-delete:hover {
+  background-color: #fff1f2;
+  color: #e11d48;
+  border-color: #fecdd3;
+}
+
+.card-nav-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.btn-nav-prev {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  transition: all .2s;
+  cursor: pointer;
+}
+
+.btn-nav-prev:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-nav-next {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  transition: all .2s;
+  cursor: pointer;
+}
+
+.btn-nav-next:hover {
+  background-color: #dbeafe;
+}
+
+.btn-nav-finish {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  transition: all .2s;
+  cursor: pointer;
+}
+
+.btn-nav-finish:hover {
+  background-color: #d1fae5;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15,23,42,.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.popup-box {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  width: 600px;
+  max-width: 90%;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,.1), 0 10px 10px -5px rgba(0,0,0,.04);
+  animation: scaleIn .2s ease-out;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 20px;
+}
+
+.popup-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.popup-btn-close {
+  background-color: #f1f5f9;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.popup-btn-close:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.popup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.popup-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.popup-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.popup-table-container {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.popup-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.popup-table th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.popup-table td {
+  padding: 12px 14px;
+  font-size: 13.5px;
+  color: #1e293b;
+  text-align: center;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.popup-table tr:last-child td {
+  border-bottom: none;
+}
+
+.barcode-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.barcode-input:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+  outline: none;
 }

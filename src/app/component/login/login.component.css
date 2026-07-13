@@ -1,45 +1,82 @@
-section {
-  height: 100vh;
+.login-section {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  font-family: 'Outfit', 'Inter', sans-serif;
 }
 
 .login-container {
   max-width: 850px;
   width: 100%;
+  padding: 20px;
 }
 
 .login-card {
   display: flex;
-  background-color: #fff;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  min-height: 480px;
 }
 
 .login-left {
-  flex: 1;
-  background: #253a54;
-  color: #fff;
+  flex: 1.1;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  border-right: 1px solid #1e293b;
+}
+
+.brand-logo-container {
+  color: #38bdf8;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
 }
 
 .brand-text {
   font-size: 32px;
-  font-weight: bold;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.brand-tagline {
+  max-width: 200px;
+  line-height: 1.4;
 }
 
 .login-form {
-  flex: 1;
-  background: #f9f9f9;
+  flex: 1.2;
+  background: #ffffff;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
 }
 
 .form-control {
-  border-radius: 12px;
-  border: 1px solid #d1d1d1;
+  border-radius: 8px !important;
+  border: 1px solid #cbd5e1 !important;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
 }
 
-.btn-primary {
-  background: linear-gradient(90deg, #1976d2, #42a5f5);
-  border: none;
+.form-control:focus {
+  border-color: #93c5fd !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(90deg, #1565c0, #1e88e5);
-  transform: translateY(-2px);
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+  }
+  .login-left {
+    padding: 40px 20px !important;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
 }

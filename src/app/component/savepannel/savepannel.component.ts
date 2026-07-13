@@ -67,8 +67,12 @@ export class SavepannelComponent {
   moveWashing(orderId: string, kuri: any, customerId: any) {
     const workflow = localStorage.getItem('workflow')
     let workflows = []
-    if (workflow){
-      workflows=JSON.parse(workflow)
+    if (workflow && workflow !== 'undefined'){
+      try {
+        workflows=JSON.parse(workflow)
+      } catch (e) {
+        console.error('Error parsing workflow JSON', e);
+      }
     }
     const firstWorkflow=workflows.find((item:any)=>{
       return item.order==0
@@ -80,7 +84,7 @@ export class SavepannelComponent {
       type: 'status',
       kuri,
       // status: 'washing'
-      status: firstWorkflow.indentifier
+      status: firstWorkflow ? firstWorkflow.indentifier : 'washing'
     }
     this.orderService.updateOrder(data).subscribe({
       next: (res) => {
