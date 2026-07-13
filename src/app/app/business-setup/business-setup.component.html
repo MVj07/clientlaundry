@@ -15,33 +15,6 @@
       <h1 class="app-title fw-bold">LaundryPro SaaS</h1>
       <p class="app-tagline text-secondary-light">Setting up your professional wash workflows.</p>
 
-      <!-- Steps Timeline Indicators -->
-      <div class="setup-timeline mt-5">
-        <!-- Step 1 Indicator -->
-        <div class="timeline-item d-flex align-items-center mb-4" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
-          <div class="timeline-number-circle d-flex align-items-center justify-content-center me-3">
-            <span *ngIf="currentStep === 1">1</span>
-            <svg *ngIf="currentStep > 1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-          </div>
-          <div>
-            <h6 class="mb-0 fw-bold timeline-label">Shop Details</h6>
-            <span class="small text-muted">Register your store profile</span>
-          </div>
-        </div>
-
-        <!-- Step 2 Indicator -->
-        <div class="timeline-item d-flex align-items-center" [class.active]="currentStep === 2">
-          <div class="timeline-number-circle d-flex align-items-center justify-content-center me-3">
-            <span>2</span>
-          </div>
-          <div>
-            <h6 class="mb-0 fw-bold timeline-label">Operational Workflow</h6>
-            <span class="small text-muted">Define the status queue steps</span>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -50,9 +23,9 @@
     
     <div class="slider-wrapper w-100 px-5" style="max-width: 600px;">
       
-      <div class="slider" [class.step2]="currentStep === 2">
+      <div class="slider">
         
-        <!-- STEP 1: BUSINESS DETAILS -->
+        <!-- BUSINESS DETAILS -->
         <div class="slide step-1">
           <h2 class="title fw-bold text-dark mb-1">Set Up Your Laundry Business</h2>
           <p class="subtitle text-secondary mb-4">Enter your shop profile information</p>
@@ -123,55 +96,12 @@
               </div>
             </div>
 
-            <!-- Step 1 Button -->
-            <button type="button" class="primaryBtn py-2 d-flex align-items-center justify-content-center gap-2" (click)="goNext()">
-              <span>Next Step</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"/>
-                <polyline points="12 5 19 12 12 19"/>
-              </svg>
-            </button>
-          </form>
-        </div>
-
-        <!-- STEP 2: WORKFLOW SETUP -->
-        <div class="slide step-2">
-          <h2 class="title fw-bold text-dark mb-1">Define Your Workflow Steps</h2>
-          <p class="subtitle text-secondary mb-4">Define how orders transition inside your shop</p>
-
-          <div class="workflow-builder mb-4">
-            <div *ngFor="let step of steps; let i = index; trackBy: trackByIndex" class="workflow-step-row mb-3 d-flex align-items-center gap-2">
-              <div class="step-badge d-flex align-items-center justify-content-center fw-bold">
-                {{ i + 1 }}
-              </div>
-              <input [(ngModel)]="steps[i]" placeholder="Enter workflow step name (e.g. Washing, Ironing)" class="form-control" />
-              <button *ngIf="i !== 0" (click)="Remove(i)" class="btn btn-outline-danger border-0 p-2" title="Remove step">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="3 6 5 6 21 6"/>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                </svg>
-              </button>
-            </div>
-            
-            <button (click)="addStep()" class="btn btn-outline-primary d-flex align-items-center gap-2 mt-2 px-3 border-dashed" style="border-style: dashed; font-size: 14px; border-radius: 8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-              <span>Add Workflow Step</span>
-            </button>
-          </div>
-
-          <!-- Step 2 Buttons -->
-          <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-outline-secondary py-2 px-4" style="border-radius: 8px;" (click)="goBack()">
-              ← Back
-            </button>
-            <button class="primaryBtn py-2 d-flex align-items-center justify-content-center gap-2" [disabled]="loading" (click)="submit()">
+            <!-- Submit Button -->
+            <button type="button" class="primaryBtn py-2 d-flex align-items-center justify-content-center gap-2" [disabled]="loading" (click)="submit()">
               <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               <span>{{ loading ? 'Saving Profile...' : 'Save & Complete Setup' }}</span>
             </button>
-          </div>
+          </form>
         </div>
 
       </div>

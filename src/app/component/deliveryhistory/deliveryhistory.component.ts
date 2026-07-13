@@ -179,6 +179,18 @@ export class DeliveryhistoryComponent {
     this.getOrders();
   }
 
+  getWorkflowBadgeClass(status: string): string {
+    const map: any = {
+      confirm: 'bg-warning text-dark',
+      washing: 'bg-primary text-white',
+      ironing: 'bg-info text-dark',
+      folding: 'bg-secondary text-white',
+      packing: 'bg-dark text-white',
+      delivered: 'bg-success text-white'
+    };
+    return map[status] || 'bg-secondary text-white';
+  }
+
   getPageTotal(): number {
     if (!this.orders) return 0;
     return this.orders.reduce((sum: number, order: any) => sum + (order.billAmount || 0), 0);

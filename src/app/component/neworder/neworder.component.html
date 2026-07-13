@@ -113,6 +113,28 @@
           </div>
         </div>
 
+        <!-- Select Services (Dynamic list) -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold text-secondary">Select Required Services for this Order</label>
+          <div class="d-flex flex-wrap gap-2 mt-1">
+            <button 
+              type="button" 
+              *ngFor="let service of availableServices"
+              (click)="toggleService(service._id)"
+              class="btn btn-sm d-flex align-items-center gap-1 px-3 py-2"
+              [ngClass]="isServiceSelected(service._id) ? 'btn-primary' : 'btn-outline-secondary'"
+              style="border-radius: 20px; font-size: 13px; font-weight: 600; transition: all 0.2s;">
+              <svg *ngIf="isServiceSelected(service._id)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              {{ service.name }}
+            </button>
+            <div *ngIf="availableServices.length === 0" class="text-muted small">
+              No services configured yet. Configure them in <a routerLink="/services" class="fw-bold">Services Settings</a>.
+            </div>
+          </div>
+        </div>
+
         <!-- Special Instructions -->
         <div class="mb-4">
           <label class="form-label fw-semibold text-secondary">Special Instructions / Damage Notes</label>
@@ -126,30 +148,68 @@
       <div class="pt-4 border-top" style="border-top-color: #f1f5f9 !important;">
         <h5 class="fw-bold text-dark mb-3" style="font-family: 'Outfit', sans-serif;">Add Products / Items</h5>
 
+        <!-- Order Type Toggle -->
+        <div class="d-flex gap-3 mb-4 mt-2 justify-content-center">
+          <button 
+            type="button" 
+            class="btn px-4 py-2 fw-semibold d-flex align-items-center gap-2"
+            [class.btn-primary]="orderType === 'item'"
+            [class.btn-outline-primary]="orderType !== 'item'"
+            (click)="setOrderType('item')"
+            style="border-radius: 20px; font-size: 14px; transition: all 0.2s;">
+            🧺 Item-Wise Order
+          </button>
+          <button 
+            type="button" 
+            class="btn px-4 py-2 fw-semibold d-flex align-items-center gap-2"
+            [class.btn-primary]="orderType === 'kg'"
+            [class.btn-outline-primary]="orderType !== 'kg'"
+            (click)="setOrderType('kg')"
+            style="border-radius: 20px; font-size: 14px; transition: all 0.2s;">
+            ⚖️ Kg-Wise Order
+          </button>
+        </div>
+
         <form [formGroup]="itemForm" (ngSubmit)="addOrder()" class="mb-4">
           <div class="row g-3 align-items-end">
-            <div class="col-md-5">
-              <label class="form-label fw-semibold text-secondary">Product / Service</label>
-              <select formControlName="items" class="form-select select-items" (change)="onItemsChange($event)"
-                style="border-radius: 8px; border: 1px solid #cbd5e1; padding: 10px; font-size: 14px;">
-                <option [ngValue]="null" disabled>Select Product</option>
-                <option *ngFor="let item of orditems" [ngValue]="item">{{ item.name }}</option>
-              </select>
-              <div *ngIf="itemSubmit && itemControls['items'].invalid" class="text-danger small mt-1">Item selection is
-                required</div>
+            <div class="col-md-5 position-relative">
+              <label class="form-label fw-semibold text-secondary">{{ orderType === 'kg' ? 'Service / Description' : 'Product Name' }}</label>
+              <input 
+                formControlName="itemName" 
+                type="text" 
+                class="form-control" 
+                [placeholder]="orderType === 'kg' ? 'e.g. Clothes (Kg), Wash & Fold (Kg)...' : 'Type item name (e.g. Shirt, Pant, Saree)...'"
+                [ngClass]="{'is-invalid': itemSubmit && itemControls['itemName'].invalid}"
+                style="border-radius: 8px; border: 1px solid #cbd5e1; padding: 10px; font-size: 14px;"
+                autocomplete="off"
+              />
+              <div *ngIf="itemSubmit && itemControls['itemName'].invalid" class="invalid-feedback">Required</div>
+              
+              <!-- Autocomplete suggestions dropdown -->
+              <div class="position-absolute bg-white border shadow-lg rounded-3 mt-1 w-100 z-3 overflow-hidden" 
+                   *ngIf="orderType === 'item' && showProductSuggestions && productSuggestions.length > 0"
+                   style="max-height: 200px; overflow-y: auto; border-color: #e2e8f0; left: 0;">
+                <div 
+                  *ngFor="let suggestion of productSuggestions"
+                  (click)="selectProductSuggestion(suggestion)"
+                  class="px-3 py-2 autocomplete-item text-dark fw-medium small text-start border-bottom"
+                  style="transition: background 0.15s;">
+                  {{ suggestion.name }} <span class="text-muted float-end">₹{{ suggestion.price }}</span>
+                </div>
+              </div>
             </div>
 
             <div class="col-md-2">
-              <label class="form-label fw-semibold text-secondary">Qty</label>
-              <input formControlName="quantity" type="number" class="form-control qty-box" placeholder="Qty"
+              <label class="form-label fw-semibold text-secondary">{{ orderType === 'kg' ? 'Weight (Kg)' : 'Qty' }}</label>
+              <input formControlName="quantity" type="number" step="0.01" class="form-control qty-box" [placeholder]="orderType === 'kg' ? 'Weight' : 'Qty'"
                 [ngClass]="{'is-invalid': itemSubmit && itemControls['quantity'].invalid}"
                 style="border-radius: 8px; padding: 10px; font-size: 14px;" />
               <div *ngIf="itemSubmit && itemControls['quantity'].invalid" class="invalid-feedback">Required</div>
             </div>
 
             <div class="col-md-3">
-              <label class="form-label fw-semibold text-secondary">Amount (₹)</label>
-              <input formControlName="amount" type="number" class="form-control" placeholder="Price"
+              <label class="form-label fw-semibold text-secondary">{{ orderType === 'kg' ? 'Rate per Kg (₹)' : 'Amount (₹)' }}</label>
+              <input formControlName="amount" type="number" step="0.01" class="form-control" [placeholder]="orderType === 'kg' ? 'Rate/Kg' : 'Price'"
                 [ngClass]="{'is-invalid': itemSubmit && itemControls['amount'].invalid}"
                 style="border-radius: 8px; padding: 10px; font-size: 14px;" />
               <div *ngIf="itemSubmit && itemControls['amount'].invalid" class="invalid-feedback">Required</div>
@@ -170,9 +230,9 @@
           <table class="table align-middle table-hover m-0">
             <thead>
               <tr>
-                <th class="text-start ps-3">Product Name</th>
-                <th>Qty</th>
-                <th>Rate</th>
+                <th class="text-start ps-3">{{ orderType === 'kg' ? 'Service / Description' : 'Product Name' }}</th>
+                <th>{{ orderType === 'kg' ? 'Weight (Kg)' : 'Qty' }}</th>
+                <th>{{ orderType === 'kg' ? 'Rate/Kg' : 'Rate' }}</th>
                 <th>Total Amount</th>
                 <th class="text-end pe-4">Remove</th>
               </tr>

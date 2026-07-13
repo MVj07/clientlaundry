@@ -1,223 +1,235 @@
 <app-header></app-header>
 
-<div class="container-fluid kanban-container" *ngIf="!showCreateWorkflow">
+<div class="container-fluid tracking-container" style="background-color: #f8fafc; min-height: 100vh; padding: 30px;">
 
-    <!-- Header Section -->
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <h2 class="fw-bold text-dark m-0" style="font-family: 'Outfit', sans-serif;">Tracking Board</h2>
-        
-        <div class="d-flex align-items-center gap-3 flex-wrap">
-            <!-- Barcode Scanner Input -->
-            <div class="barcode-scanner-container d-flex align-items-center position-relative">
-                <svg class="position-absolute start-0 ms-3 text-secondary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="top: 50%; transform: translateY(-50%); pointer-events: none; z-index: 10;">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                    <line x1="7" y1="7" x2="7" y2="17"/>
-                    <line x1="10" y1="7" x2="10" y2="17"/>
-                    <line x1="13" y1="7" x2="13" y2="17"/>
-                    <line x1="17" y1="7" x2="17" y2="17"/>
-                </svg>
-                <input 
-                    type="text" 
-                    class="form-control barcode-input" 
-                    placeholder="Scan barcode..." 
-                    [(ngModel)]="barcodeInput" 
-                    (keyup.enter)="onBarcodeSubmit()"
-                    style="padding-left: 42px; width: 240px; height: 42px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-weight: 500;"
-                />
-                <button class="btn btn-primary ms-2 d-flex align-items-center justify-content-center" (click)="onBarcodeSubmit()" style="height: 42px; border-radius: 10px; background-color: #2563eb; border: none; font-weight: 600; padding: 0 16px;">
-                    Update
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <h2 class="fw-bold text-dark m-0" style="font-family: 'Outfit', sans-serif;">Active Order Tracker</h2>
+      <p class="text-secondary small m-0">Mark individual services completed and manage ongoing laundry processing.</p>
+    </div>
+    
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <!-- Universal Search Input -->
+      <div class="d-flex align-items-center position-relative">
+        <svg class="position-absolute start-0 ms-3 text-secondary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="top: 50%; transform: translateY(-50%); pointer-events: none; z-index: 10;">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input 
+          type="text" 
+          class="form-control barcode-input" 
+          placeholder="Search name, phone, bill..." 
+          [(ngModel)]="filterQuery" 
+          style="padding-left: 42px; width: 280px; height: 42px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-weight: 500;"
+        />
+      </div>
+      
+      <button class="primaryBtn d-flex align-items-center gap-2" routerLink="/neworder" style="width: auto; height: 42px; margin-top: 0; padding: 0 20px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        <span>Create Order</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5 text-secondary bg-white border rounded-3 shadow-sm">
+    <span class="spinner-border spinner-border-sm me-2" role="status"></span> Loading active orders...
+  </div>
+
+  <!-- Redesigned Tracking Table Card -->
+  <div class="bg-white border rounded-3 shadow-sm overflow-hidden" *ngIf="!loading" style="border-color: #e2e8f0 !important;">
+    <div class="table-responsive">
+      <table class="table align-middle m-0 table-hover">
+        <thead class="bg-light">
+          <tr>
+            <th class="text-start ps-4">Bill No</th>
+            <th class="text-start">Customer Details</th>
+            <th class="text-start" style="min-width: 250px;">Services Progress (Click to Toggle)</th>
+            <th class="text-end">Total Bill</th>
+            <th class="text-center">Dates</th>
+            <th class="text-center" style="min-width: 150px;">Status</th>
+            <th class="text-end pe-4" style="min-width: 180px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of filteredOrders" class="align-middle">
+            
+            <!-- Bill No -->
+            <td class="text-start ps-4">
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-dark" style="font-family: monospace; font-size: 15px;">#{{ order.bill }}</span>
+                <span class="badge bg-danger text-white" style="font-size: 9px; font-weight: 700; padding: 4px 6px;" *ngIf="order.dueDate && isDueToday(order.dueDate)">DUE TODAY</span>
+              </div>
+            </td>
+            
+            <!-- Customer Details -->
+            <td class="text-start">
+              <div class="fw-semibold text-dark">{{ order.customerId?.name || 'Walk-in Customer' }}</div>
+              <div class="text-secondary small">📞 {{ order.customerId?.mobile || '—' }}</div>
+            </td>
+            
+            <!-- Services Progress Pills -->
+            <td class="text-start">
+              <div class="d-flex flex-wrap gap-2">
+                <button 
+                  type="button" 
+                  *ngFor="let service of order.services"
+                  (click)="toggleServiceStatus(order, service)"
+                  class="btn btn-sm service-pill d-flex align-items-center gap-1"
+                  [ngClass]="service.status === 'completed' ? 'service-completed' : 'service-pending'"
+                  title="Click to toggle completion">
+                  <span class="pill-dot" [ngClass]="service.status === 'completed' ? 'dot-completed' : 'dot-pending'"></span>
+                  {{ service.name }}
                 </button>
-            </div>
-            
-            <button class="primaryBtn d-flex align-items-center gap-2" routerLink="/neworder" style="width: auto; height: 42px; margin-top: 0;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
-                <span>Create Order</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Kanban Board Grid -->
-    <div class="kanban-board" cdkDropListGroup>
-
-        <!-- Dynamic Column mapping -->
-        <div class="kanban-column" *ngFor="let workflow of workflows; let i = index">
-            
-            <!-- Column Header -->
-            <div class="column-header-row">
-                <div class="column-dot" 
-                     [style.background-color]="i === 0 ? '#06b6d4' : (i === 1 ? '#8b5cf6' : (i === 2 ? '#f59e0b' : '#10b981'))">
+                <div *ngIf="!order.services || order.services.length === 0" class="text-muted small italic">
+                  No services selected
                 </div>
-                <h5 class="column-title">{{ workflow.name }}</h5>
-            </div>
+              </div>
+            </td>
             
-            <hr class="column-divider" />
+            <!-- Total Bill -->
+            <td class="text-end fw-bold text-dark fs-6 pe-3">
+              ₹{{ order.billAmount }}
+            </td>
+            
+            <!-- Dates -->
+            <td class="text-center small text-secondary">
+              <div>Received: {{ order.date | date:'dd-MM-yyyy' }}</div>
+              <div class="fw-semibold" [ngClass]="order.dueDate && isDueToday(order.dueDate) ? 'text-danger' : 'text-dark'">
+                Due: {{ order.dueDate | date:'dd-MM-yyyy' }}
+              </div>
+            </td>
 
-            <!-- Card Drops Area -->
-            <div cdkDropList 
-                 [cdkDropListDisabled]="false" 
-                 [cdkDropListData]="getOrdersByStatus(workflow.indentifier)"
-                 (cdkDropListDropped)="onDrop($event, workflow)"
-                 class="kanban-list">
+            <!-- Status Indicator -->
+            <td class="text-center">
+              <span class="status-badge" [ngClass]="isAllServicesCompleted(order) ? 'status-ready' : 'status-processing'">
+                {{ isAllServicesCompleted(order) ? 'Ready for Delivery' : 'Processing' }}
+              </span>
+            </td>
+            
+            <!-- Actions -->
+            <td class="text-end pe-4">
+              <div class="d-flex justify-content-end align-items-center gap-2">
                 
-                <!-- Individual Cards -->
-                <div class="kanban-card" 
-                     *ngFor="let order of getOrdersByStatus(workflow.indentifier)" 
-                     [cdkDragData]="order" 
-                     cdkDrag
-                     [class.due-today]="order.dueDate && isDueToday(order.dueDate)"
-                     [style.border-left-color]="order.dueDate && isDueToday(order.dueDate) ? '#ef4444' : (i === 0 ? '#06b6d4' : (i === 1 ? '#8b5cf6' : (i === 2 ? '#f59e0b' : '#10b981')))">
-                    
-                    <!-- Card Top Header -->
-                    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="fw-bold text-dark" style="font-family: monospace; font-size: 14px;">#{{ order.bill }}</div>
-                            <span class="badge bg-danger text-white" style="font-size: 9px; font-weight: 700; padding: 4px 6px;" *ngIf="order.dueDate && isDueToday(order.dueDate)">DELIVER TODAY</span>
-                        </div>
-                        
-                        <div class="d-flex gap-2">
-                            <!-- Detail View Button -->
-                            <button class="btn-card-action" (click)="openPopUp(order._id)" title="View Details">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                            </button>
-                            
-                            <!-- Delete Button -->
-                            <button class="btn-card-action btn-card-action-delete" (click)="deleteOrder(order._id)" title="Delete Order">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="3 6 5 6 21 6"/>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                </svg>
-                            </button>
+                <!-- Deliver Button (Only active when all services are completed) -->
+                <button 
+                  class="btn btn-sm btn-success d-flex align-items-center gap-1 px-3"
+                  [disabled]="!isAllServicesCompleted(order)"
+                  (click)="deliverOrder(order)"
+                  style="border-radius: 8px; font-weight: 600; padding: 6px 12px; font-size: 13px;">
+                  🚀 Deliver
+                </button>
 
-                            <!-- Invoice Download (Delivered state indicator) -->
-                            <button *ngIf="i === workflows.length - 1" class="btn-card-action" 
-                                    (click)="generateInvoice(order._id, order.customerId._id)" title="Download Invoice">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                    <polyline points="7 10 12 15 17 10"/>
-                                    <line x1="12" y1="15" x2="12" y2="3"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
+                <!-- View Detail Popup -->
+                <button class="btn btn-outline-secondary btn-sm p-2 rounded-3" (click)="openPopUp(order._id)" title="View Details">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+                
+                <!-- Print Bill -->
+                <button class="btn btn-outline-secondary btn-sm p-2 rounded-3" (click)="generateInvoice(order._id, order.customerId?._id)" title="Download Invoice">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                </button>
 
-                    <!-- Customer Info -->
-                    <div style="font-size: 13px; color: #475569; margin-bottom: 2px;">
-                        Customer: <span class="fw-bold text-dark">{{ order.customerId.name }}</span>
-                    </div>
-                    <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">
-                        Mobile: {{ order.customerId.mobile }}
-                    </div>
+                <!-- Delete -->
+                <button class="btn btn-outline-danger btn-sm p-2 rounded-3" (click)="deleteOrder(order._id)" title="Delete Order">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
 
-                    <!-- Due Indicator -->
-                    <div class="text-danger small fw-semibold mb-2" *ngIf="order.dueDate">
-                        📅 Due: {{ order.dueDate | date: 'dd-MM-yyyy' }}
-                    </div>
-
-                    <!-- Instructions -->
-                    <div class="text-secondary small py-1 px-2 rounded mb-3 bg-light" *ngIf="order.specialInstructions" 
-                         style="font-style: italic; font-size: 11px; border-left: 3px solid #cbd5e1;">
-                        "{{ order.specialInstructions }}"
-                    </div>
-
-                    <!-- Card Total -->
-                    <div class="fw-bold text-dark text-end" style="font-size: 14px;">
-                        Total: ₹{{ order.billAmount }}
-                    </div>
-
-                    <!-- Navigation Action Shifts -->
-                    <div class="card-nav-group">
-                        <button class="btn-nav-prev w-100" *ngIf="i > 0"
-                                (click)="moveWashing(order._id, 0, order.customerId._id, workflows[i - 1].indentifier)">
-                            ← Prev
-                        </button>
-
-                        <button class="btn-nav-next w-100" *ngIf="i < workflows.length - 1"
-                                (click)="moveWashing(order._id, 0, order.customerId._id, workflows[i + 1].indentifier)">
-                            Next →
-                        </button>
-                        
-                        <button class="btn-nav-finish w-100" *ngIf="i == workflows.length - 1"
-                                (click)="moveWashing(order._id, 0, order.customerId._id, 'delivered')">
-                            Finish 🎉
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- DETAILS OVERLAY POPUP -->
-    <div class="popup-overlay" *ngIf="showPopup">
-        <div class="popup-box">
+              </div>
+            </td>
             
-            <!-- Modal Header -->
-            <div class="popup-header">
-                <h4 class="popup-title" style="font-family: 'Outfit', sans-serif;">Order Details Overview</h4>
-                <button class="popup-btn-close" (click)="close()">Close</button>
-            </div>
-
-            <!-- Modal Info Grid -->
-            <div class="popup-grid">
-                <div>
-                    <div class="popup-label">Bill Number</div>
-                    <div class="popup-value" style="font-family: monospace;">#{{ orderDetails?.bill }}</div>
-                </div>
-                <div>
-                    <div class="popup-label">Customer Name</div>
-                    <div class="popup-value">{{ orderDetails?.customerId?.name }}</div>
-                </div>
-                <div>
-                    <div class="popup-label">Delivery Address</div>
-                    <div class="popup-value" style="font-size: 13px; color: #475569;">{{ orderDetails?.customerId?.address || 'No Address' }}</div>
-                </div>
-                <div>
-                    <div class="popup-label">Mobile Number</div>
-                    <div class="popup-value">{{ orderDetails?.customerId?.mobile }}</div>
-                </div>
-                <div>
-                    <div class="popup-label">Order Date</div>
-                    <div class="popup-value">{{ orderDetails?.date | date: 'dd-MM-yyyy' }}</div>
-                </div>
-                <div>
-                    <div class="popup-label">Total Bill Amount</div>
-                    <div class="popup-value text-primary">₹{{ orderDetails?.billAmount }}</div>
-                </div>
-            </div>
-
-            <hr style="border-top-color: #f1f5f9 !important;" />
-
-            <!-- Products Detail Table -->
-            <h6 class="fw-bold text-secondary mb-2" style="font-size: 13px;">Product Items Details</h6>
-            <div class="popup-table-container">
-                <table class="popup-table">
-                    <thead>
-                        <tr>
-                            <th class="text-start ps-3">Product Name</th>
-                            <th>Qty</th>
-                            <th>Rate</th>
-                            <th class="text-end pe-3">Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of orderDetails.items">
-                            <td class="fw-semibold text-dark text-start ps-3">{{ item.name }}</td>
-                            <td>{{ item.qty }}</td>
-                            <td>₹{{ item.amount }}</td>
-                            <td class="text-end pe-3 fw-bold text-dark">₹{{ item.qty * item.amount }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
+          </tr>
+          
+          <!-- Empty State -->
+          <tr *ngIf="filteredOrders.length === 0">
+            <td colspan="7" class="text-center py-5 text-muted fw-semibold bg-light">
+              <div style="font-size: 40px; margin-bottom: 10px;">🧺</div>
+              <div>No matching active tracking orders found.</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 
+</div>
+
+<!-- DETAILS OVERLAY POPUP -->
+<div class="popup-overlay" *ngIf="showPopup">
+  <div class="popup-box">
+      
+      <!-- Modal Header -->
+      <div class="popup-header">
+          <h4 class="popup-title" style="font-family: 'Outfit', sans-serif;">Order Details Overview</h4>
+          <button class="popup-btn-close" (click)="close()">Close</button>
+      </div>
+
+      <!-- Modal Info Grid -->
+      <div class="popup-grid">
+          <div>
+              <div class="popup-label">Bill Number</div>
+              <div class="popup-value" style="font-family: monospace;">#{{ orderDetails?.bill }}</div>
+          </div>
+          <div>
+              <div class="popup-label">Customer Name</div>
+              <div class="popup-value">{{ orderDetails?.customerId?.name }}</div>
+          </div>
+          <div>
+              <div class="popup-label">Delivery Address</div>
+              <div class="popup-value" style="font-size: 13px; color: #475569;">{{ orderDetails?.customerId?.address || 'No Address' }}</div>
+          </div>
+          <div>
+              <div class="popup-label">Mobile Number</div>
+              <div class="popup-value">{{ orderDetails?.customerId?.mobile }}</div>
+          </div>
+          <div>
+              <div class="popup-label">Order Date</div>
+              <div class="popup-value">{{ orderDetails?.date | date: 'dd-MM-yyyy' }}</div>
+          </div>
+          <div>
+              <div class="popup-label">Total Bill Amount</div>
+              <div class="popup-value text-primary">₹{{ orderDetails?.billAmount }}</div>
+          </div>
+      </div>
+
+      <hr style="border-top-color: #f1f5f9 !important;" />
+
+      <!-- Products Detail Table -->
+      <h6 class="fw-bold text-secondary mb-2" style="font-size: 13px;">Product Items Details</h6>
+      <div class="popup-table-container">
+          <table class="popup-table">
+              <thead>
+                  <tr>
+                      <th class="text-start ps-3">{{ orderDetails?.type === 'kg' ? 'Service / Description' : 'Product Name' }}</th>
+                      <th>{{ orderDetails?.type === 'kg' ? 'Weight (Kg)' : 'Qty' }}</th>
+                      <th>{{ orderDetails?.type === 'kg' ? 'Rate/Kg' : 'Rate' }}</th>
+                      <th class="text-end pe-3">Subtotal</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let item of orderDetails.items">
+                      <td class="fw-semibold text-dark text-start ps-3">{{ item.name }}</td>
+                      <td>{{ item.qty }}</td>
+                      <td>₹{{ item.amount }}</td>
+                      <td class="text-end pe-3 fw-bold text-dark">₹{{ item.qty * item.amount }}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+
+  </div>
 </div>

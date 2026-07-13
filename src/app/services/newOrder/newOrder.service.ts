@@ -17,14 +17,6 @@ export class newOrderService {
         };
         return this.http.get(this.apiUrl+'/order/'+id, {headers});
     }
-
-    getAllItems(): Observable<any> {
-        const token = this.storageService.getItem('authToken'); // or sessionStorage
-        const headers = {
-            Authorization: `Bearer ${token}`
-        };
-        return this.http.get(this.apiUrl+'/items', {headers});
-    }
     
     newOrder(data: any): Observable<any>{
         const token = this.storageService.getItem('authToken');
@@ -82,20 +74,6 @@ export class newOrderService {
     return this.http.post(this.apiUrl + '/change_pass', data,{headers});
   }
 
-  createItems(data:any): Observable<any>{
-        const token = this.storageService.getItem('authToken'); // or sessionStorage
-     const headers = {
-            Authorization: `Bearer ${token}`
-        };
-    return this.http.post(this.apiUrl + '/items/create', data,{headers});
-  }
-  deleteItem(data:any): Observable<any>{
-        const token = this.storageService.getItem('authToken'); // or sessionStorage
-     const headers = {
-            Authorization: `Bearer ${token}`
-        };
-    return this.http.post(this.apiUrl + '/items/delete', data,{headers});
-  }
   overallsearch(data:any): Observable<any>{
         const token = this.storageService.getItem('authToken'); // or sessionStorage
      const headers = {
@@ -134,5 +112,13 @@ export class newOrderService {
         Authorization: `Bearer ${token}`
     };
     return this.http.post(this.apiUrl + '/order/record-payment', data, { headers });
+  }
+
+  updateOrderServiceStatus(orderId: string, serviceId: string, status: string): Observable<any> {
+    const token = this.storageService.getItem('authToken');
+    const headers = {
+        Authorization: `Bearer ${token}`
+    };
+    return this.http.put(`${this.apiUrl}/order/${orderId}/service-status`, { serviceId, status }, { headers });
   }
 }

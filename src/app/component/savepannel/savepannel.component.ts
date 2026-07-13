@@ -65,36 +65,20 @@ export class SavepannelComponent {
   }
 
   moveWashing(orderId: string, kuri: any, customerId: any) {
-    const workflow = localStorage.getItem('workflow')
-    let workflows = []
-    if (workflow && workflow !== 'undefined'){
-      try {
-        workflows=JSON.parse(workflow)
-      } catch (e) {
-        console.error('Error parsing workflow JSON', e);
-      }
-    }
-    const firstWorkflow=workflows.find((item:any)=>{
-      return item.order==0
-    })
-    console.log(firstWorkflow)
     const data = {
       customerId: customerId._id,
       orderId,
       type: 'status',
       kuri,
-      // status: 'washing'
-      status: firstWorkflow ? firstWorkflow.indentifier : 'washing'
+      status: 'processing'
     }
     this.orderService.updateOrder(data).subscribe({
       next: (res) => {
         this.getOrders()
         this.toast.success('Order updated successfully')
-        // window.alert('Order updated successfully')
       },
       error: (err) => {
         this.toast.error('Order update failed')
-        // window.alert('Order update failed')
         return;
       }
     })

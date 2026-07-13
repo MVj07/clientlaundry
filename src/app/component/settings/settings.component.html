@@ -9,12 +9,12 @@
       <p class="text-secondary small m-0">Manage security details and system items configuration.</p>
     </div>
 
-    <!-- Grid Layout -->
-    <div class="row g-4">
+    <!-- Centered Layout -->
+    <div class="row justify-content-center">
 
       <!-- Left Column: Password Management -->
-      <div class="col-md-5">
-        <div class="bg-white border rounded-3 p-4 shadow-sm h-100"
+      <div class="col-md-6">
+        <div class="bg-white border rounded-3 p-4 shadow-sm"
           style="border-color: #e2e8f0 !important; border-left: 5px solid #2563eb !important;">
           <h5 class="fw-bold text-dark mb-4" style="font-family: 'Outfit', sans-serif;">Change Password</h5>
 
@@ -100,7 +100,7 @@
               ✅ {{ success }}
             </div>
 
-            <button type="submit" [disabled]="!passwordForm.valid || !passwordsMatch() || loading"
+            <button type="submit" [disabled]="!passwordForm.valid || passwords.newPassword !== passwords.confirmPassword || loading"
               class="primaryBtn py-2 d-flex align-items-center justify-content-center gap-2"
               style="border-radius: 8px; font-size: 14px;">
               <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -110,96 +110,6 @@
         </div>
       </div>
 
-      <!-- Right Column: Services Setup -->
-      <div class="col-md-7">
-        <div class="bg-white border rounded-3 p-4 shadow-sm"
-          style="border-color: #e2e8f0 !important; border-left: 5px solid #10b981 !important;">
-          <h5 class="fw-bold text-dark mb-3" style="font-family: 'Outfit', sans-serif;">Manage Service Items</h5>
-
-          <form [formGroup]="orderForm" (ngSubmit)="additem()" class="mb-4">
-            <div class="row g-3 align-items-end">
-              <div class="col-md-7">
-                <label class="form-label fw-semibold text-secondary">Item Name</label>
-                <input formControlName="name" type="text" class="form-control" placeholder="e.g. Silk Saree, Suit"
-                  [ngClass]="{'is-invalid': (submit && form['name'].errors) || (form['name'].invalid && (form['name'].dirty || form['name'].touched))}"
-                  style="border-radius: 8px; font-size: 14px; padding: 10px 14px;">
-                <div
-                  *ngIf="(submit && form['name'].errors) || (form['name'].invalid && (form['name'].dirty || form['name'].touched))"
-                  class="invalid-feedback">
-                  <span *ngIf="form['name'].errors?.['required']">Item name is required</span>
-                </div>
-              </div>
-
-              <div class="col-md-5">
-                <label class="form-label fw-semibold text-secondary">Unit Price (₹)</label>
-                <input formControlName="price" type="number" class="form-control" placeholder="Rate"
-                  [ngClass]="{'is-invalid': (submit && form['price'].errors) || (form['price'].invalid && (form['price'].dirty || form['price'].touched))}"
-                  style="border-radius: 8px; font-size: 14px; padding: 10px 14px;">
-                <div
-                  *ngIf="(submit && form['price'].errors) || (form['price'].invalid && (form['price'].dirty || form['price'].touched))"
-                  class="invalid-feedback">
-                  <span *ngIf="form['price'].errors?.['required']">Price is required</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-end mt-3">
-              <button type="submit" class="primaryBtn py-2 d-flex align-items-center gap-2" [disabled]="loadingItem"
-                style="width: auto; border-radius: 8px; font-size: 14px;">
-                <span *ngIf="loadingItem" class="spinner-border spinner-border-sm" role="status"
-                  aria-hidden="true"></span>
-                <span>{{ loadingItem ? 'Adding...' : '+ Add Product' }}</span>
-              </button>
-            </div>
-          </form>
-
-          <!-- Items Table -->
-          <div class="pt-2">
-            <div class="table-responsive border rounded-3 mb-3" style="border-color: #e2e8f0 !important;">
-              <table class="table align-middle table-hover m-0">
-                <thead>
-                  <tr>
-                    <th class="text-start ps-3">Item Description</th>
-                    <th>Price</th>
-                    <th class="text-end pe-4">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    *ngFor="let order of additems | paginate:{ itemsPerPage: limit, currentPage: page, totalItems:totalItems }; let i=index"
-                    class="item-row">
-                    <td class="fw-semibold text-dark text-start ps-3">{{ order.name }}</td>
-                    <td class="fw-bold text-dark">₹{{ order.price }}</td>
-                    <td class="text-end pe-3">
-                      <button class="btn btn-outline-danger btn-sm border-0 rounded-circle py-2 px-3"
-                        (click)="deleteItem(order._id)" title="Delete Item">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <polyline points="3 6 5 6 21 6" />
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                        </svg>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr *ngIf="additems?.length === 0">
-                    <td colspan="3" class="text-center py-4 text-muted">No items configured yet.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="d-flex justify-content-center">
-              <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="5" [directionLinks]="true"
-                [autoHide]="true">
-              </pagination-controls>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
     </div>
-
   </div>
 </section>

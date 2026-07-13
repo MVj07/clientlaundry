@@ -80,9 +80,9 @@
                             <table class="w-100">
                                 <thead class="">
                                     <tr>
-                                        <th class="p-2">Product Name</th>
-                                        <th>Qty</th>
-                                        <th>Amount</th>
+                                        <th class="p-2">{{ order.type === 'kg' ? 'Service / Description' : 'Product Name' }}</th>
+                                        <th>{{ order.type === 'kg' ? 'Weight (Kg)' : 'Qty' }}</th>
+                                        <th>{{ order.type === 'kg' ? 'Rate/Kg' : 'Amount' }}</th>
                                         <th>Total Amount</th>
                                     </tr>
                                 </thead>

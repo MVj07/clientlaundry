@@ -43,3 +43,11 @@
   background-color: #f1f5f9 !important;
   cursor: pointer;
 }
+
+.autocomplete-item {
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+.autocomplete-item:hover {
+  background-color: #f1f5f9 !important;
+}

@@ -1,197 +1,115 @@
-.kanban-container {
-  padding: 30px;
-  background-color: #f8fafc;
-  min-height: 100vh;
+/* Redesigned Active Tracker Table Styles */
+
+.tracking-container {
+  font-family: 'Outfit', sans-serif;
 }
 
-.kanban-board {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  padding-bottom: 20px;
-  align-items: flex-start;
-}
-
-@media (max-width: 1100px) {
-  .kanban-board {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .kanban-board {
-    grid-template-columns: 1fr;
-  }
-}
-
-.kanban-column {
-  background: #ffffff;
-  width: 100%;
-  padding: 20px;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,.02);
-  display: flex;
-  flex-direction: column;
-  max-height: 75vh;
-  box-sizing: border-box;
-}
-
-.column-header-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.column-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #3b82f6;
-}
-
-.column-title {
-  font-weight: 700;
-  font-size: 15px;
-  color: #1e293b;
-  margin: 0;
-  letter-spacing: -0.3px;
+.table th {
+  font-size: 11px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #475569;
+  border-bottom: 2px solid #e2e8f0;
+  padding: 14px 16px;
+  font-weight: 700;
+  background-color: #f8fafc;
 }
 
-.column-divider {
-  border: 0;
-  border-top: 2px solid #f1f5f9;
-  margin: 0 0 16px 0;
-}
-
-.kanban-list {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding-right: 4px;
-  min-height: 200px;
-}
-
-.kanban-column::-webkit-scrollbar,
-.kanban-list::-webkit-scrollbar {
-  width: 4px;
-}
-
-.kanban-column::-webkit-scrollbar-thumb,
-.kanban-list::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 4px;
-}
-
-.kanban-card {
-  background: #ffffff;
+.table td {
   padding: 16px;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 4px rgba(0,0,0,.02);
-  margin-bottom: 14px;
-  cursor: grab;
-  border-left: 4px solid #3b82f6;
-  transition: all .2s;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
 }
 
-.kanban-card.due-today {
-  background: #fef2f2 !important;
-  border-color: #fee2e2 !important;
-  border-left: 5px solid #ef4444 !important;
+.table-hover tbody tr:hover {
+  background-color: #fafbfc;
 }
 
-.kanban-card:active {
-  cursor: grabbing;
+/* Service Pills Completion Status */
+.service-pill {
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
 }
 
-.kanban-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 12px -3px rgba(0,0,0,.06);
-  border-color: #cbd5e1;
-  background-color: #fafbfd;
+.service-completed {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
 }
 
-.btn-card-action {
-  background: transparent;
-  border: 1px solid #e2e8f0;
-  padding: 6px;
-  border-radius: 8px;
-  color: #64748b;
-  display: flex;
+.service-completed:hover {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+.service-pending {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.service-pending:hover {
+  background-color: #e2e8f0 !important;
+  color: #1e293b !important;
+  border-color: #94a3b8 !important;
+}
+
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-completed {
+  background-color: #ffffff;
+}
+
+.dot-pending {
+  background-color: #64748b;
+}
+
+/* Overall Status Badge */
+.status-badge {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all .2s;
-  cursor: pointer;
-}
-
-.btn-card-action:hover {
-  background-color: #f1f5f9;
-  color: #0f172a;
-  border-color: #cbd5e1;
-}
-
-.btn-card-action-delete:hover {
-  background-color: #fff1f2;
-  color: #e11d48;
-  border-color: #fecdd3;
-}
-
-.card-nav-group {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.btn-nav-prev {
-  background-color: #f1f5f9;
-  color: #475569;
-  border: none;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
   padding: 6px 12px;
-  transition: all .2s;
-  cursor: pointer;
-}
-
-.btn-nav-prev:hover {
-  background-color: #e2e8f0;
-}
-
-.btn-nav-next {
-  background-color: #eff6ff;
-  color: #2563eb;
-  border: none;
-  border-radius: 6px;
-  font-size: 11px;
+  border-radius: 12px;
+  font-size: 12px;
   font-weight: 700;
-  padding: 6px 12px;
-  transition: all .2s;
-  cursor: pointer;
+  text-transform: capitalize;
 }
 
-.btn-nav-next:hover {
+.status-ready {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-processing {
   background-color: #dbeafe;
+  color: #1d4ed8;
 }
 
-.btn-nav-finish {
-  background-color: #ecfdf5;
-  color: #059669;
-  border: none;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 6px 12px;
-  transition: all .2s;
-  cursor: pointer;
+/* Barcode input scanner adjustments */
+.barcode-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.btn-nav-finish:hover {
-  background-color: #d1fae5;
+.barcode-input:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+  outline: none;
 }
 
+/* Details Overlay Popup */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -213,7 +131,6 @@
   width: 600px;
   max-width: 90%;
   box-shadow: 0 20px 25px -5px rgba(0,0,0,.1), 0 10px 10px -5px rgba(0,0,0,.04);
-  animation: scaleIn .2s ease-out;
 }
 
 .popup-header {
@@ -303,14 +220,4 @@
 
 .popup-table tr:last-child td {
   border-bottom: none;
-}
-
-.barcode-input {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.barcode-input:focus {
-  border-color: #2563eb !important;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
-  outline: none;
 }

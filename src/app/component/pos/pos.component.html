@@ -42,7 +42,7 @@
               <span *ngIf="!isDefaultView">{{ searchResults.length }} result(s) found</span>
               <span *ngIf="isDefaultView" class="text-primary small cursorP" style="font-size:10px; font-weight:600;" (click)="loadUnpaidOrders()">↻ Refresh</span>
             </div>
-            <div *ngFor="let order of searchResults" class="result-item" (click)="selectOrder(order)">
+            <div *ngFor="let order of searchResults" class="result-item" [class.active-item]="selectedOrder?._id === order._id" (click)="selectOrder(order)">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
                   <div class="fw-bold text-dark" style="font-size:14px;">

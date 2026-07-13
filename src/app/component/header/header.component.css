@@ -175,3 +175,48 @@
   background-color: rgba(239, 68, 68, 0.1);
   border-color: #ef4444;
 }
+
+/* Grouped Sidebar Categories */
+.nav-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.nav-category-header:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.category-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.8px;
+}
+
+.chevron-icon {
+  color: #64748b;
+  transition: transform 0.2s ease;
+}
+
+.chevron-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.submenu-link {
+  padding-left: 36px !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+}

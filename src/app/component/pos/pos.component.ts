@@ -149,7 +149,6 @@ export class PosComponent implements OnInit {
 
   selectOrder(order: any) {
     this.selectedOrder = order;
-    this.searchResults = [];
     this.paymentDone = false;
 
     // Pre-fill paidAmount with current billAmount - existing discount
@@ -168,8 +167,8 @@ export class PosComponent implements OnInit {
     this.selectedOrder = null;
     this.paymentDone = false;
     this.searchTerm = '';
-    this.searchResults = [];
     this.paymentForm.reset({ discount: 0, paidAmount: 0, paymentMethod: 'cash' });
+    this.loadUnpaidOrders();
   }
 
   get finalAmount(): number {
@@ -259,12 +258,5 @@ export class PosComponent implements OnInit {
       },
       error: () => this.toaster.error('Invoice download failed')
     });
-  }
-
-  @HostListener('document:click', ['$event'])
-  clickout(event: any) {
-    if (!this.eRef.nativeElement.contains(event.target)) {
-      this.searchResults = [];
-    }
   }
 }

@@ -29,7 +29,7 @@ import { BusinessSetupComponent } from './app/business-setup/business-setup.comp
 import { SignupComponent } from './component/signup/signup.component';
 import { OrdersComponent } from './component/orders/orders.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { WorkflowComponent } from './component/workflow/workflow.component';
+import { ServicesComponent } from './component/services/services.component';
 import { PosComponent } from './component/pos/pos.component';
 
 @NgModule({
@@ -52,7 +52,7 @@ import { PosComponent } from './component/pos/pos.component';
     BusinessSetupComponent,
     SignupComponent,
     OrdersComponent,
-    WorkflowComponent,
+    ServicesComponent,
     PosComponent
   ],
   imports: [

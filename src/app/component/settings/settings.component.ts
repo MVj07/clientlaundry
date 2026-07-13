@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -17,34 +16,14 @@ export class SettingsComponent {
   error = '';
   success = '';
   loading = false;
-  loadingItem = false;
   showCurrentPassword = false;
   showNewPassword = false;
   showConfirmPassword = false;
-  orderForm!: FormGroup;
-  submit: boolean = false;
-  orders: any[] = [];
-  page: number = 1;
-  limit: number = 5;
-  totalItems: number = 0;
-  additems: any = [];
+
   constructor(
     private orderService: newOrderService,
-    private fb: FormBuilder,
     private toast: ToastrService
   ) { }
-
-  ngOnInit(): void {
-    this.orderForm = this.fb.group({
-      name: ['', Validators.required],
-      price: ['', Validators.required],
-    })
-    this.listItems()
-  }
-
-  get form() {
-    return this.orderForm?.controls;
-  }
 
   passwordsMatch(): boolean {
     return this.passwords.newPassword === this.passwords.confirmPassword;
@@ -67,91 +46,20 @@ export class SettingsComponent {
     }
     this.orderService.changePassword(payload).subscribe({
       next: (res) => {
-        console.log('Login Success:', res);
         if (res) {
-          // alert(res.message)
-          this.toast.success(res.message)
+          this.toast.success(res.message);
           this.passwords = {
             currentPassword: '',
             newPassword: '',
             confirmPassword: ''
-          }
-          this.loading = false
+          };
+          this.loading = false;
         }
       },
       error: (err) => {
-        // alert(err.error.message)
-        this.toast.error(err.error.message)
-        this.loading = false
+        this.toast.error(err.error.message);
+        this.loading = false;
       }
     });
-  }
-  pageChanged(newPage: number): void {
-    this.page = newPage;
-    // this.getExpense();
-  }
-
-  additem() {
-    this.submit = true;
-    if (this.orderForm.invalid) return;
-
-    this.loadingItem = true;
-    const formValue = this.orderForm.value;
-    const orderData = {
-      name: formValue.name,
-      price: formValue.price,
-    };
-    // this.additems.push(orderData)
-    this.orderService.createItems(Array(orderData)).subscribe({
-      next: (res) => {
-        this.orderForm.patchValue({
-          name: "",
-          price: 0
-        })
-        if (res) {
-          this.listItems()
-          // alert(res.message)
-          this.toast.success(res.message)
-          this.loadingItem = false;
-        }
-      },
-      error: (err) => {
-        // alert(err.error.message)
-        this.toast.error(err.error.message)
-        this.loadingItem = false;
-      }
-    })
-  }
-
-  deleteItem(index: number) {
-    // this.additems.splice(index, 1);
-    this.orderService.deleteItem({ itemId: index }).subscribe({
-      next: (res) => {
-        if (res) {
-          this.listItems()
-          // alert(res.message)
-          this.toast.success(res.message)
-        }
-      },
-      error: (err) => {
-        // alert(err.error.message)
-        this.toast.error(err.error.message)
-      }
-    })
-  }
-
-  listItems(): void {
-    this.orderService.getAllItems().subscribe({
-      next: (res) => {
-        if (res) {
-          // alert(res.message)
-          this.additems = res.data
-        }
-      },
-      error: (err) => {
-        // alert(err.error.message)
-        this.toast.error(err.error.message)
-      }
-    })
   }
 }

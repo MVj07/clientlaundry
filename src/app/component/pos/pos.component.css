@@ -102,6 +102,12 @@
   background: #f8fafc;
 }
 
+.result-item.active-item {
+  background: #f1f5f9;
+  border-left: 4px solid #6366f1;
+  padding-left: 10px;
+}
+
 /* Payment status badges */
 .billing-badge {
   display: inline-flex;
