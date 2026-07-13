@@ -5,23 +5,23 @@ import { StorageService } from '../storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
-    // private apiUrl = 'https://laundry-fju0.onrender.com/customer'; // Change to your actual API URL
-    private apiUrl='http://localhost:5000/customer'
+    private apiUrl = 'https://laundry-fju0.onrender.com/customer'; // Change to your actual API URL
+    // private apiUrl='http://localhost:5000/customer'
 
     constructor(private http: HttpClient, private storageService: StorageService) { }
 
-    getAll(search:any): Observable<any> {
+    getAll(search: any): Observable<any> {
         const token = this.storageService.getItem('authToken'); // or sessionStorage
         const headers = {
             Authorization: `Bearer ${token}`
         };
-        return this.http.get(`${this.apiUrl}?search=${encodeURIComponent(search)}`, {headers});
+        return this.http.get(`${this.apiUrl}?search=${encodeURIComponent(search)}`, { headers });
     }
-    getById(id:any):Observable<any>{
+    getById(id: any): Observable<any> {
         const token = this.storageService.getItem('authToken'); // or sessionStorage
         const headers = {
             Authorization: `Bearer ${token}`
         };
-        return this.http.get(this.apiUrl+`/${id}`, {headers})
+        return this.http.get(this.apiUrl + `/${id}`, { headers })
     }
 }

@@ -27,7 +27,8 @@ export class PosComponent implements OnInit {
   processing: boolean = false;
   paymentDone: boolean = false;
 
-  private apiUrl = 'http://localhost:5000';
+  // private apiUrl = 'http://localhost:5000';
+  private apiUrl = 'https://laundry-fju0.onrender.com'
 
   constructor(
     private fb: FormBuilder,
@@ -36,7 +37,7 @@ export class PosComponent implements OnInit {
     private http: HttpClient,
     private storage: StorageService,
     private eRef: ElementRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.paymentForm = this.fb.group({
