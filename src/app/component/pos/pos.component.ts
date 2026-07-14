@@ -28,7 +28,8 @@ export class PosComponent implements OnInit {
   paymentDone: boolean = false;
 
   // private apiUrl = 'http://localhost:5000';
-  private apiUrl = 'https://laundry-fju0.onrender.com'
+  // private apiUrl = 'https://laundry-fju0.onrender.com'
+  private apiUrl = 'https://laundry-omega-nine.vercel.app'
 
   constructor(
     private fb: FormBuilder,
