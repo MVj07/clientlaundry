@@ -192,7 +192,32 @@
 .btn-new-order .action-icon { background: #3b82f6; color: #fff; }
 .btn-new-customer { background: #ecfdf5; color: #047857; }
 .btn-new-customer .action-icon { background: #10b981; color: #fff; }
-.btn-orders-board { background: #fbf7f0; color: #b45309; }
 .btn-orders-board .action-icon { background: #f59e0b; color: #fff; }
 .btn-expenses { background: #f8fafc; color: #475569; }
 .btn-expenses .action-icon { background: #64748b; color: #fff; }
+
+/* Responsive Dashboard Layout */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 16px 12px;
+  }
+  .kpi-card {
+    padding: 16px;
+    gap: 14px;
+  }
+  .kpi-title {
+    font-size: 13px;
+  }
+  .kpi-value {
+    font-size: 22px;
+  }
+  .quick-actions-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+}

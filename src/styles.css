@@ -160,6 +160,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding: 20px 24px;
   border-radius: 10px;
   width: 580px;
+  max-width: 94vw;
+  max-height: 90vh;
+  overflow-y: auto;
   animation: scaleIn 0.2s ease;
 }
 
@@ -168,9 +171,77 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   to { transform: scale(1); opacity: 1; }
 }
 
-app-header ~ * {
-  margin-left: 260px !important;
-  width: calc(100% - 260px) !important;
-  min-height: 100vh;
-  box-sizing: border-box;
+/* Desktop Sidebar Layout (> 991px) */
+@media (min-width: 992px) {
+  app-header ~ * {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: block;
+  }
+}
+
+/* Tablet & Mobile Layout (<= 991px) */
+@media (max-width: 991px) {
+  app-header ~ * {
+    margin-left: 0 !important;
+    width: 100% !important;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: block;
+    padding-top: 64px !important; /* Spacing for fixed top mobile navbar */
+  }
+
+  .col-lg-10.offset-lg-1,
+  .col-lg-8.offset-lg-2,
+  .col-md-10.offset-md-1,
+  .col-md-8.offset-md-2 {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .table-container,
+  .popup-table-container,
+  .table-responsive {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: block !important;
+  }
+
+  table {
+    width: 100% !important;
+  }
+
+  .popup-box {
+    width: 94% !important;
+    padding: 16px !important;
+    margin: 12px auto !important;
+  }
+}
+
+/* Small Smartphone Viewports (<= 576px) */
+@media (max-width: 576px) {
+  .wd-title {
+    font-size: 20px !important;
+    line-height: 24px !important;
+  }
+
+  .primaryBtn,
+  .btn {
+    font-size: 13px !important;
+  }
+
+  th, td {
+    padding: 8px 6px !important;
+    font-size: 12.5px !important;
+  }
+
+  .save-boxs {
+    padding: 12px !important;
+  }
 }

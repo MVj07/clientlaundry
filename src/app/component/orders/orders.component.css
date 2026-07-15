@@ -249,3 +249,28 @@
   opacity: 0.9;
   pointer-events: none;
 }
+
+/* Responsive Tracking Board */
+@media (max-width: 768px) {
+  .tracking-container {
+    padding: 16px 12px !important;
+  }
+  .barcode-input {
+    width: 100% !important;
+  }
+  .primaryBtn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .timeline-container {
+    overflow-x: auto !important;
+    padding-bottom: 12px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .table th, .table td {
+    padding: 10px 8px !important;
+    font-size: 12.5px !important;
+  }
+}

@@ -278,3 +278,34 @@
   font-size: 48px;
   margin-bottom: 12px;
 }
+
+/* Responsive POS Billing Layout */
+@media (max-width: 991px) {
+  .billing-section {
+    padding: 16px 12px !important;
+  }
+  .billing-card {
+    padding: 16px !important;
+  }
+  .search-results-list {
+    max-height: 320px;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .payment-summary-row {
+    padding: 12px !important;
+    gap: 8px;
+    justify-content: space-around;
+  }
+  .summary-val {
+    font-size: 14px;
+  }
+  .summary-label {
+    font-size: 10px;
+  }
+  .billing-search {
+    font-size: 13px;
+  }
+}

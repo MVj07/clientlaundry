@@ -125,3 +125,16 @@
   letter-spacing: 0.2px;
   margin-top: 2px;
 }
+
+/* Responsive Customer Directory */
+@media (max-width: 576px) {
+  .customer-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .search-box {
+    width: 100% !important;
+  }
+  .customer-card {
+    padding: 16px !important;
+  }
+}

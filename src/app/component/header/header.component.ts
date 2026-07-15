@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { StorageService } from '../../services/storage.service';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
 
@@ -18,12 +19,19 @@ export class HeaderComponent implements OnInit {
   isDeliveryExpanded: boolean = true;
   isCustomerExpanded: boolean = true;
   isSettingsExpanded: boolean = true;
+  isMobileMenuOpen: boolean = false;
 
   constructor(
     private router: Router,
     private storageService: StorageService,
     private orderService: newOrderService
-  ){}
+  ){
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.isMobileMenuOpen = false;
+    });
+  }
 
   ngOnInit() {
     const store = this.storageService.getItem('store');
@@ -35,6 +43,14 @@ export class HeaderComponent implements OnInit {
     this.isDeliveryExpanded = url.includes('/delivery') || url.includes('/pickup') || url.includes('/deliveryhistory');
     this.isCustomerExpanded = url.includes('/customerhistory');
     this.isSettingsExpanded = url.includes('/dailyexpenses') || url.includes('/services') || url.includes('/settings');
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen = false;
   }
 
   toggleOrders() {

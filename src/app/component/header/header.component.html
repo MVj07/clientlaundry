@@ -1,4 +1,35 @@
-<div class="sidebar">
+<!-- Mobile Top Navbar (Visible only on <= 991px) -->
+<div class="mobile-top-navbar d-flex d-lg-none">
+  <div class="d-flex align-items-center gap-3">
+    <button class="mobile-toggle-btn" (click)="toggleMobileMenu()" aria-label="Toggle Navigation">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <div class="sidebar-brand m-0 p-0">
+      <div class="brand-logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22a7 7 0 0 0 5-11.97l-5-5.91-5 5.91A7 7 0 0 0 12 22z" />
+        </svg>
+      </div>
+      <span class="brand-name f20x text-white">{{ storeName }}</span>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center gap-2">
+    <a routerLink="/pos" class="btn btn-sm btn-info text-white fw-bold px-3 py-1 rounded-pill d-flex align-items-center gap-1" (click)="closeMobileMenu()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      POS
+    </a>
+  </div>
+</div>
+
+<!-- Dimmed Backdrop overlay on mobile when drawer is open -->
+<div class="mobile-sidebar-backdrop d-lg-none" *ngIf="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+<div class="sidebar" [class.mobile-open]="isMobileMenuOpen">
   <div class="sidebar-brand">
     <div class="brand-logo">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"

@@ -49,3 +49,20 @@
 .table-hover tbody tr:hover {
   background-color: #f8fafc;
 }
+
+/* Responsive Daily Expenses Layout */
+@media (max-width: 576px) {
+  .period-toggle {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .period-toggle button {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .table th, .table td {
+    padding: 10px 6px !important;
+    font-size: 12.5px !important;
+  }
+}
