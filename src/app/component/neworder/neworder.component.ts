@@ -6,6 +6,8 @@ import { CustomerService } from '../../services/customer/customer.service';
 import { LoginService } from '../../services/login/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { ServiceService } from '../../services/service/service.service';
+import { BusinessService } from '../../services/business/business.service';
+import { TagPrintService, ThermalTagSettings } from '../../services/tag-print/tag-print.service';
 
 @Component({
   selector: 'app-neworder',
@@ -52,11 +54,29 @@ export class NeworderComponent {
   productSuggestions: any[] = [];
   showProductSuggestions: boolean = false;
 
+  // Thermal Tag & Receipt Modal state
+  showTagModal: boolean = false;
+  createdOrder: any = null;
+  businessData: any = null;
+  tagSettings: ThermalTagSettings = {
+    paperSize: '58mm',
+    autoShowModalOnOrderCreate: true,
+    showBarcode: true,
+    showShopName: true,
+    showKuriNo: true,
+    showCustomerMobile: true,
+    showDueDate: true,
+    showInstructions: true,
+    copiesPerPiece: 1
+  };
+
   constructor(
     private fb: FormBuilder,
     private newOrderService: newOrderService,
     private customerService: CustomerService,
     private serviceService: ServiceService,
+    private businessService: BusinessService,
+    public tagPrintService: TagPrintService,
     private route: ActivatedRoute,
     private router: Router,
     private authservice: LoginService,
@@ -65,6 +85,14 @@ export class NeworderComponent {
   ) { }
 
   ngOnInit(): void {
+    this.tagSettings = this.tagPrintService.getSettings();
+    this.businessService.getOne().subscribe({
+      next: (res) => {
+        this.businessData = res.data || res;
+      },
+      error: () => {}
+    });
+
     this.newOrderForm = this.fb.group({
       date: ['', Validators.required],
       dueDate: ['', Validators.required],
@@ -294,13 +322,16 @@ export class NeworderComponent {
     if (!this.update) {
       this.newOrderService.newOrder(orderPayload).subscribe({
         next: (res) => {
-          this.newOrderForm.reset();
-          this.itemForm.reset();
+          this.createdOrder = res.data || { ...orderPayload, bill: res?.data?.bill || orderPayload.bill || 'LDY-00001' };
           this.submit = false;
-          this.orders = []
-          this.selectedServiceIds = [];
           this.loading = false;
-          this.toaster.success('Order success', 'success')
+          this.toaster.success('Order success', 'success');
+
+          if (this.tagSettings.autoShowModalOnOrderCreate) {
+            this.showTagModal = true;
+          } else {
+            this.resetAfterOrder();
+          }
         },
         error: (err) => {
           this.toaster.error('Order failed')
@@ -438,6 +469,68 @@ export class NeworderComponent {
     this.showSuggestions = false;
     this.suggestions = [];
     this.activeField = null;
+  }
+
+  editItem(index: number) {
+    const item = this.orders[index];
+    this.itemForm.patchValue({
+      item: item.name,
+      price: item.amount,
+      qty: item.qty
+    });
+    this.orders.splice(index, 1);
+  }
+
+  resetAfterOrder(): void {
+    this.newOrderForm.reset();
+    this.itemForm.reset();
+    this.submit = false;
+    this.orders = [];
+    this.selectedServiceIds = [];
+    this.createdOrder = null;
+    this.showTagModal = false;
+  }
+
+  printGarmentTagsDirect(): void {
+    if (this.createdOrder) {
+      this.tagPrintService.printGarmentTags(this.createdOrder, this.businessData, this.tagSettings);
+    }
+  }
+
+  printThermalReceiptDirect(): void {
+    if (this.createdOrder) {
+      this.tagPrintService.printThermalReceipt(this.createdOrder, this.businessData, this.tagSettings);
+    }
+  }
+
+  downloadGarmentTagsPdf(): void {
+    if (this.createdOrder && (this.createdOrder._id || this.createdOrder.id)) {
+      const orderId = this.createdOrder._id || this.createdOrder.id;
+      this.newOrderService.getGarmentTagsPdf(orderId, this.tagSettings).subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `tags-${this.createdOrder.bill || orderId}.pdf`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: () => {
+          this.printGarmentTagsDirect();
+        }
+      });
+    } else {
+      this.printGarmentTagsDirect();
+    }
+  }
+
+  onTagSettingsChange(): void {
+    this.tagPrintService.saveSettings(this.tagSettings);
+  }
+
+  getPreviewPieces(): any[] {
+    if (!this.createdOrder) return [];
+    return this.tagPrintService.getPiecesList(this.createdOrder, this.tagSettings.copiesPerPiece || 1);
   }
 
   @HostListener('document:click', ['$event'])

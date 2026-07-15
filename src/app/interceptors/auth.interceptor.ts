@@ -1,11 +1,12 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { LoginService } from "../services/login/login.service";
 import { catchError, Observable, throwError } from "rxjs";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: LoginService) {}
+  constructor(private authService: LoginService, private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Skip interceptor for login/register endpoints
@@ -24,9 +25,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authReq).pipe(
       catchError((err: HttpErrorResponse) => {
-        // if (err.status === 401 || err.status === 403) {
-        //   this.authService.logOut(); // make sure this clears token before redirect
-        // }
+        if (err.status === 403 && err.error?.subscriptionRequired) {
+          if (this.router.url !== '/subscription') {
+            this.router.navigate(['/subscription']);
+          }
+        }
         return throwError(() => err);
       })
     );

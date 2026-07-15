@@ -180,6 +180,14 @@
                   🚀 Deliver
                 </button>
 
+                <!-- Print Tags -->
+                <button class="btn btn-sm btn-dark d-flex align-items-center gap-1 px-2"
+                  (click)="printGarmentTags(order)"
+                  style="border-radius: 8px; font-weight: 600; padding: 6px 10px; font-size: 13px;"
+                  title="Print Garment Tags">
+                  🏷️ Tags
+                </button>
+
                 <!-- View Detail Popup -->
                 <button class="btn btn-outline-secondary btn-sm p-2 rounded-3" (click)="openPopUp(order._id)"
                   title="View Details">
@@ -322,6 +330,19 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Popup Footer Print Actions -->
+    <div class="d-flex flex-wrap justify-content-end align-items-center gap-2 mt-4 pt-3 border-top">
+      <button class="btn btn-dark btn-sm d-flex align-items-center gap-1 px-3 py-2 fw-semibold rounded-3" (click)="printGarmentTags(orderDetails)">
+        🏷️ Print Garment Tags
+      </button>
+      <button class="btn btn-outline-dark btn-sm d-flex align-items-center gap-1 px-3 py-2 fw-semibold rounded-3" (click)="printThermalReceipt(orderDetails)">
+        🧾 Thermal Bill Receipt
+      </button>
+      <button class="btn btn-outline-secondary btn-sm px-3 py-2 fw-semibold rounded-3" (click)="close()">
+        Close
+      </button>
     </div>
 
   </div>

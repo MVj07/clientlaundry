@@ -29,28 +29,35 @@ import { SignupComponent } from './component/signup/signup.component';
 import { OrdersComponent } from './component/orders/orders.component';
 import { ServicesComponent } from './component/services/services.component';
 import { PosComponent } from './component/pos/pos.component';
+import { posGuard } from './guards/pos.guard';
+import { serviceGuard } from './guards/services.guard';
+import { ordersGuard } from './guards/orders.guard';
+import { deliveryGuard } from './guards/delivery.guard';
+import { pickupGuard } from './guards/pickup.guard';
+import { SubscriptionComponent } from './component/subscription/subscription.component';
 
 const routes: Routes = [
   { path: 'edit-order/:id', component: NeworderComponent },
-  { path: '', component: LoginComponent, canActivate:[authGuard] },
+  { path: '', component: LoginComponent, canActivate: [authGuard] },
   { path: 'home', component: HomeComponent, canActivate: [homeGuard] },
   { path: 'neworder', component: NeworderComponent, canActivate: [neworderGuard] },
   { path: 'savepannel', component: SavepannelComponent, canActivate: [savepannelGuard] },
   { path: 'washing', component: WashingComponent, canActivate: [washingGuard] },
   { path: 'ironing', component: IroningComponent, canActivate: [ironingGuard] },
-  { path: 'delivery', component: DeliveryComponent },
-  { path: 'pickup', component: PickupComponent },
+  { path: 'delivery', component: DeliveryComponent, canActivate: [deliveryGuard] },
+  { path: 'pickup', component: PickupComponent, canActivate: [pickupGuard] },
   { path: 'deliveryhistory', component: DeliveryhistoryComponent },
   { path: 'customerhistory', component: CustomerhistoryComponent, canActivate: [customerhistoryGuard] },
   { path: 'dailyexpenses', component: DailyexpensesComponent, canActivate: [expenseGuard] },
-  { path: 'invoice', component: InvoiceComponent },
+  // { path: 'invoice', component: InvoiceComponent },
   { path: 'settings', component: SettingsComponent, canActivate: [settingsGuard] },
-  {path: 'packing', component: PackingComponent},
-  {path: 'business_setup', component: BusinessSetupComponent, canActivate: [businessSetupGuard]},
-  {path: 'signup', component: SignupComponent},
-  {path: 'orders', component: OrdersComponent},
-  {path: 'services', component: ServicesComponent},
-  {path: 'pos', component: PosComponent}
+  // { path: 'packing', component: PackingComponent },
+  { path: 'business_setup', component: BusinessSetupComponent, canActivate: [businessSetupGuard] },
+  { path: 'signup', component: SignupComponent },
+  { path: 'orders', component: OrdersComponent, canActivate: [ordersGuard] },
+  { path: 'services', component: ServicesComponent, canActivate: [serviceGuard] },
+  { path: 'pos', component: PosComponent, canActivate: [posGuard] },
+  { path: 'subscription', component: SubscriptionComponent }
 ];
 
 @NgModule({

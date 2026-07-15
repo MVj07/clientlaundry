@@ -7,17 +7,16 @@
     "/delivery",
     "/deliveryhistory",
     "/home",
-    "/invoice",
     "/ironing",
     "/neworder",
     "/orders",
-    "/packing",
     "/pickup",
     "/pos",
     "/savepannel",
     "/services",
     "/settings",
     "/signup",
+    "/subscription",
     "/washing"
   ]
 }

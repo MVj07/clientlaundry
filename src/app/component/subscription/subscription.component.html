@@ -1,0 +1,167 @@
+<div class="sub-page-wrapper">
+  <div class="container py-5">
+    <!-- Top Navigation Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <button class="btn btn-outline-light btn-back" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i> Back to Dashboard
+      </button>
+      <button class="btn btn-outline-info btn-refresh" (click)="fetchStatus()" [disabled]="loading">
+        <i class="bi bi-arrow-clockwise me-2"></i> Refresh Status
+      </button>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="text-center my-5 py-5">
+      <div class="spinner-border text-primary sub-spinner" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3 text-light-50">Checking your subscription status...</p>
+    </div>
+
+    <div *ngIf="!loading">
+      <!-- Expired Trial Alert -->
+      <div *ngIf="statusData?.subscriptionStatus === 'expired'" class="alert alert-danger custom-alert mb-5 shadow-lg d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle-fill fs-3 me-3 text-danger"></i>
+        <div>
+          <h5 class="alert-heading fw-bold mb-1">Trial Period Expired!</h5>
+          <p class="mb-0">Your 14-day free trial has ended and protected POS access is restricted. Please subscribe to our ₹150 Monthly Plan below to restore instant, uninterrupted access to all laundry modules.</p>
+        </div>
+      </div>
+
+      <!-- Success Alert -->
+      <div *ngIf="successMsg" class="alert alert-success custom-alert mb-5 shadow-lg d-flex align-items-center" role="alert">
+        <i class="bi bi-check-circle-fill fs-3 me-3 text-success"></i>
+        <div>
+          <h5 class="alert-heading fw-bold mb-1">Payment Verified Successfully!</h5>
+          <p class="mb-0">{{ successMsg }} Redirecting to dashboard...</p>
+        </div>
+      </div>
+
+      <!-- Error Alert -->
+      <div *ngIf="error" class="alert alert-warning custom-alert mb-5 shadow-lg d-flex align-items-center justify-content-between" role="alert">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-info-circle-fill fs-4 me-3 text-warning"></i>
+          <span>{{ error }}</span>
+        </div>
+        <button class="btn btn-sm btn-outline-warning" (click)="fetchStatus()">Retry</button>
+      </div>
+
+      <!-- Metrics Overview Cards -->
+      <div class="row g-4 mb-5">
+        <div class="col-md-4">
+          <div class="status-metric-card p-4 rounded-4 shadow-sm">
+            <span class="metric-label d-block mb-1">Current Plan</span>
+            <h3 class="metric-value fw-bold mb-2">{{ statusData?.currentPlan || '14-Day Free Trial' }}</h3>
+            <span class="badge status-badge" 
+                  [ngClass]="{
+                    'bg-success': isActivePlan,
+                    'bg-info text-dark': isTrialPlan,
+                    'bg-danger': !isActivePlan && !isTrialPlan
+                  }">
+              <i class="bi bi-shield-check me-1"></i>
+              <span class="text-uppercase">{{ statusData?.subscriptionStatus }}</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="status-metric-card p-4 rounded-4 shadow-sm">
+            <span class="metric-label d-block mb-1">Trial / Subscription Remaining</span>
+            <div class="d-flex align-items-baseline gap-2">
+              <h2 class="metric-number fw-extrabold mb-0">{{ statusData?.daysRemaining || 0 }}</h2>
+              <span class="text-light-50">Days Left</span>
+            </div>
+            <small class="d-block mt-2 text-muted">
+              {{ statusData?.expiryDate ? ('Valid until ' + (statusData.expiryDate | date:'mediumDate')) : 'N/A' }}
+            </small>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="status-metric-card p-4 rounded-4 shadow-sm">
+            <span class="metric-label d-block mb-1">Payment Status</span>
+            <h3 class="metric-value fw-bold text-capitalize mb-2">{{ statusData?.paymentStatus || 'Unpaid' }}</h3>
+            <small class="text-muted d-block">
+              {{ statusData?.paymentStatus?.toLowerCase() === 'paid' ? 'Verified via Razorpay' : 'Requires active subscription' }}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Card Section -->
+      <div class="row justify-content-center mt-4">
+        <div class="col-lg-7 col-xl-6">
+          <div class="pricing-card rounded-5 p-5 shadow-2xl position-relative overflow-hidden">
+            <div class="pricing-glow"></div>
+
+            <div class="d-flex justify-content-between align-items-start mb-4">
+              <div>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 mb-2">
+                  <i class="bi bi-stars me-1"></i> Most Popular Plan
+                </span>
+                <h2 class="pricing-title fw-bold">Laundry SaaS Pro</h2>
+              </div>
+              <div class="pricing-icon-wrapper rounded-3 d-flex align-items-center justify-content-center">
+                <i class="bi bi-lightning-charge-fill fs-3 text-white"></i>
+              </div>
+            </div>
+
+            <div class="price-display d-flex align-items-baseline gap-2 pb-4 border-bottom border-secondary mb-4">
+              <span class="price-amount fw-bolder">₹150</span>
+              <span class="price-period text-light-50">/ month</span>
+              <span class="badge bg-success-subtle text-success border border-success-subtle ms-auto px-3 py-1">
+                All-Inclusive
+              </span>
+            </div>
+
+            <div class="features-list mb-5">
+              <p class="text-uppercase text-light-50 small fw-bold tracking-wide mb-3">Everything you need to run your laundry:</p>
+              <ul class="list-unstyled mb-0">
+                <li class="d-flex align-items-center gap-3 mb-3">
+                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
+                  <span>Unlimited POS Orders & Billing</span>
+                </li>
+                <li class="d-flex align-items-center gap-3 mb-3">
+                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
+                  <span>Real-time Order Tracking & Barcode Workflow</span>
+                </li>
+                <li class="d-flex align-items-center gap-3 mb-3">
+                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
+                  <span>Automated WhatsApp & SMS Notifications</span>
+                </li>
+                <li class="d-flex align-items-center gap-3 mb-3">
+                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
+                  <span>Complete Expense & Customer Analytics</span>
+                </li>
+                <li class="d-flex align-items-center gap-3">
+                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
+                  <span>24/7 Priority Support & Automated Cloud Backup</span>
+                </li>
+              </ul>
+            </div>
+
+            <button 
+              class="btn btn-subscribe w-100 py-4 rounded-4 fw-bold fs-5 shadow-lg d-flex align-items-center justify-content-center gap-3"
+              (click)="subscribeNow()"
+              [disabled]="processing || isActivePlan">
+              <span *ngIf="processing" class="spinner-border spinner-border-sm me-2" role="status"></span>
+              <i *ngIf="!processing && !isActivePlan" class="bi bi-lock-fill"></i>
+              <i *ngIf="isActivePlan" class="bi bi-patch-check-fill text-success"></i>
+              <span>
+                {{ isActivePlan 
+                   ? 'Active Plan (' + statusData.daysRemaining + ' Days Remaining)' 
+                   : processing ? 'Connecting to Razorpay...' : 'Subscribe to ₹150 / Month' }}
+              </span>
+            </button>
+
+            <div class="text-center mt-4">
+              <small class="text-light-50">
+                <i class="bi bi-shield-lock-fill me-1"></i> 256-Bit SSL Encrypted by Razorpay • Instant Activation
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

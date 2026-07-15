@@ -255,7 +255,7 @@
               </div>
 
               <!-- Action Buttons -->
-              <div class="d-flex gap-2">
+              <div class="d-flex flex-wrap gap-2">
                 <button
                   type="button"
                   class="btn btn-success px-4 py-2 fw-bold"
@@ -268,11 +268,27 @@
                 </button>
                 <button
                   type="button"
-                  class="btn btn-outline-primary px-4 py-2 fw-semibold"
+                  class="btn btn-dark px-3 py-2 fw-semibold d-flex align-items-center gap-1"
+                  style="border-radius:10px; font-size:14px;"
+                  (click)="printGarmentTags()"
+                >
+                  🏷️ Print Tags
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-dark px-3 py-2 fw-semibold d-flex align-items-center gap-1"
+                  style="border-radius:10px; font-size:14px;"
+                  (click)="printThermalReceipt()"
+                >
+                  🧾 Thermal Bill
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary px-3 py-2 fw-semibold"
                   style="border-radius:10px; font-size:14px;"
                   (click)="downloadInvoice()"
                 >
-                  🖨️ Download Invoice
+                  📄 A4 Invoice
                 </button>
               </div>
 
@@ -287,11 +303,17 @@
               Order #{{ selectedOrder.bill }} marked as
               <span class="billing-badge {{ getStatusBadgeClass(selectedOrder.paymentStatus) }} ms-1">{{ selectedOrder.paymentStatus | titlecase }}</span>
             </p>
-            <div class="d-flex justify-content-center gap-2">
-              <button class="btn btn-outline-primary px-4 py-2 fw-semibold" style="border-radius:10px; font-size:14px;" (click)="downloadInvoice()">
-                🖨️ Download Invoice
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+              <button class="btn btn-dark px-3 py-2 fw-semibold" style="border-radius:10px; font-size:14px;" (click)="printGarmentTags()">
+                🏷️ Print Tags
               </button>
-              <button class="btn btn-outline-secondary px-4 py-2 fw-semibold" style="border-radius:10px; font-size:14px;" (click)="clearSelection()">
+              <button class="btn btn-outline-dark px-3 py-2 fw-semibold" style="border-radius:10px; font-size:14px;" (click)="printThermalReceipt()">
+                🧾 Thermal Bill
+              </button>
+              <button class="btn btn-outline-primary px-3 py-2 fw-semibold" style="border-radius:10px; font-size:14px;" (click)="downloadInvoice()">
+                📄 A4 Invoice
+              </button>
+              <button class="btn btn-outline-secondary px-3 py-2 fw-semibold" style="border-radius:10px; font-size:14px;" (click)="clearSelection()">
                 + New Billing
               </button>
             </div>

@@ -32,6 +32,7 @@ import { OrdersComponent } from './component/orders/orders.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ServicesComponent } from './component/services/services.component';
 import { PosComponent } from './component/pos/pos.component';
+import { SubscriptionComponent } from './component/subscription/subscription.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { PosComponent } from './component/pos/pos.component';
     SignupComponent,
     OrdersComponent,
     ServicesComponent,
-    PosComponent
+    PosComponent,
+    SubscriptionComponent
   ],
   imports: [
     NgxPaginationModule,

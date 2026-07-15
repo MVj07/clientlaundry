@@ -121,4 +121,20 @@ export class newOrderService {
         };
         return this.http.put(`${this.apiUrl}/order/${orderId}/service-status`, { serviceId, status }, { headers });
     }
+
+    getGarmentTagsPdf(orderId: string, options: any = {}): Observable<any> {
+        const token = this.storageService.getItem('authToken');
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        return this.http.post(`${this.apiUrl}/order/generate-tags/${orderId}`, options, { headers, responseType: 'blob' });
+    }
+
+    getThermalBillPdf(orderId: string, options: any = {}): Observable<any> {
+        const token = this.storageService.getItem('authToken');
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        return this.http.post(`${this.apiUrl}/order/generate-thermal-invoice/${orderId}`, options, { headers, responseType: 'blob' });
+    }
 }

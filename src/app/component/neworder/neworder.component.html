@@ -307,3 +307,190 @@
 
   </div>
 </section>
+
+<!-- Garment Tag & Thermal Print Modal -->
+<div class="modal-backdrop-custom" *ngIf="showTagModal">
+  <div class="tag-modal-container shadow-lg border-0 rounded-4 bg-white overflow-hidden">
+    <!-- Modal Header -->
+    <div class="modal-header-custom px-4 py-3 bg-dark text-white d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <span class="badge bg-primary px-3 py-2 fs-6 rounded-pill">KURI #{{ createdOrder?.customerId?.kuri || createdOrder?.kuri || 'N/A' }}</span>
+        <div>
+          <h5 class="m-0 fw-bold d-flex align-items-center gap-2">
+            🏷️ Print Garment Tags & Receipt
+          </h5>
+          <small class="text-light opacity-75">Bill No: {{ createdOrder?.bill || 'N/A' }} | Customer: {{ createdOrder?.customerId?.name || createdOrder?.customerName || 'N/A' }}</small>
+        </div>
+      </div>
+      <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="resetAfterOrder()"></button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body-custom p-4 row g-4">
+      <!-- Left Column: Thermal Printer Settings & Paper Size -->
+      <div class="col-md-5 border-end pe-md-4">
+        <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+          🖨️ Thermal Paper Size & Options
+        </h6>
+
+        <div class="mb-4">
+          <label class="form-label small fw-semibold text-secondary">Select Paper Roll / Label Size</label>
+          <div class="d-flex flex-column gap-2">
+            <label class="paper-option p-2 rounded border d-flex align-items-center gap-2 cursor-pointer" [class.active-paper]="tagSettings.paperSize === '58mm'">
+              <input type="radio" name="paperSize" value="58mm" [(ngModel)]="tagSettings.paperSize" (change)="onTagSettingsChange()">
+              <div>
+                <b class="d-block text-dark small">58mm Thermal Roll (Receipt Width)</b>
+                <span class="text-muted" style="font-size: 11px;">Standard compact receipt printer roll (~2.25 inch)</span>
+              </div>
+            </label>
+
+            <label class="paper-option p-2 rounded border d-flex align-items-center gap-2 cursor-pointer" [class.active-paper]="tagSettings.paperSize === '80mm'">
+              <input type="radio" name="paperSize" value="80mm" [(ngModel)]="tagSettings.paperSize" (change)="onTagSettingsChange()">
+              <div>
+                <b class="d-block text-dark small">80mm Thermal Roll (Wide Receipt)</b>
+                <span class="text-muted" style="font-size: 11px;">Standard wide receipt printer roll (~3.125 inch)</span>
+              </div>
+            </label>
+
+            <label class="paper-option p-2 rounded border d-flex align-items-center gap-2 cursor-pointer" [class.active-paper]="tagSettings.paperSize === '50x30mm'">
+              <input type="radio" name="paperSize" value="50x30mm" [(ngModel)]="tagSettings.paperSize" (change)="onTagSettingsChange()">
+              <div>
+                <b class="d-block text-dark small">50mm x 30mm Sticker / Label</b>
+                <span class="text-muted" style="font-size: 11px;">For thermal sticker tag printers (TVS, Epson, Zebra)</span>
+              </div>
+            </label>
+
+            <label class="paper-option p-2 rounded border d-flex align-items-center gap-2 cursor-pointer" [class.active-paper]="tagSettings.paperSize === 'A4'">
+              <input type="radio" name="paperSize" value="A4" [(ngModel)]="tagSettings.paperSize" (change)="onTagSettingsChange()">
+              <div>
+                <b class="d-block text-dark small">A4 Page (Multi-Tag Grid)</b>
+                <span class="text-muted" style="font-size: 11px;">Print multiple tags on standard sheet to cut out</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small fw-semibold text-secondary mb-2">Display Elements on Tag</label>
+          <div class="row g-2">
+            <div class="col-6">
+              <div class="form-check small">
+                <input class="form-check-input" type="checkbox" id="showBarcode" [(ngModel)]="tagSettings.showBarcode" (change)="onTagSettingsChange()">
+                <label class="form-check-label text-dark fw-medium" for="showBarcode">Barcode / Bill No</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check small">
+                <input class="form-check-input" type="checkbox" id="showShopName" [(ngModel)]="tagSettings.showShopName" (change)="onTagSettingsChange()">
+                <label class="form-check-label text-dark fw-medium" for="showShopName">Shop Name / Logo</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check small">
+                <input class="form-check-input" type="checkbox" id="showKuriNo" [(ngModel)]="tagSettings.showKuriNo" (change)="onTagSettingsChange()">
+                <label class="form-check-label text-dark fw-medium" for="showKuriNo">Kuri Number</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check small">
+                <input class="form-check-input" type="checkbox" id="showCustomerMobile" [(ngModel)]="tagSettings.showCustomerMobile" (change)="onTagSettingsChange()">
+                <label class="form-check-label text-dark fw-medium" for="showCustomerMobile">Customer Mobile</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check small">
+                <input class="form-check-input" type="checkbox" id="showDueDate" [(ngModel)]="tagSettings.showDueDate" (change)="onTagSettingsChange()">
+                <label class="form-check-label text-dark fw-medium" for="showDueDate">Due Date</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check small">
+                <input class="form-check-input" type="checkbox" id="showInstructions" [(ngModel)]="tagSettings.showInstructions" (change)="onTagSettingsChange()">
+                <label class="form-check-label text-dark fw-medium" for="showInstructions">Instructions</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 p-2 rounded bg-light border small text-secondary">
+          💡 <b>Tip:</b> Barcodes generated on thermal tags allow instant scanning with any barcode reader on the delivery screen (`/order/barcode-update`).
+        </div>
+      </div>
+
+      <!-- Right Column: Live Preview of Garment Tags -->
+      <div class="col-md-7 ps-md-3 d-flex flex-column">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h6 class="fw-bold text-dark m-0">🏷️ Tag Preview (Total: {{ getPreviewPieces().length }} Pieces)</h6>
+          <span class="badge bg-secondary small">{{ tagSettings.paperSize }} Format</span>
+        </div>
+
+        <div class="tag-preview-scroll p-3 bg-light border rounded-3 flex-grow-1 overflow-auto" style="max-height: 400px;">
+          <div class="d-flex flex-wrap gap-3 justify-content-center">
+            <div *ngFor="let piece of getPreviewPieces(); let idx = index" 
+                 class="preview-tag-card bg-white border shadow-sm p-2 rounded-2"
+                 [ngStyle]="{
+                   'width': tagSettings.paperSize === '80mm' ? '240px' : (tagSettings.paperSize === '50x30mm' ? '180px' : '200px')
+                 }">
+              <div *ngIf="tagSettings.showShopName" class="text-center fw-bold text-uppercase border-bottom pb-1 mb-1" style="font-size: 10px;">
+                {{ businessData?.business_name || 'LAUNDRY SERVICE' }}
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center gap-1 mb-1">
+                <span *ngIf="tagSettings.showKuriNo" class="badge bg-dark text-white fw-bold px-2 py-1" style="font-size: 11px;">
+                  #{{ createdOrder?.customerId?.kuri || createdOrder?.kuri || 'N/A' }}
+                </span>
+                <span class="fw-bold font-monospace text-dark" style="font-size: 11px;">
+                  [ {{ idx + 1 }} / {{ getPreviewPieces().length }} ]
+                </span>
+              </div>
+
+              <div class="fw-bold text-dark text-uppercase text-truncate mb-1" style="font-size: 13px;">
+                {{ piece.name }}
+              </div>
+
+              <div class="text-truncate text-secondary fw-semibold mb-1" style="font-size: 11px;">
+                {{ createdOrder?.customerId?.name || createdOrder?.customerName || 'Customer' }}
+                <span *ngIf="tagSettings.showCustomerMobile && (createdOrder?.customerId?.mobile || createdOrder?.phoneNumber)">
+                  ({{ createdOrder?.customerId?.mobile || createdOrder?.phoneNumber }})
+                </span>
+              </div>
+
+              <div class="d-flex justify-content-between border-top pt-1 text-muted" style="font-size: 10px;">
+                <span>Bill: {{ createdOrder?.bill || 'N/A' }}</span>
+                <span *ngIf="tagSettings.showDueDate">Due: {{ createdOrder?.dueDate ? (createdOrder.dueDate | date:'dd/MM/yyyy') : 'N/A' }}</span>
+              </div>
+
+              <div *ngIf="tagSettings.showBarcode" class="mt-2 text-center bg-light rounded p-1 border">
+                <div [innerHTML]="tagPrintService.generateBarcodeSvg(createdOrder?.bill || 'LDY-00000', 25)" class="overflow-hidden"></div>
+                <div class="font-monospace fw-bold text-dark mt-1" style="font-size: 9px; letter-spacing: 1px;">{{ createdOrder?.bill || '' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer Actions -->
+    <div class="modal-footer-custom px-4 py-3 bg-light border-top d-flex flex-wrap align-items-center justify-content-between gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <button type="button" class="btn btn-dark d-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-semibold shadow-sm" (click)="printGarmentTagsDirect()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          🖨️ Print Garment Tags (Thermal)
+        </button>
+
+        <button type="button" class="btn btn-outline-dark d-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-semibold" (click)="printThermalReceiptDirect()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          🧾 Print Receipt (Bill)
+        </button>
+
+        <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2 px-3 py-2 rounded-3 fw-semibold" (click)="downloadGarmentTagsPdf()">
+          📄 Download Tags PDF
+        </button>
+      </div>
+
+      <button type="button" class="btn btn-success d-flex align-items-center gap-2 px-4 py-2 rounded-3 fw-bold shadow-sm" (click)="resetAfterOrder()">
+        ✅ Done & Create Next Order
+      </button>
+    </div>
+  </div>
+</div>

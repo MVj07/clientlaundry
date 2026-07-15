@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
 import { ToastrService } from 'ngx-toastr';
+import { BusinessService } from '../../services/business/business.service';
+import { TagPrintService } from '../../services/tag-print/tag-print.service';
 
 @Component({
   selector: 'app-orders',
@@ -28,12 +30,22 @@ export class OrdersComponent implements OnInit {
     });
   }
 
+  businessData: any = null;
+
   constructor(
     private orderService: newOrderService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private businessService: BusinessService,
+    public tagPrintService: TagPrintService
   ) { }
 
   ngOnInit() {
+    this.businessService.getOne().subscribe({
+      next: (res) => {
+        this.businessData = res.data || res;
+      },
+      error: () => {}
+    });
     this.getOrders();
   }
 
@@ -176,5 +188,15 @@ export class OrdersComponent implements OnInit {
     return today.getFullYear() === dueDate.getFullYear() &&
       today.getMonth() === dueDate.getMonth() &&
       today.getDate() === dueDate.getDate();
+  }
+
+  printGarmentTags(order: any) {
+    if (!order) return;
+    this.tagPrintService.printGarmentTags(order, this.businessData);
+  }
+
+  printThermalReceipt(order: any) {
+    if (!order) return;
+    this.tagPrintService.printThermalReceipt(order, this.businessData);
   }
 }

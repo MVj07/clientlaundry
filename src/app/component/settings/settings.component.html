@@ -10,7 +10,7 @@
     </div>
 
     <!-- Centered Layout -->
-    <div class="row justify-content-center">
+    <div class="row g-4 justify-content-center">
 
       <!-- Left Column: Password Management -->
       <div class="col-md-6">
@@ -100,13 +100,111 @@
               ✅ {{ success }}
             </div>
 
-            <button type="submit" [disabled]="!passwordForm.valid || passwords.newPassword !== passwords.confirmPassword || loading"
+            <button type="submit"
+              [disabled]="!passwordForm.valid || passwords.newPassword !== passwords.confirmPassword || loading"
               class="primaryBtn py-2 d-flex align-items-center justify-content-center gap-2"
               style="border-radius: 8px; font-size: 14px;">
               <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               <span>{{ loading ? 'Updating...' : 'Update Password' }}</span>
             </button>
           </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Thermal Printer & Garment Tag Configuration -->
+      <div class="col-md-6">
+        <div class="bg-white border rounded-3 p-4 shadow-sm h-100"
+          style="border-color: #e2e8f0 !important; border-left: 5px solid #10b981 !important;">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+              <h5 class="fw-bold text-dark m-0" style="font-family: 'Outfit', sans-serif;">🖨️ Thermal Printer & Tags</h5>
+              <small class="text-secondary">Configure automatic garment tagging and receipt format.</small>
+            </div>
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1">Active</span>
+          </div>
+
+          <!-- Paper Size Selection -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold text-secondary small">Default Thermal Roll / Sheet Size</label>
+            <select class="form-select" [(ngModel)]="tagSettings.paperSize" style="border-radius: 8px; font-size: 14px;">
+              <option value="58mm">58mm Thermal Roll (Standard Compact Receipt Roll ~2.25")</option>
+              <option value="80mm">80mm Thermal Roll (Wide Receipt Roll ~3.125")</option>
+              <option value="50x30mm">50mm x 30mm Sticker Label (For Zebra / TVS / Epson Tag Printers)</option>
+              <option value="A4">A4 Page Grid (Multi-Tag Sheet layout for Desktop Printers)</option>
+            </select>
+          </div>
+
+          <!-- Auto Show Modal Switch -->
+          <div class="mb-4 p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between">
+            <div>
+              <span class="fw-bold text-dark d-block small">Auto-Show Print Modal on New Order</span>
+              <small class="text-secondary" style="font-size: 12px;">Automatically prompt to print thermal tags immediately after saving an order.</small>
+            </div>
+            <div class="form-check form-switch m-0">
+              <input class="form-check-input" type="checkbox" role="switch" id="autoShowModal" [(ngModel)]="tagSettings.autoShowModalOnOrderCreate" style="width: 40px; height: 20px;">
+            </div>
+          </div>
+
+          <!-- Copies Per Piece -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold text-secondary small">Copies Per Garment Piece</label>
+            <select class="form-select" [(ngModel)]="tagSettings.copiesPerPiece" style="border-radius: 8px; font-size: 14px;">
+              <option [ngValue]="1">1 Copy per piece (Standard - Garment Tag only)</option>
+              <option [ngValue]="2">2 Copies per piece (Garment Tag + Customer Piece Stub)</option>
+            </select>
+          </div>
+
+          <!-- Display Elements Checkboxes -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold text-secondary small mb-2">Display Elements on Tags</label>
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="form-check small">
+                  <input class="form-check-input" type="checkbox" id="setBarcode" [(ngModel)]="tagSettings.showBarcode">
+                  <label class="form-check-label text-dark fw-medium" for="setBarcode">Code128 Barcode</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-check small">
+                  <input class="form-check-input" type="checkbox" id="setShop" [(ngModel)]="tagSettings.showShopName">
+                  <label class="form-check-label text-dark fw-medium" for="setShop">Shop Name Header</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-check small">
+                  <input class="form-check-input" type="checkbox" id="setKuri" [(ngModel)]="tagSettings.showKuriNo">
+                  <label class="form-check-label text-dark fw-medium" for="setKuri">Kuri Number Badge</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-check small">
+                  <input class="form-check-input" type="checkbox" id="setMobile" [(ngModel)]="tagSettings.showCustomerMobile">
+                  <label class="form-check-label text-dark fw-medium" for="setMobile">Customer Mobile</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-check small">
+                  <input class="form-check-input" type="checkbox" id="setDue" [(ngModel)]="tagSettings.showDueDate">
+                  <label class="form-check-label text-dark fw-medium" for="setDue">Delivery Due Date</label>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-check small">
+                  <input class="form-check-input" type="checkbox" id="setInstr" [(ngModel)]="tagSettings.showInstructions">
+                  <label class="form-check-label text-dark fw-medium" for="setInstr">Special Instructions</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mt-4 pt-2 border-top">
+            <button type="button" class="btn btn-dark py-2 px-4 fw-semibold rounded-3 d-flex align-items-center gap-2 flex-grow-1 justify-content-center" (click)="saveTagSettings()">
+              💾 Save Configuration
+            </button>
+            <button type="button" class="btn btn-outline-success py-2 px-3 fw-semibold rounded-3 d-flex align-items-center gap-1" (click)="testPrintSampleTag()" title="Generate & Print Demo Tag">
+              🖨️ Test Sample Tag
+            </button>
+          </div>
         </div>
       </div>
 

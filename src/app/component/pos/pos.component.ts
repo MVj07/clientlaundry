@@ -6,6 +6,8 @@ import { HttpParams } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../services/storage.service';
 import { environment } from '../../../environments/environment';
+import { BusinessService } from '../../services/business/business.service';
+import { TagPrintService } from '../../services/tag-print/tag-print.service';
 
 @Component({
   selector: 'app-pos',
@@ -30,16 +32,27 @@ export class PosComponent implements OnInit {
 
   private apiUrl = environment.apiUrl;
 
+  businessData: any = null;
+
   constructor(
     private fb: FormBuilder,
     private orderService: newOrderService,
     private toaster: ToastrService,
     private http: HttpClient,
     private storage: StorageService,
-    private eRef: ElementRef
+    private eRef: ElementRef,
+    private businessService: BusinessService,
+    public tagPrintService: TagPrintService
   ) { }
 
   ngOnInit(): void {
+    this.businessService.getOne().subscribe({
+      next: (res) => {
+        this.businessData = res.data || res;
+      },
+      error: () => {}
+    });
+
     this.paymentForm = this.fb.group({
       discount: [0, [Validators.min(0)]],
       paidAmount: [0, [Validators.required, Validators.min(0.01)]],
@@ -264,5 +277,15 @@ export class PosComponent implements OnInit {
       },
       error: () => this.toaster.error('Invoice download failed')
     });
+  }
+
+  printGarmentTags() {
+    if (!this.selectedOrder) return;
+    this.tagPrintService.printGarmentTags(this.selectedOrder, this.businessData);
+  }
+
+  printThermalReceipt() {
+    if (!this.selectedOrder) return;
+    this.tagPrintService.printThermalReceipt(this.selectedOrder, this.businessData);
   }
 }

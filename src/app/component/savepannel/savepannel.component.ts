@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
 import { authService } from '../../services/authenticate/auth.service';
 import { LoginService } from '../../services/login/login.service';
 import { ToastrService } from 'ngx-toastr';
+import { BusinessService } from '../../services/business/business.service';
+import { TagPrintService } from '../../services/tag-print/tag-print.service';
 
 @Component({
   selector: 'app-savepannel',
   templateUrl: './savepannel.component.html',
   styleUrl: './savepannel.component.css'
 })
-export class SavepannelComponent {
+export class SavepannelComponent implements OnInit {
   orders: any[] = [];
   status: any = 'confirm';
   isLoading = true;
@@ -36,11 +38,26 @@ export class SavepannelComponent {
     });
   }
 
+  businessData: any = null;
+
   constructor(
     private orderService: newOrderService,
     private authservice: LoginService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private businessService: BusinessService,
+    public tagPrintService: TagPrintService
   ) { }
+
+  ngOnInit(): void {
+    this.businessService.getOne().subscribe({
+      next: (res) => {
+        this.businessData = res.data || res;
+      },
+      error: () => {}
+    });
+    this.getOrders();
+  }
+
   getOrders() {
     this.orderService.getAllOrders(this.status, this.page, this.limit).subscribe({
       next: (res) => {
@@ -57,11 +74,9 @@ export class SavepannelComponent {
         // }
         return;
       },
-    })
+    });
   }
-  ngOnInit(): void {
-    this.getOrders()
-  }
+
   getOrderTotal(order: any): number {
     return order.items.reduce((sum: number, item: any) => sum + (item.qty * item.amount), 0) + (order.deliveryCharge || 0);
   }
@@ -183,5 +198,15 @@ export class SavepannelComponent {
 
   close() {
     this.showPopup = false;
+  }
+
+  printGarmentTags(order: any) {
+    if (!order) return;
+    this.tagPrintService.printGarmentTags(order, this.businessData);
+  }
+
+  printThermalReceipt(order: any) {
+    if (!order) return;
+    this.tagPrintService.printThermalReceipt(order, this.businessData);
   }
 }
