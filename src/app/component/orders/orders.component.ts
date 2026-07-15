@@ -98,8 +98,11 @@ export class OrdersComponent implements OnInit {
   }
 
   toggleServiceStatus(order: any, service: any) {
-    const newStatus = service.status === 'completed' ? 'pending' : 'completed';
-    
+    if (service.status === 'completed') {
+      return;
+    }
+    const newStatus = 'completed';
+
     this.orderService.updateOrderServiceStatus(order._id, service.serviceId, newStatus).subscribe({
       next: (res) => {
         service.status = newStatus;
@@ -118,6 +121,17 @@ export class OrdersComponent implements OnInit {
     return order.services.every((s: any) => s.status === 'completed');
   }
 
+  getCompletedServicesSorted(order: any): any[] {
+    if (!order || !order.services) return [];
+    return order.services
+      .filter((s: any) => s.status === 'completed')
+      .sort((a: any, b: any) => {
+        const timeA = a.completedAt ? new Date(a.completedAt).getTime() : new Date(order.processingStartTime || order.createdAt).getTime();
+        const timeB = b.completedAt ? new Date(b.completedAt).getTime() : new Date(order.processingStartTime || order.createdAt).getTime();
+        return timeA - timeB;
+      });
+  }
+
   deliverOrder(order: any) {
     const data = {
       customerId: order.customerId._id,
@@ -126,7 +140,7 @@ export class OrdersComponent implements OnInit {
       kuri: order.customerId.kuri || '',
       status: 'delivered'
     };
-    
+
     this.orderService.updateOrder(data).subscribe({
       next: (res) => {
         this.getOrders();

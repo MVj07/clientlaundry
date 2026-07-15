@@ -73,8 +73,11 @@ export class NeworderComponent {
       mobile: ['', Validators.required],
       address: ['', Validators.required],
       whatsapp: [''],
-      sameAsPhone: [false]
+      sameAsPhone: [false],
+      deliverytype: ['CP', Validators.required],
+      deliveryCharge: [0]
     })
+
 
     this.itemForm = this.fb.group({
       itemName: ['', Validators.required],
@@ -172,7 +175,9 @@ export class NeworderComponent {
         date: dateVal,
         dueDate: dueDateVal,
         specialInstructions: params['specialInstructions'] || '',
-        bill: params['bill']
+        bill: params['bill'],
+        deliverytype: params['deliverytype'] || 'CP',
+        deliveryCharge: parseFloat(params['deliveryCharge'] || 0)
       })
       this.orderType = params['type'] || 'item';
       if (this.orderType === 'kg') {
@@ -282,7 +287,9 @@ export class NeworderComponent {
         amount: order.amount
       })),
       total: this.getTotalAmount(),
-      services: this.selectedServiceIds
+      services: this.selectedServiceIds,
+      deliverytype: formValue.deliverytype || ((parseFloat(formValue.deliveryCharge) || 0) > 0 ? 'DD' : 'CP'),
+      deliveryCharge: parseFloat(formValue.deliveryCharge) || 0
     };
     if (!this.update) {
       this.newOrderService.newOrder(orderPayload).subscribe({
@@ -388,7 +395,11 @@ export class NeworderComponent {
   }
 
   getTotalAmount(): number {
-    return this.orders.reduce((sum, order) => sum + (order.qty * order.amount), 0);
+    const itemsTotal = this.orders.reduce((sum, order) => sum + (order.qty * order.amount), 0);
+    const charge = this.newOrderForm?.get('deliverytype')?.value === 'DD'
+      ? (parseFloat(this.newOrderForm?.get('deliveryCharge')?.value) || 0)
+      : 0;
+    return itemsTotal + charge;
   }
 
   fetchSuggestions(term: string, field: 'name' | 'mobile') {

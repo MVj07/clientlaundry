@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   storeName: any = 'Laundry';
 
   isOrdersExpanded: boolean = true;
+  isDeliveryExpanded: boolean = true;
   isCustomerExpanded: boolean = true;
   isSettingsExpanded: boolean = true;
 
@@ -30,13 +31,18 @@ export class HeaderComponent implements OnInit {
 
     // Auto-expand the category related to current route
     const url = this.router.url;
-    this.isOrdersExpanded = url.includes('/orders') || url.includes('/deliveryhistory') || url.includes('/savepannel');
+    this.isOrdersExpanded = url.includes('/orders') || url.includes('/savepannel');
+    this.isDeliveryExpanded = url.includes('/delivery') || url.includes('/pickup') || url.includes('/deliveryhistory');
     this.isCustomerExpanded = url.includes('/customerhistory');
     this.isSettingsExpanded = url.includes('/dailyexpenses') || url.includes('/services') || url.includes('/settings');
   }
 
   toggleOrders() {
     this.isOrdersExpanded = !this.isOrdersExpanded;
+  }
+
+  toggleDelivery() {
+    this.isDeliveryExpanded = !this.isDeliveryExpanded;
   }
 
   toggleCustomer() {

@@ -46,7 +46,8 @@ export class InvoiceComponent {
     this.getOrders()
   }
   getOrderTotal(order: any): number {
-    return order.items.reduce((sum: number, item: any) => sum + (item.qty * item.amount), 0);
+    const itemsTotal = order?.items ? order.items.reduce((sum: number, item: any) => sum + ((parseFloat(item.qty) || 0) * (parseFloat(item.amount) || 0)), 0) : 0;
+    return itemsTotal + (parseFloat(order?.deliveryCharge) || 0);
   }
   deleteOrder(id: any): void {
     this.orderService.deleteOrder(id).subscribe({

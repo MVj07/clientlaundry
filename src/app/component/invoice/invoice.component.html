@@ -103,17 +103,22 @@
 
                             </div>
                             <div class="col pt-2">
-                                <div class="row">
+                                <div class="row gap-2">
+                                    <div *ngIf="order.deliveryCharge || order.deliverytype === 'DD'" class="d-flex align-items-center justify-content-end gap-3">
+                                        <label class="form-label text-end mb-0 text-primary fw-semibold">Delivery Charge :</label>
+                                        <div class="w150x">
+                                            <input type="text" class="form-control text-primary fw-semibold text-end" [value]="'+ ₹' + (order.deliveryCharge || 0)" readonly>
+                                        </div>
+                                    </div>
                                     <div class="d-flex align-items-center justify-content-end gap-3">
-                                        <label class="form-label text-end">Total Amount :</label>
-                                        <div class="">
-                                            <input type="text" class="form-control" placeholder="Total amount"
-                                                [value]="getOrderTotal(order)" readonly>
+                                        <label class="form-label text-end mb-0">Total Amount :</label>
+                                        <div class="w150x">
+                                            <input type="text" class="form-control fw-bold text-end" placeholder="Total amount"
+                                                [value]="'₹' + getOrderTotal(order)" readonly>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
 

@@ -1,156 +1,310 @@
 <app-header></app-header>
+<section class="py-5">
 
-<section class="py-5" style="background-color: #f8fafc; min-height: 100vh;">
-    <div class="col-lg-10 offset-lg-1">
+  <!-- Page Header Bar -->
+  <div class="bg-white col-lg-10 offset-lg-1 mb-2 rounded border shadow-sm p-3"
+    style="border-color: #e2e8f0 !important;">
+    <div class="d-flex gap-2 align-items-center justify-content-between w-100 flex-wrap">
+      <div class="d-flex align-items-center gap-3">
+        <h1 class="wd-title m-0">Pending Orders</h1>
 
-        <!-- Header Controls Row -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold text-dark m-0" style="font-family: 'Outfit', sans-serif;">Saved Orders</h2>
-
-            <div class="d-flex gap-3 align-items-center">
-                <!-- Select All Trigger -->
-                <div class="select-all-box d-flex gap-2 align-items-center px-3 py-2 rounded border cursorP bg-white"
-                    (click)="toggleSelectAll()" style="border-color: #e2e8f0 !important;">
-                    <input type="checkbox" class="form-check-input m-0 cursorP" [checked]="selectAllChecked" />
-                    <span class="small fw-semibold text-secondary">Select All</span>
-                </div>
-
-                <!-- Bulk Confirm Button -->
-                <button *ngIf="selectedOrders?.length"
-                    class="btn btn-success fw-semibold d-flex align-items-center gap-1 py-2" (click)="bulkUpdate()">
-                    <span>🚀 Confirm Selected ({{ selectedOrders.length }})</span>
-                </button>
-
-                <!-- Create Order Button -->
-                <button class="primaryBtn d-flex align-items-center gap-2" routerLink="/neworder" style="width: auto;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                    <span>Create Order</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Content Area -->
-        <div class="d-flex justify-content-center py-5" *ngIf="isLoading">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-
-        <ng-container *ngIf="!isLoading">
-            <!-- No Orders State -->
-            <div *ngIf="orders?.length === 0"
-                class="text-center text-muted py-5 fw-semibold bg-white border rounded shadow-sm">
-                No saved orders found. Click "Create Order" to add one!
-            </div>
-
-            <!-- Orders Cards List -->
-            <div class="save-boxs mb-4 px-4 py-4"
-                *ngFor="let order of orders | paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}">
-
-                <!-- Card Header with selection -->
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <input type="checkbox" class="form-check-input cursorP m-0" [value]="order._id"
-                            [checked]="isSelected(order._id)" (change)="toggleSelection($event)">
-                        <span class="text-primary fw-bold" style="font-family: monospace; font-size: 15px;">#{{
-                            order.bill }}</span>
-                    </div>
-                    <span class="badge bg-secondary text-white small px-2 py-1">Saved</span>
-                </div>
-
-                <hr style="border-color: #f1f5f9; margin-top: 0; margin-bottom: 20px;" />
-
-                <!-- Details Grid -->
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="info-label">Customer Name</div>
-                        <div class="info-value">{{ order.customerId.name }}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label">Phone Number</div>
-                        <div class="info-value">{{ order.customerId.mobile }}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label">Order Date</div>
-                        <div class="info-value">{{ order.date | date:"dd-MM-yyyy" }}</div>
-                    </div>
-
-                    <div class="col-md-8">
-                        <div class="info-label">Delivery Address</div>
-                        <address class="address-text mb-0">{{ order.customerId.address || 'No Address Provided' }}
-                        </address>
-                    </div>
-                    <div class="col-md-4" *ngIf="order.dueDate">
-                        <div class="info-label">Due Date</div>
-                        <div class="info-value text-danger">{{ order.dueDate | date:"dd-MM-yyyy" }}</div>
-                    </div>
-                </div>
-
-                <!-- Services List -->
-                <div class="mt-3 mb-2" *ngIf="order.services && order.services.length > 0">
-                    <div class="info-label">Selected Services</div>
-                    <div class="d-flex flex-wrap gap-2 mt-1">
-                        <span *ngFor="let s of order.services" class="badge bg-light text-secondary border px-2 py-1" style="font-size: 11px; border-radius: 12px; font-weight: 600;">
-                            {{ s.name }} ({{ s.status }})
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Products Table -->
-                <div class="table-container">
-                    <table class="w-100 m-0">
-                        <thead>
-                            <tr>
-                                <th class="p-2">{{ order.type === 'kg' ? 'Service / Description' : 'Product Name' }}</th>
-                                <th>{{ order.type === 'kg' ? 'Weight (Kg)' : 'Qty' }}</th>
-                                <th>{{ order.type === 'kg' ? 'Rate/Kg' : 'Amount' }}</th>
-                                <th class="text-end pe-3">Total Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of order.items">
-                                <td class="p-2 fw-semibold text-dark text-start ps-3">{{ item.name }}</td>
-                                <td>{{ item.qty }}</td>
-                                <td>₹{{ item.amount }}</td>
-                                <td class="text-end pe-3 fw-bold text-dark">₹{{ item.qty * item.amount }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Total Amount Summary Row -->
-                <div class="row align-items-center justify-content-end mb-4">
-                    <div class="col-auto d-flex align-items-center gap-3">
-                        <span class="fw-bold text-secondary text-end">Total Amount:</span>
-                        <span class="fs-4 fw-bold text-dark">₹{{ getOrderTotal(order) }}</span>
-                    </div>
-                </div>
-
-                <!-- Card Action Group -->
-                <div class="action-group">
-                    <button class="btn-action-edit" [routerLink]="['/edit-order', order.customerId._id]"
-                        [queryParams]="{items: toJson(order.items), kuri: order.customerId.kuri, date: order.date, dueDate: order.dueDate, specialInstructions: order.specialInstructions, orderId: order._id, bill: order.bill, type: order.type || 'item', services: toJson(order.services)}">
-                        Edit Order
-                    </button>
-                    <button class="btn-action-delete" (click)="deleteOrder(order._id)">
-                        Delete
-                    </button>
-                    <button class="btn-action-confirm" (click)="moveWashing(order._id, order.kuri, order.customerId)">
-                        Confirm Order
-                    </button>
-                </div>
-            </div>
-
-            <!-- Pagination Wrapper -->
-            <div class="d-flex justify-content-center mt-4">
-                <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="5" [directionLinks]="true"
-                    [autoHide]="true">
-                </pagination-controls>
-            </div>
-        </ng-container>
+        <button *ngIf="selectedOrders?.length" class="btn btn-sm btn-success fw-semibold px-3"
+          style="border-radius: 8px; font-size: 13px;" (click)="bulkUpdate()">
+          🚀 Confirm Selected ({{ selectedOrders.length }})
+        </button>
+      </div>
+      <button class="btn primaryBtn w150x" routerLink="/neworder" style="height: 42px; margin-top: 0;">
+        + Create Order
+      </button>
     </div>
+  </div>
+
+  <!-- Filters Panel -->
+  <div
+    class="bg-white col-lg-10 offset-lg-1 mb-4 border rounded-3 p-3 shadow-sm d-flex align-items-center flex-wrap gap-3"
+    style="border-color: #e2e8f0 !important;">
+    <input type="text" class="form-control" placeholder="Search Customer..." [(ngModel)]="filterCustomer"
+      (input)="applyFilter()" style="border-radius: 8px; width: 180px; font-size: 14px; height: 38px;" />
+    <input type="text" class="form-control" placeholder="Mobile Number..." [(ngModel)]="filterMobile"
+      (input)="applyFilter()" style="border-radius: 8px; width: 155px; font-size: 14px; height: 38px;" />
+    <input type="text" class="form-control" placeholder="Bill No..." [(ngModel)]="filterBill" (input)="applyFilter()"
+      style="border-radius: 8px; width: 130px; font-size: 14px; height: 38px;" />
+    <button (click)="resetFilters()" class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+      style="height: 38px; border-radius: 8px; font-size: 14px;">
+      Reset
+    </button>
+  </div>
+
+  <!-- Table Area -->
+  <div class="col-lg-10 offset-lg-1">
+
+    <!-- Loading -->
+    <div class="d-flex justify-content-center py-5" *ngIf="isLoading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!isLoading">
+
+      <!-- Empty State -->
+      <div *ngIf="filteredOrders?.length === 0"
+        class="text-center text-muted py-5 fw-semibold bg-white border rounded shadow-sm">
+        <div style="font-size: 36px; margin-bottom: 8px;">📋</div>
+        No pending orders found. Click "Create Order" to add one!
+      </div>
+
+      <!-- Table -->
+      <div class="table-container" *ngIf="filteredOrders.length > 0">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 40px;">
+                <input type="checkbox" class="form-check-input" [checked]="selectAllChecked"
+                  (change)="toggleSelectAll()" />
+              </th>
+              <th class="text-center" style="width: 55px;">S.No</th>
+              <th class="text-start">Customer</th>
+              <th class="text-center" style="width: 100px;">Bill No</th>
+              <th class="text-center">Services</th>
+              <th class="text-start">Mobile</th>
+              <th class="text-end">Amount</th>
+              <th class="text-center">Date</th>
+              <th class="text-center" style="width: 200px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let order of filteredOrders | paginate:{itemsPerPage:limit, currentPage: page, totalItems:totalItems}; let index = index"
+              class="text-center">
+
+              <!-- Checkbox -->
+              <td>
+                <input type="checkbox" class="form-check-input" [value]="order._id" [checked]="isSelected(order._id)"
+                  (change)="toggleSelection($event)" />
+              </td>
+
+              <!-- S.No -->
+              <td class="text-secondary fw-semibold">{{ (page - 1) * limit + index + 1 }}</td>
+
+              <!-- Customer -->
+              <td class="text-start">
+                <div class="fw-bold text-dark" style="font-size: 14px;">{{ order.customerId?.name || 'Walk-in' }}</div>
+                <div class="text-muted" style="font-size: 12px;">{{ order.customerId?.address || '' }}</div>
+              </td>
+
+              <!-- Bill No -->
+              <td>
+                <span class="badge bg-light text-dark border px-2 py-1 font-monospace"
+                  style="font-size: 11.5px; font-weight: 600;">
+                  {{ order.bill }}
+                </span>
+              </td>
+
+              <!-- Services -->
+              <td>
+                <div class="d-flex flex-wrap justify-content-center gap-1">
+                  <span *ngFor="let s of order.services" class="badge bg-light text-secondary border px-2 py-1"
+                    style="font-size: 11px; border-radius: 12px; font-weight: 600;">
+                    {{ s.name }}
+                  </span>
+                  <span *ngIf="!order.services || order.services.length === 0" class="text-muted small">—</span>
+                </div>
+
+                <!-- Horizontal Timeline showing completed steps in chronological order -->
+                <div class="timeline-container mt-2 pt-2 border-top" *ngIf="order.processingStartTime || getCompletedServicesSorted(order).length > 0">
+                  <div class="d-flex align-items-center flex-wrap gap-2 py-1 justify-content-center">
+                    <!-- Start Time Node -->
+                    <div *ngIf="order.processingStartTime" class="timeline-node start-node px-2 py-1 rounded border bg-light text-secondary font-monospace text-center"
+                      style="font-size: 11px;">
+                      <span class="fw-semibold text-dark">Start Time</span>
+                      <div>{{ order.processingStartTime | date:'dd/MM/yyyy hh:mm a' }}</div>
+                    </div>
+
+                    <!-- Chronological Completed Services -->
+                    <ng-container *ngFor="let completedService of getCompletedServicesSorted(order); let isFirst = first">
+                      <div *ngIf="order.processingStartTime || !isFirst" class="timeline-arrow text-secondary font-monospace" style="font-size: 13px;">→</div>
+                      <div
+                        class="timeline-node completed-node px-2 py-1 rounded border border-success-subtle bg-success-subtle text-success font-monospace text-center"
+                        style="font-size: 11px;">
+                        <span class="fw-bold">{{ completedService.name | titlecase }}</span>
+                        <div>{{ (completedService.completedAt || order.processingStartTime || order.createdAt) | date:'dd/MM/yyyy hh:mm a' }}</div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Mobile -->
+              <td class="text-start text-secondary">{{ order.customerId?.mobile || '—' }}</td>
+
+              <!-- Amount -->
+              <td class="text-end fw-bold text-dark">₹{{ getOrderTotal(order) | number:'1.2-2' }}</td>
+
+              <!-- Date -->
+              <td class="text-secondary">
+                <div>{{ order.date | date:'dd MMM yyyy' }}</div>
+                <div *ngIf="order.dueDate" class="text-danger fw-semibold" style="font-size: 11px;">
+                  Due: {{ order.dueDate | date:'dd MMM yyyy' }}
+                </div>
+              </td>
+
+              <!-- Actions -->
+              <td>
+                <div class="d-flex justify-content-center align-items-center gap-2">
+
+                  <!-- Edit -->
+                  <a class="btn btn-outline-secondary btn-sm p-2 rounded-3"
+                    [routerLink]="['/edit-order', order.customerId._id]"
+                    [queryParams]="{items: toJson(order.items), kuri: order.customerId.kuri, date: order.date, dueDate: order.dueDate, specialInstructions: order.specialInstructions, orderId: order._id, bill: order.bill, type: order.type || 'item', services: toJson(order.services), deliverytype: order.deliverytype, deliveryCharge: order.deliveryCharge}"
+                    title="Edit Order">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                  </a>
+
+                  <!-- Confirm -->
+                  <button class="btn btn-sm btn-success d-flex align-items-center gap-1 px-3"
+                    (click)="moveWashing(order._id, order.kuri, order.customerId)"
+                    style="border-radius: 8px; font-weight: 600; padding: 6px 12px; font-size: 13px;">
+                    ✔ Confirm
+                  </button>
+
+                  <!-- View Detail Popup -->
+                  <button class="btn btn-outline-secondary btn-sm p-2 rounded-3" (click)="openPopUp(order._id)"
+                    title="View Details">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </button>
+
+                  <!-- Delete -->
+                  <button class="btn btn-outline-danger btn-sm p-2 rounded-3" (click)="deleteOrder(order._id)"
+                    title="Delete Order">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                  </button>
+
+                </div>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="row align-items-center justify-content-center mt-4 pt-3 border-top"
+        style="border-top-color: #f1f5f9 !important; margin: 0 0 20px 0;" *ngIf="filteredOrders.length > 0">
+        <div class="col-auto">
+          <pagination-controls (pageChange)="pageChanged($event)" [maxSize]="10" [directionLinks]="true"
+            [autoHide]="true" style="margin: 0;">
+          </pagination-controls>
+        </div>
+      </div>
+
+    </ng-container>
+  </div>
+
 </section>
+
+<!-- DETAILS OVERLAY POPUP -->
+<div class="popup-overlay" *ngIf="showPopup">
+  <div class="popup-box">
+
+    <!-- Modal Header -->
+    <div class="popup-header">
+      <h4 class="popup-title" style="font-family: 'Outfit', sans-serif;">Order Details Overview</h4>
+      <button class="popup-btn-close" (click)="close()">Close</button>
+    </div>
+
+    <!-- Modal Info Grid -->
+    <div class="popup-grid">
+      <div>
+        <div class="popup-label">Bill Number</div>
+        <div class="popup-value" style="font-family: monospace;">#{{ orderDetails?.bill }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Customer Name</div>
+        <div class="popup-value">{{ orderDetails?.customerId?.name }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Delivery Address</div>
+        <div class="popup-value" style="font-size: 13px; color: #475569;">{{ orderDetails?.customerId?.address || 'No Address' }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Mobile Number</div>
+        <div class="popup-value">{{ orderDetails?.customerId?.mobile }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Order Date</div>
+        <div class="popup-value">{{ orderDetails?.date | date: 'dd-MM-yyyy' }}</div>
+      </div>
+      <div *ngIf="orderDetails?.deliveryCharge">
+        <div class="popup-label">Delivery Charge</div>
+        <div class="popup-value text-primary">+₹{{ orderDetails?.deliveryCharge }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Total Bill Amount</div>
+        <div class="popup-value text-primary">₹{{ orderDetails?.billAmount }}</div>
+      </div>
+      <div *ngIf="orderDetails?.processingStartTime">
+        <div class="popup-label">Processing Start Time</div>
+        <div class="popup-value text-primary" style="font-size: 13px;">{{ orderDetails?.processingStartTime | date: 'dd-MM-yyyy hh:mm a' }}</div>
+      </div>
+    </div>
+
+    <!-- Service Timeline in Popup -->
+    <div class="mt-3 mb-3 p-3 bg-light rounded-3 border" *ngIf="orderDetails?.processingStartTime || getCompletedServicesSorted(orderDetails).length > 0">
+      <h6 class="fw-bold text-secondary mb-2" style="font-size: 12px; text-transform: uppercase;">Service Completion Timeline</h6>
+      <div class="d-flex align-items-center flex-wrap gap-2 py-1">
+        <div *ngIf="orderDetails?.processingStartTime" class="timeline-node start-node px-2 py-1 rounded border bg-white text-secondary font-monospace"
+          style="font-size: 11.5px;">
+          <span class="fw-semibold text-dark">Start Time</span>
+          <div>{{ orderDetails?.processingStartTime | date:'dd/MM/yyyy hh:mm a' }}</div>
+        </div>
+        <ng-container *ngFor="let completedService of getCompletedServicesSorted(orderDetails); let isFirst = first">
+          <div *ngIf="orderDetails?.processingStartTime || !isFirst" class="timeline-arrow text-secondary font-monospace" style="font-size: 13px;">→</div>
+          <div class="timeline-node completed-node px-2 py-1 rounded border border-success-subtle bg-success-subtle text-success font-monospace"
+            style="font-size: 11.5px;">
+            <span class="fw-bold">{{ completedService.name | titlecase }}</span>
+            <div>{{ (completedService.completedAt || orderDetails?.processingStartTime || orderDetails?.createdAt) | date:'dd/MM/yyyy hh:mm a' }}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <hr style="border-top-color: #f1f5f9 !important;" />
+
+    <!-- Products Detail Table -->
+    <h6 class="fw-bold text-secondary mb-2" style="font-size: 13px;">Product Items Details</h6>
+    <div class="popup-table-container">
+      <table class="popup-table">
+        <thead>
+          <tr>
+            <th class="text-start ps-3">{{ orderDetails?.type === 'kg' ? 'Service / Description' : 'Product Name' }}</th>
+            <th>{{ orderDetails?.type === 'kg' ? 'Weight (Kg)' : 'Qty' }}</th>
+            <th>{{ orderDetails?.type === 'kg' ? 'Rate/Kg' : 'Rate' }}</th>
+            <th class="text-end pe-3">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of orderDetails?.items">
+            <td class="fw-semibold text-dark text-start ps-3">{{ item.name }}</td>
+            <td>{{ item.qty }}</td>
+            <td>₹{{ item.amount }}</td>
+            <td class="text-end pe-3 fw-bold text-dark">₹{{ item.qty * item.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

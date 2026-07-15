@@ -7,8 +7,7 @@ import { StorageService } from '../storage.service';
 @Injectable({ providedIn: 'root' })
 export class LoginService {
   // private apiUrl = 'https://laundry-fju0.onrender.com';
-  private apiUrl = 'https://laundry-omega-nine.vercel.app'
-  // private apiUrl = 'http://localhost:5000';
+  private apiUrl = 'http://localhost:5000';
 
   constructor(private http: HttpClient, private router: Router, private storageService: StorageService) { }
 

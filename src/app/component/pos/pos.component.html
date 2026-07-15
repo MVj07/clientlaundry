@@ -49,7 +49,7 @@
                     #{{ order.bill }} — {{ order.customerId?.name || 'Unknown' }}
                   </div>
                   <div class="text-secondary" style="font-size:12px;">
-                    📞 {{ order.customerId?.mobile || '—' }} &nbsp;|&nbsp; ₹{{ order.billAmount }}
+                    📞 {{ order.customerId?.mobile || '—' }} &nbsp;|&nbsp; ₹{{ order.billAmount }} <span *ngIf="order.deliveryCharge" class="text-primary fw-semibold ms-1">(+₹{{ order.deliveryCharge }} Delivery)</span>
                   </div>
                 </div>
                 <div class="d-flex flex-column align-items-end gap-1">
@@ -126,6 +126,7 @@
                 <div class="info-row"><span class="info-label">Phone</span><span class="info-val">{{ selectedOrder.customerId?.mobile || '—' }}</span></div>
                 <div class="info-row" *ngIf="selectedOrder.customerId?.whatsapp"><span class="info-label">WhatsApp</span><span class="info-val">{{ selectedOrder.customerId.whatsapp }}</span></div>
                 <div class="info-row" *ngIf="selectedOrder.customerId?.address"><span class="info-label">Address</span><span class="info-val">{{ selectedOrder.customerId.address }}</span></div>
+                <div class="info-row"><span class="info-label">Delivery</span><span class="info-val fw-semibold" [class.text-primary]="selectedOrder.deliveryCharge || selectedOrder.deliverytype === 'DD'">{{ selectedOrder.deliverytype === 'DD' || selectedOrder.deliveryCharge ? 'Door Delivery (+₹' + (selectedOrder.deliveryCharge || 0) + ')' : 'Customer Pickup' }}</span></div>
                 <div class="info-row" *ngIf="selectedOrder.specialInstructions"><span class="info-label">Notes</span><span class="info-val text-warning">{{ selectedOrder.specialInstructions }}</span></div>
               </div>
             </div>
@@ -153,6 +154,14 @@
                       </tr>
                     </tbody>
                     <tfoot>
+                      <tr *ngIf="selectedOrder.deliveryCharge || selectedOrder.deliverytype === 'DD'" class="table-light">
+                        <td colspan="3" class="fw-semibold text-end text-secondary">Items Total</td>
+                        <td class="fw-semibold text-end text-secondary">₹{{ getItemsTotal() }}</td>
+                      </tr>
+                      <tr *ngIf="selectedOrder.deliveryCharge || selectedOrder.deliverytype === 'DD'" class="table-light">
+                        <td colspan="3" class="fw-semibold text-end text-primary">Delivery Charge</td>
+                        <td class="fw-semibold text-end text-primary">+ ₹{{ selectedOrder.deliveryCharge || 0 }}</td>
+                      </tr>
                       <tr class="table-light">
                         <td colspan="3" class="fw-bold text-end">Bill Total</td>
                         <td class="fw-bold text-end text-dark">₹{{ selectedOrder.billAmount }}</td>
@@ -203,6 +212,16 @@
 
               <!-- Summary Row -->
               <div class="payment-summary-row mb-3">
+                <div class="summary-item" *ngIf="selectedOrder.deliveryCharge || selectedOrder.deliverytype === 'DD'">
+                  <span class="summary-label">Items Total</span>
+                  <span class="summary-val">₹{{ getItemsTotal() }}</span>
+                </div>
+                <div class="summary-divider" *ngIf="selectedOrder.deliveryCharge || selectedOrder.deliverytype === 'DD'">+</div>
+                <div class="summary-item" *ngIf="selectedOrder.deliveryCharge || selectedOrder.deliverytype === 'DD'">
+                  <span class="summary-label text-primary">Delivery Charge</span>
+                  <span class="summary-val text-primary">+₹{{ selectedOrder.deliveryCharge || 0 }}</span>
+                </div>
+                <div class="summary-divider" *ngIf="selectedOrder.deliveryCharge || selectedOrder.deliverytype === 'DD'">=</div>
                 <div class="summary-item">
                   <span class="summary-label">Bill Total</span>
                   <span class="summary-val">₹{{ selectedOrder.billAmount }}</span>

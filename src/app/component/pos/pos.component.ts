@@ -27,9 +27,8 @@ export class PosComponent implements OnInit {
   processing: boolean = false;
   paymentDone: boolean = false;
 
-  // private apiUrl = 'http://localhost:5000';
+  private apiUrl = 'http://localhost:5000';
   // private apiUrl = 'https://laundry-fju0.onrender.com'
-  private apiUrl = 'https://laundry-omega-nine.vercel.app'
 
   constructor(
     private fb: FormBuilder,
@@ -194,6 +193,11 @@ export class PosComponent implements OnInit {
   getOrderTotal(order: any): number {
     if (!order?.items?.length) return order?.billAmount || 0;
     return order.items.reduce((sum: number, item: any) => sum + ((item.qty || 0) * (item.amount || 0)), 0);
+  }
+
+  getItemsTotal(): number {
+    if (!this.selectedOrder?.items) return 0;
+    return this.selectedOrder.items.reduce((sum: number, item: any) => sum + ((parseFloat(item.qty) || 0) * (parseFloat(item.amount) || 0)), 0);
   }
 
   getStatusBadgeClass(status: string): string {

@@ -7,6 +7,7 @@ import { SavepannelComponent } from './component/savepannel/savepannel.component
 import { WashingComponent } from './component/washing/washing.component';
 import { IroningComponent } from './component/ironing/ironing.component';
 import { DeliveryComponent } from './component/delivery/delivery.component';
+import { PickupComponent } from './component/pickup/pickup.component';
 import { DeliveryhistoryComponent } from './component/deliveryhistory/deliveryhistory.component';
 import { CustomerhistoryComponent } from './component/customerhistory/customerhistory.component';
 import { DailyexpensesComponent } from './component/dailyexpenses/dailyexpenses.component';
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'washing', component: WashingComponent, canActivate: [washingGuard] },
   { path: 'ironing', component: IroningComponent, canActivate: [ironingGuard] },
   { path: 'delivery', component: DeliveryComponent },
+  { path: 'pickup', component: PickupComponent },
   { path: 'deliveryhistory', component: DeliveryhistoryComponent },
   { path: 'customerhistory', component: CustomerhistoryComponent, canActivate: [customerhistoryGuard] },
   { path: 'dailyexpenses', component: DailyexpensesComponent, canActivate: [expenseGuard] },

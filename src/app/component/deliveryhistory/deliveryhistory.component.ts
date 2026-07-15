@@ -9,14 +9,16 @@ import { LoginService } from '../../services/login/login.service';
 })
 export class DeliveryhistoryComponent {
   orders: any
-  status: any = 'delivered'
+  status: any = ''
   overallTotalAmount: number = 0;
   isLoading = true;
-  p:number=1
+  p: number = 1
   page: number = 1;
   limit: number = 10;
   totalItems: number = 0;
-  selected :string[]= []
+  selected: string[] = [];
+  showPopup: boolean = false;
+  orderDetails: any;
 
   filterCustomer: string = '';
   filterMobile: string = '';
@@ -48,19 +50,19 @@ export class DeliveryhistoryComponent {
     const currentYear = new Date().getFullYear();
     this.years = Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
   }
-  
-  selectAll(event: Event){
+
+  selectAll(event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
-    if (checked){
-    this.orders.map((item:any)=>{
-      this.selected.push(item._id)
-    })
-    }else{
-      this.selected=[]
+    if (checked) {
+      this.orders.map((item: any) => {
+        this.selected.push(item._id)
+      })
+    } else {
+      this.selected = []
     }
   }
 
-  handleSelect(id: any){
+  handleSelect(id: any) {
     this.selected.push(id)
   }
 
@@ -112,7 +114,7 @@ export class DeliveryhistoryComponent {
     if (this.filterMobile.trim()) {
       filters.mobile = this.filterMobile.trim();
     }
-    
+
     if (this.selectedPeriod === 'today' && this.selectedDate) {
       filters.date = this.selectedDate;
     } else if (this.selectedPeriod === 'month' && this.selectedMonth && this.selectedYear) {
@@ -156,18 +158,18 @@ export class DeliveryhistoryComponent {
 
   moveWashing(orderId: string, kuri: any, customerId: any) {
     const data = {
-      customerId:customerId._id,
+      customerId: customerId._id,
       orderId,
       type: 'status',
       kuri,
       status: 'washing'
     }
     this.orderService.updateOrder(data).subscribe({
-      next:(res)=>{
+      next: (res) => {
         this.getOrders()
         alert('Order updated successfully')
       },
-      error: (err)=>{
+      error: (err) => {
         alert('Order update failed')
         return;
       }
@@ -196,4 +198,27 @@ export class DeliveryhistoryComponent {
     return this.orders.reduce((sum: number, order: any) => sum + (order.billAmount || 0), 0);
   }
 
+  getCompletedServicesSorted(order: any): any[] {
+    if (!order || !order.services) return [];
+    return order.services
+      .filter((s: any) => s.status === 'completed')
+      .sort((a: any, b: any) => {
+        const timeA = a.completedAt ? new Date(a.completedAt).getTime() : new Date(order.processingStartTime || order.createdAt).getTime();
+        const timeB = b.completedAt ? new Date(b.completedAt).getTime() : new Date(order.processingStartTime || order.createdAt).getTime();
+        return timeA - timeB;
+      });
+  }
+
+  openPopUp(id: any) {
+    this.showPopup = true;
+    this.orderService.getById(id).subscribe({
+      next: (res) => {
+        this.orderDetails = res.data;
+      }
+    });
+  }
+
+  close() {
+    this.showPopup = false;
+  }
 }

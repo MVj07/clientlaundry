@@ -13,6 +13,7 @@ import { SavepannelComponent } from './component/savepannel/savepannel.component
 import { WashingComponent } from './component/washing/washing.component';
 import { IroningComponent } from './component/ironing/ironing.component';
 import { DeliveryComponent } from './component/delivery/delivery.component';
+import { PickupComponent } from './component/pickup/pickup.component';
 import { DeliveryhistoryComponent } from './component/deliveryhistory/deliveryhistory.component';
 import { CustomerhistoryComponent } from './component/customerhistory/customerhistory.component';
 import { DailyexpensesComponent } from './component/dailyexpenses/dailyexpenses.component';
@@ -43,6 +44,7 @@ import { PosComponent } from './component/pos/pos.component';
     WashingComponent,
     IroningComponent,
     DeliveryComponent,
+    PickupComponent,
     DeliveryhistoryComponent,
     CustomerhistoryComponent,
     DailyexpensesComponent,

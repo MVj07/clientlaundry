@@ -121,6 +121,51 @@
                       </span>
                       <span *ngIf="!order.services || order.services.length === 0" class="text-muted small">—</span>
                     </div>
+
+                    <!-- Horizontal Timeline showing completed steps in chronological order -->
+                    <div class="timeline-container mt-2 pt-2 border-top" *ngIf="order.processingStartTime || getCompletedServicesSorted(order).length > 0 || order.orderTakenAt || order.deliveredAt">
+                      <div class="d-flex align-items-center flex-wrap gap-2 py-1 justify-content-center">
+                        <!-- Start Time Node -->
+                        <div *ngIf="order.processingStartTime" class="timeline-node start-node px-2 py-1 rounded border bg-light text-secondary font-monospace text-center"
+                          style="font-size: 11px;">
+                          <span class="fw-semibold text-dark">Start Time</span>
+                          <div>{{ order.processingStartTime | date:'dd/MM/yyyy hh:mm a' }}</div>
+                        </div>
+
+                        <!-- Chronological Completed Services -->
+                        <ng-container *ngFor="let completedService of getCompletedServicesSorted(order); let isFirst = first">
+                          <div *ngIf="order.processingStartTime || !isFirst" class="timeline-arrow text-secondary font-monospace" style="font-size: 13px;">→</div>
+                          <div
+                            class="timeline-node completed-node px-2 py-1 rounded border border-success-subtle bg-success-subtle text-success font-monospace text-center"
+                            style="font-size: 11px;">
+                            <span class="fw-bold">{{ completedService.name | titlecase }}</span>
+                            <div>{{ (completedService.completedAt || order.processingStartTime || order.createdAt) | date:'dd/MM/yyyy hh:mm a' }}</div>
+                          </div>
+                        </ng-container>
+
+                        <!-- Order Taken Node -->
+                        <ng-container *ngIf="order.orderTakenAt">
+                          <div class="timeline-arrow text-secondary font-monospace" style="font-size: 13px;">→</div>
+                          <div
+                            class="timeline-node completed-node px-2 py-1 rounded border border-primary-subtle bg-primary-subtle text-primary font-monospace text-center"
+                            style="font-size: 11px;">
+                            <span class="fw-bold text-dark">Order Taken</span>
+                            <div>{{ order.orderTakenAt | date:'dd/MM/yyyy hh:mm a' }}</div>
+                          </div>
+                        </ng-container>
+
+                        <!-- Delivered Node -->
+                        <ng-container *ngIf="order.deliveredAt">
+                          <div class="timeline-arrow text-secondary font-monospace" style="font-size: 13px;">→</div>
+                          <div
+                            class="timeline-node completed-node px-2 py-1 rounded border border-success-subtle bg-success text-white font-monospace text-center"
+                            style="font-size: 11px;">
+                            <span class="fw-bold">Delivered</span>
+                            <div>{{ order.deliveredAt | date:'dd/MM/yyyy hh:mm a' }}</div>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
                   </td>
                   <td class="text-start text-secondary">{{ order.customerId?.mobile || '—' }}</td>
                   <td class="text-end fw-bold text-dark">₹{{ order.billAmount | number:'1.2-2' }}</td>
@@ -131,12 +176,24 @@
                     </span>
                   </td>
                   <td>
-                    <button class="delete-row-btn" (click)="deleteOrder(order._id)" title="Delete Record">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="3 6 5 6 21 6" />
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                      </svg>
-                    </button>
+                    <div class="d-flex justify-content-center align-items-center gap-2">
+                      <!-- View Detail Popup -->
+                      <button class="btn btn-outline-secondary btn-sm p-2 rounded-3" (click)="openPopUp(order._id)"
+                        title="View Details">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      </button>
+
+                      <button class="delete-row-btn" (click)="deleteOrder(order._id)" title="Delete Record">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                        </svg>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -163,3 +220,117 @@
 
   </div>
 </section>
+
+<!-- DETAILS OVERLAY POPUP -->
+<div class="popup-overlay" *ngIf="showPopup">
+  <div class="popup-box">
+
+    <!-- Modal Header -->
+    <div class="popup-header">
+      <h4 class="popup-title" style="font-family: 'Outfit', sans-serif;">Order Details Overview</h4>
+      <button class="popup-btn-close" (click)="close()">Close</button>
+    </div>
+
+    <!-- Modal Info Grid -->
+    <div class="popup-grid">
+      <div>
+        <div class="popup-label">Bill Number</div>
+        <div class="popup-value" style="font-family: monospace;">#{{ orderDetails?.bill }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Customer Name</div>
+        <div class="popup-value">{{ orderDetails?.customerId?.name }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Delivery Address</div>
+        <div class="popup-value" style="font-size: 13px; color: #475569;">{{ orderDetails?.customerId?.address || 'No Address' }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Mobile Number</div>
+        <div class="popup-value">{{ orderDetails?.customerId?.mobile }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Order Date</div>
+        <div class="popup-value">{{ orderDetails?.date | date: 'dd-MM-yyyy' }}</div>
+      </div>
+      <div *ngIf="orderDetails?.deliveryCharge">
+        <div class="popup-label">Delivery Charge</div>
+        <div class="popup-value text-primary">+₹{{ orderDetails?.deliveryCharge }}</div>
+      </div>
+      <div>
+        <div class="popup-label">Total Bill Amount</div>
+        <div class="popup-value text-primary">₹{{ orderDetails?.billAmount }}</div>
+      </div>
+      <div *ngIf="orderDetails?.processingStartTime">
+        <div class="popup-label">Processing Start Time</div>
+        <div class="popup-value text-primary" style="font-size: 13px;">{{ orderDetails?.processingStartTime | date: 'dd-MM-yyyy hh:mm a' }}</div>
+      </div>
+    </div>
+
+    <!-- Service Timeline in Popup -->
+    <div class="mt-3 mb-3 p-3 bg-light rounded-3 border" *ngIf="orderDetails?.processingStartTime || getCompletedServicesSorted(orderDetails).length > 0 || orderDetails?.orderTakenAt || orderDetails?.deliveredAt">
+      <h6 class="fw-bold text-secondary mb-2" style="font-size: 12px; text-transform: uppercase;">Service Completion Timeline</h6>
+      <div class="d-flex align-items-center flex-wrap gap-2 py-1">
+        <div *ngIf="orderDetails?.processingStartTime" class="timeline-node start-node px-2 py-1 rounded border bg-white text-secondary font-monospace"
+          style="font-size: 11.5px;">
+          <span class="fw-semibold text-dark">Start Time</span>
+          <div>{{ orderDetails?.processingStartTime | date:'dd/MM/yyyy hh:mm a' }}</div>
+        </div>
+        <ng-container *ngFor="let completedService of getCompletedServicesSorted(orderDetails); let isFirst = first">
+          <div *ngIf="orderDetails?.processingStartTime || !isFirst" class="timeline-arrow text-secondary font-monospace" style="font-size: 13px;">→</div>
+          <div class="timeline-node completed-node px-2 py-1 rounded border border-success-subtle bg-success-subtle text-success font-monospace"
+            style="font-size: 11.5px;">
+            <span class="fw-bold">{{ completedService.name | titlecase }}</span>
+            <div>{{ (completedService.completedAt || orderDetails?.processingStartTime || orderDetails?.createdAt) | date:'dd/MM/yyyy hh:mm a' }}</div>
+          </div>
+        </ng-container>
+
+        <!-- Order Taken Node in Popup -->
+        <ng-container *ngIf="orderDetails?.orderTakenAt">
+          <div class="timeline-arrow text-secondary font-monospace" style="font-size: 13px;">→</div>
+          <div class="timeline-node completed-node px-2 py-1 rounded border border-primary-subtle bg-primary-subtle text-primary font-monospace"
+            style="font-size: 11.5px;">
+            <span class="fw-bold text-dark">Order Taken</span>
+            <div>{{ orderDetails?.orderTakenAt | date:'dd/MM/yyyy hh:mm a' }}</div>
+          </div>
+        </ng-container>
+
+        <!-- Delivered Node in Popup -->
+        <ng-container *ngIf="orderDetails?.deliveredAt">
+          <div class="timeline-arrow text-secondary font-monospace" style="font-size: 13px;">→</div>
+          <div class="timeline-node completed-node px-2 py-1 rounded border border-success-subtle bg-success text-white font-monospace"
+            style="font-size: 11.5px;">
+            <span class="fw-bold">Delivered</span>
+            <div>{{ orderDetails?.deliveredAt | date:'dd/MM/yyyy hh:mm a' }}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <hr style="border-top-color: #f1f5f9 !important;" />
+
+    <!-- Products Detail Table -->
+    <h6 class="fw-bold text-secondary mb-2" style="font-size: 13px;">Product Items Details</h6>
+    <div class="popup-table-container">
+      <table class="popup-table">
+        <thead>
+          <tr>
+            <th class="text-start ps-3">{{ orderDetails?.type === 'kg' ? 'Service / Description' : 'Product Name' }}</th>
+            <th>{{ orderDetails?.type === 'kg' ? 'Weight (Kg)' : 'Qty' }}</th>
+            <th>{{ orderDetails?.type === 'kg' ? 'Rate/Kg' : 'Rate' }}</th>
+            <th class="text-end pe-3">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of orderDetails?.items">
+            <td class="fw-semibold text-dark text-start ps-3">{{ item.name }}</td>
+            <td>{{ item.qty }}</td>
+            <td>₹{{ item.amount }}</td>
+            <td class="text-end pe-3 fw-bold text-dark">₹{{ item.qty * item.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

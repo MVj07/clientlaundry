@@ -26,13 +26,13 @@ export class HomeComponent {
 
   constructor(
     private order: newOrderService
-  ){}
+  ) { }
 
-  getOrders(){
-    this.order.getAllOrders("all", 1, 10).subscribe({
-      next:(res)=>{
+  getOrders() {
+    this.order.getAllOrders("", 1, 10).subscribe({
+      next: (res) => {
         console.log(res)
-        this.orders = res.data ? res.data.slice(0, 5) : [];
+        this.orders = res.data ? res.data.slice(0, 3) : [];
       },
       error: (err) => {
         return;
@@ -41,9 +41,9 @@ export class HomeComponent {
 
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.getOrders();
-    
+
     const workflowStr = localStorage.getItem('workflow');
     if (workflowStr) {
       try {
@@ -52,9 +52,9 @@ export class HomeComponent {
         this.workflows = [];
       }
     }
-    
+
     this.loadDashboardMetrics();
-    
+
     const storedStore = localStorage.getItem('store');
     if (storedStore) {
       this.businessName = storedStore;
@@ -76,7 +76,7 @@ export class HomeComponent {
           this.statusSummary = this.workflows.map(wf => {
             return {
               label: wf.name,
-              count: metrics.statusCounts?.[wf.indentifier] || 0
+              count: (metrics.statusCounts?.[wf.indentifier] || 0) + (wf.indentifier === 'deliver' ? (metrics.statusCounts?.order_taken || 0) : 0)
             };
           });
         } else {
@@ -84,7 +84,8 @@ export class HomeComponent {
             { label: 'Washing', count: metrics.statusCounts?.washing || 0 },
             { label: 'Ironing', count: metrics.statusCounts?.ironing || 0 },
             { label: 'Packing', count: metrics.statusCounts?.packing || 0 },
-            { label: 'Delivery', count: metrics.statusCounts?.deliver || metrics.statusCounts?.delivery || 0 }
+            { label: 'Door Delivery', count: (metrics.statusCounts?.deliver || 0) + (metrics.statusCounts?.order_taken || 0) },
+            { label: 'Customer Pickup', count: metrics.statusCounts?.pickup || 0 }
           ];
         }
       },

@@ -113,6 +113,23 @@
           </div>
         </div>
 
+        <!-- Delivery Options Row -->
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold text-secondary">Delivery Type</label>
+            <select formControlName="deliverytype" class="form-select" style="border-radius: 8px; padding: 10px 14px; font-size: 13.5px; font-weight: 500;">
+              <option value="CP">Customer Pickup (CP)</option>
+              <option value="DD">Door Delivery (DD)</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-semibold text-secondary">Delivery Charge (₹)</label>
+            <input formControlName="deliveryCharge" type="number" class="form-control" placeholder="Enter delivery charge (0 if none)"
+              style="border-radius: 8px; padding: 10px 14px;" />
+          </div>
+        </div>
+
         <!-- Select Services (Dynamic list) -->
         <div class="mb-4">
           <label class="form-label fw-semibold text-secondary">Select Required Services for this Order</label>
