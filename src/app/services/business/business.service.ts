@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StorageService } from '../storage.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class BusinessService {
-    // private apiUrl = 'https://laundry-fju0.onrender.com/business'; // Change to your actual API URL
-    private apiUrl = 'http://localhost:5000/business'
+    private apiUrl = `${environment.apiUrl}/business`;
 
     constructor(private http: HttpClient, private storageService: StorageService) { }
 

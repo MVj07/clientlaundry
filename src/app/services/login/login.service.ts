@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { StorageService } from '../storage.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-  // private apiUrl = 'https://laundry-fju0.onrender.com';
-  private apiUrl = 'http://localhost:5000';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private router: Router, private storageService: StorageService) { }
 

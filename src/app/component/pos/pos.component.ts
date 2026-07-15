@@ -5,6 +5,7 @@ import { newOrderService } from '../../services/newOrder/newOrder.service';
 import { HttpParams } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../services/storage.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-pos',
@@ -27,8 +28,7 @@ export class PosComponent implements OnInit {
   processing: boolean = false;
   paymentDone: boolean = false;
 
-  private apiUrl = 'http://localhost:5000';
-  // private apiUrl = 'https://laundry-fju0.onrender.com'
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private fb: FormBuilder,
