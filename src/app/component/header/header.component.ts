@@ -14,6 +14,8 @@ export class HeaderComponent implements OnInit {
   searchText: string = '';
   dateOrdersmnth :any;
   storeName: any = 'Laundry';
+  role: string = 'admin';
+  isEmployee: boolean = false;
 
   isOrdersExpanded: boolean = true;
   isDeliveryExpanded: boolean = true;
@@ -36,6 +38,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     const store = this.storageService.getItem('store');
     this.storeName = store;
+    this.role = this.storageService.getItem('role') || 'admin';
+    this.isEmployee = (this.role === 'employee');
 
     // Auto-expand the category related to current route
     const url = this.router.url;

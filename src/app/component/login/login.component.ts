@@ -38,6 +38,7 @@ export class LoginComponent {
             this.storageService.setItem('authToken', res.token);
             this.storageService.setItem('userId', res.user._id);
             this.storageService.setItem('profile', res.user.is_profile_completed)
+            this.storageService.setItem('role', res.user.role || res.user.type || 'admin');
             if (res?.user?.is_profile_completed) {
               // console.log(res.user.is_profile_completed)
               this.businessService.getOne().subscribe({
@@ -51,7 +52,12 @@ export class LoginComponent {
                   this.loading = false;
                 }
               })
-              this.router.navigate(['/home'])
+              const userRole = res.user.role || res.user.type || 'admin';
+              if (userRole === 'employee') {
+                this.router.navigate(['/savepannel']);
+              } else {
+                this.router.navigate(['/home']);
+              }
             } else {
               this.loading = false;
               this.router.navigate(['/business_setup'])

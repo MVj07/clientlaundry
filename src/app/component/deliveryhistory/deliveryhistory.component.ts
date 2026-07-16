@@ -137,7 +137,12 @@ export class DeliveryhistoryComponent {
     })
   }
 
+  isEmployee: boolean = false;
+
   ngOnInit(): void {
+    if (typeof window !== 'undefined' && localStorage) {
+      this.isEmployee = localStorage.getItem('role') === 'employee';
+    }
     this.getOrders()
   }
   getOrderTotal(order: any): number {

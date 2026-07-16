@@ -1,12 +1,12 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 
-export const posGuard: CanActivateFn = (route, state) => {
-  const router = inject(Router)
+export const deliveryhistoryGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router);
 
-  let token = null
-  let profileCompleted = null
-  let role = null
+  let token = null;
+  let profileCompleted = null;
+  let role = null;
   if (typeof window !== 'undefined' && localStorage) {
     token = localStorage.getItem('authToken');
     profileCompleted = localStorage.getItem("profile");
@@ -19,7 +19,7 @@ export const posGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  // If role is employee → restrict pos (/pos) and redirect to /savepannel
+  // If role is employee → restrict All Orders (/deliveryhistory) and redirect to /savepannel
   if (role === 'employee') {
     router.navigate(['/savepannel']);
     return false;

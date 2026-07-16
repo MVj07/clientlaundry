@@ -6,14 +6,22 @@ export const homeGuard: CanActivateFn = (route, state) => {
 
   let token = null
   let profileCompleted = null
+  let role = null
   if (typeof window !== 'undefined' && localStorage) {
     token = localStorage.getItem('authToken');
     profileCompleted = localStorage.getItem("profile");
+    role = localStorage.getItem("role");
   }
 
   // 1. If no token → redirect to login
   if (!token) {
     router.navigate(['/']);
+    return false;
+  }
+
+  // If role is employee → restrict dashboard (/home) and redirect to /savepannel
+  if (role === 'employee') {
+    router.navigate(['/savepannel']);
     return false;
   }
 

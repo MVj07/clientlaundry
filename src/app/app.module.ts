@@ -23,7 +23,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { InvoiceComponent } from './component/invoice/invoice.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { SettingsComponent } from './component/settings/settings.component';
-import { PackingComponent } from './packing/packing.component';
+// import { PackingComponent } from './packing/packing.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { BusinessSetupComponent } from './app/business-setup/business-setup.component';
@@ -51,7 +51,7 @@ import { SubscriptionComponent } from './component/subscription/subscription.com
     DailyexpensesComponent,
     InvoiceComponent,
     SettingsComponent,
-    PackingComponent,
+    // PackingComponent,
     BusinessSetupComponent,
     SignupComponent,
     OrdersComponent,

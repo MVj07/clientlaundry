@@ -210,7 +210,7 @@
                 </button>
 
                 <!-- Delete -->
-                <button class="btn btn-outline-danger btn-sm p-2 rounded-3" (click)="deleteOrder(order._id)"
+                <button *ngIf="!isEmployee" class="btn btn-outline-danger btn-sm p-2 rounded-3" (click)="deleteOrder(order._id)"
                   title="Delete Order">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                     stroke-linecap="round" stroke-linejoin="round">

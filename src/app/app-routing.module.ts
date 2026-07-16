@@ -14,7 +14,7 @@ import { DailyexpensesComponent } from './component/dailyexpenses/dailyexpenses.
 import { authGuard } from './guards/auth.guard';
 import { InvoiceComponent } from './component/invoice/invoice.component';
 import { SettingsComponent } from './component/settings/settings.component';
-import { PackingComponent } from './packing/packing.component';
+// import { PackingComponent } from './packing/packing.component';
 import { BusinessSetupComponent } from './app/business-setup/business-setup.component';
 import { businessSetupGuard } from './guards/business-setup.guard';
 import { homeGuard } from './guards/home.guard';
@@ -34,10 +34,11 @@ import { serviceGuard } from './guards/services.guard';
 import { ordersGuard } from './guards/orders.guard';
 import { deliveryGuard } from './guards/delivery.guard';
 import { pickupGuard } from './guards/pickup.guard';
+import { deliveryhistoryGuard } from './guards/deliveryhistory.guard';
 import { SubscriptionComponent } from './component/subscription/subscription.component';
 
 const routes: Routes = [
-  { path: 'edit-order/:id', component: NeworderComponent },
+  { path: 'edit-order/:id', component: NeworderComponent, canActivate: [neworderGuard] },
   { path: '', component: LoginComponent, canActivate: [authGuard] },
   { path: 'home', component: HomeComponent, canActivate: [homeGuard] },
   { path: 'neworder', component: NeworderComponent, canActivate: [neworderGuard] },
@@ -46,7 +47,7 @@ const routes: Routes = [
   { path: 'ironing', component: IroningComponent, canActivate: [ironingGuard] },
   { path: 'delivery', component: DeliveryComponent, canActivate: [deliveryGuard] },
   { path: 'pickup', component: PickupComponent, canActivate: [pickupGuard] },
-  { path: 'deliveryhistory', component: DeliveryhistoryComponent },
+  { path: 'deliveryhistory', component: DeliveryhistoryComponent, canActivate: [deliveryhistoryGuard] },
   { path: 'customerhistory', component: CustomerhistoryComponent, canActivate: [customerhistoryGuard] },
   { path: 'dailyexpenses', component: DailyexpensesComponent, canActivate: [expenseGuard] },
   // { path: 'invoice', component: InvoiceComponent },

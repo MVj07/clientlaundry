@@ -121,7 +121,7 @@
                             <!-- <div class="col">
                                 <button class="primaryBtn fN">Edit</button>
                             </div> -->
-                            <div class="">
+                            <div class="" *ngIf="!isEmployee">
                                 <button class="primaryBtn fN w150x" (click)="deleteOrder(order._id)">Delete</button>
                             </div>
                             <div class="">

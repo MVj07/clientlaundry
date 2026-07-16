@@ -39,6 +39,7 @@ export class SavepannelComponent implements OnInit {
   }
 
   businessData: any = null;
+  isEmployee: boolean = false;
 
   constructor(
     private orderService: newOrderService,
@@ -49,6 +50,9 @@ export class SavepannelComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (typeof window !== 'undefined' && localStorage) {
+      this.isEmployee = localStorage.getItem('role') === 'employee';
+    }
     this.businessService.getOne().subscribe({
       next: (res) => {
         this.businessData = res.data || res;

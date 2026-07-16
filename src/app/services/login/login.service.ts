@@ -31,4 +31,16 @@ export class LoginService {
     return null;
   }
 
+  createEmployee(data: any): Observable<any> {
+    return this.http.post(this.apiUrl + '/create-employee', data);
+  }
+
+  getEmployees(): Observable<any> {
+    return this.http.get(this.apiUrl + '/employees');
+  }
+
+  deleteEmployee(id: any): Observable<any> {
+    return this.http.delete(this.apiUrl + '/employee/' + id);
+  }
+
 }

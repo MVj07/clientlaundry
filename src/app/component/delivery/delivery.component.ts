@@ -22,6 +22,8 @@ export class DeliveryComponent {
   showPopup: boolean = false;
   orderDetails: any = {};
   
+  isEmployee: boolean = false;
+
   constructor(
     private orderService: newOrderService,
     private authservice: LoginService,
@@ -48,6 +50,9 @@ export class DeliveryComponent {
     })
   }
   ngOnInit(): void {
+    if (typeof window !== 'undefined' && localStorage) {
+      this.isEmployee = localStorage.getItem('role') === 'employee';
+    }
     this.getOrders()
   }
   getOrderTotal(order: any): number {

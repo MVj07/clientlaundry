@@ -208,6 +208,94 @@
         </div>
       </div>
 
+      <!-- Full Width Row: Employee Staff Management (RBAC) -->
+      <div class="col-12 mt-4">
+        <div class="bg-white border rounded-3 p-4 shadow-sm"
+          style="border-color: #e2e8f0 !important; border-left: 5px solid #8b5cf6 !important;">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+              <h5 class="fw-bold text-dark m-0" style="font-family: 'Outfit', sans-serif;">👥 Employee Staff Management (Role-Based Access)</h5>
+              <small class="text-secondary">Create staff logins for operators. Employees can update order statuses but cannot delete orders or access settings.</small>
+            </div>
+            <span class="badge bg-purple-subtle text-purple border border-purple-subtle px-3 py-1" style="background-color: #f3e8ff; color: #6b21a8;">RBAC Active</span>
+          </div>
+
+          <div class="row g-4">
+            <!-- Add New Staff Form -->
+            <div class="col-lg-5 border-end">
+              <h6 class="fw-bold text-dark mb-3">Add New Staff Operator</h6>
+              <form (ngSubmit)="createEmployee()" #empForm="ngForm" class="space-y-3">
+                <div class="mb-3">
+                  <label class="form-label fw-semibold text-secondary small">Staff Full Name</label>
+                  <input type="text" [(ngModel)]="employeeForm.name" name="empName" required class="form-control" placeholder="e.g. Rahul Sharma" style="border-radius: 8px; font-size: 14px;">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-semibold text-secondary small">Username (for login)</label>
+                  <input type="text" [(ngModel)]="employeeForm.username" name="empUser" required class="form-control" placeholder="e.g. rahul_staff" style="border-radius: 8px; font-size: 14px;">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-semibold text-secondary small">Email Address</label>
+                  <input type="email" [(ngModel)]="employeeForm.email" name="empEmail" required class="form-control" placeholder="staff@store.com" style="border-radius: 8px; font-size: 14px;">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-semibold text-secondary small">Password</label>
+                  <div class="position-relative">
+                    <input [type]="showEmpPassword ? 'text' : 'password'" [(ngModel)]="employeeForm.password" name="empPass" required class="form-control pe-5" placeholder="Set login password" style="border-radius: 8px; font-size: 14px;">
+                    <button type="button" class="btn position-absolute border-0 bg-transparent text-secondary" style="right: 12px; top: 50%; transform: translateY(-50%); padding: 0;" (click)="showEmpPassword = !showEmpPassword">
+                      <svg *ngIf="!showEmpPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      <svg *ngIf="showEmpPassword" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <button type="submit" [disabled]="!empForm.valid || empLoading" class="primaryBtn py-2 w-100 d-flex align-items-center justify-content-center gap-2" style="border-radius: 8px; font-size: 14px;">
+                  <span *ngIf="empLoading" class="spinner-border spinner-border-sm"></span>
+                  <span>➕ Create Staff Account</span>
+                </button>
+              </form>
+            </div>
+
+            <!-- Existing Staff List -->
+            <div class="col-lg-7">
+              <h6 class="fw-bold text-dark mb-3">Active Staff Operators (`{{ employeesList.length }}`)</h6>
+              <div class="table-responsive" *ngIf="employeesList.length > 0; else noStaff">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light small">
+                    <tr>
+                      <th>Name</th>
+                      <th>Username</th>
+                      <th>Email</th>
+                      <th>Role Access</th>
+                      <th class="text-end">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="small">
+                    <tr *ngFor="let emp of employeesList">
+                      <td class="fw-semibold text-dark">👤 {{ emp.name }}</td>
+                      <td><code>{{ emp.username }}</code></td>
+                      <td class="text-secondary">{{ emp.email }}</td>
+                      <td>
+                        <span class="badge bg-info-subtle text-info border border-info-subtle px-2 py-1">Operator / Staff</span>
+                      </td>
+                      <td class="text-end">
+                        <button type="button" class="btn btn-outline-danger btn-sm p-1 px-2 rounded-2" (click)="deleteEmployee(emp._id, emp.name)" title="Remove Staff Account">
+                          🗑️ Remove
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <ng-template #noStaff>
+                <div class="text-center py-5 bg-light rounded-3 border border-dashed">
+                  <div class="fs-4 mb-2">👥</div>
+                  <p class="text-secondary small m-0">No staff operators added yet. Create your first employee operator from the form on the left.</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>

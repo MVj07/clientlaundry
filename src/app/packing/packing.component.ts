@@ -17,7 +17,9 @@ export class PackingComponent {
   limit: number = 5;
   totalItems: number = 0;
   selectAllChecked = false;
-  selectedOrders: any = []
+  selectedOrders: any = [];
+  isEmployee: boolean = false;
+
   constructor(
     private orderService: newOrderService,
     private authservice: LoginService,
@@ -43,6 +45,9 @@ export class PackingComponent {
     })
   }
   ngOnInit(): void {
+    if (typeof window !== 'undefined' && localStorage) {
+      this.isEmployee = localStorage.getItem('role') === 'employee';
+    }
     this.getOrders()
   }
   getOrderTotal(order: any): number {

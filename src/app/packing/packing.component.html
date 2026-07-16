@@ -12,8 +12,8 @@
                 <small class="text-white">Select All</small>
             </div>
         </div>
-        <button *ngIf="selectedOrders?.length" class="primaryBtn w150x fN btn-sm py-2 px-2" (click)="bulkUpdate()">Move to
-            deliver</button>
+        <!-- <button *ngIf="selectedOrders?.length" class="primaryBtn w150x fN btn-sm py-2 px-2" (click)="bulkUpdate()">Move to
+            deliver</button> -->
     </div>
     <div class="">
         <div class="">
@@ -121,12 +121,13 @@
                             <!-- <div class="col">
                                 <button class="primaryBtn fN">Edit</button>
                             </div> -->
-                            <div class="">
+                            <div class="" *ngIf="!isEmployee">
                                 <button class="primaryBtn fN w150x" (click)="deleteOrder(order._id)">Delete</button>
                             </div>
                             <div class="">
                                 <button class="primaryBtn fN px-2"
-                                    (click)="moveWashing(order._id, order.kuri, order.customerId)">Generate Bill & Move to
+                                    (click)="moveWashing(order._id, order.kuri, order.customerId)">Generate Bill & Move
+                                    to
                                     delivery</button>
                             </div>
                         </div>
