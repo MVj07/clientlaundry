@@ -24,7 +24,7 @@
         <i class="bi bi-exclamation-triangle-fill fs-3 me-3 text-danger"></i>
         <div>
           <h5 class="alert-heading fw-bold mb-1">Trial Period Expired!</h5>
-          <p class="mb-0">Your 14-day free trial has ended and protected POS access is restricted. Please subscribe to our ₹150 Monthly Plan below to restore instant, uninterrupted access to all laundry modules.</p>
+          <p class="mb-0">Your 14-day free trial has ended and protected POS access is restricted. Please subscribe to our ₹200 Monthly Pro Plan below to restore instant, uninterrupted access to all laundry modules.</p>
         </div>
       </div>
 
@@ -88,79 +88,73 @@
         </div>
       </div>
 
-      <!-- Pricing Card Section -->
-      <div class="row justify-content-center mt-4">
-        <div class="col-lg-7 col-xl-6">
-          <div class="pricing-card rounded-5 p-5 shadow-2xl position-relative overflow-hidden">
-            <div class="pricing-glow"></div>
+      <!-- Pricing Cards Section (Single ₹200 Plan) -->
+      <div class="row g-4 mt-2 justify-content-center">
+        <!-- ₹200 All-In-One Pro Plan -->
+        <div class="col-lg-8 col-xl-6">
+          <div class="pricing-card rounded-5 p-5 shadow-2xl position-relative overflow-hidden h-100 d-flex flex-column border border-primary border-2">
+            <div class="pricing-glow" style="background: radial-gradient(circle, rgba(99,102,241,0.25) 0%, rgba(0,0,0,0) 70%);"></div>
 
             <div class="d-flex justify-content-between align-items-start mb-4">
               <div>
-                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 mb-2">
-                  <i class="bi bi-stars me-1"></i> Most Popular Plan
+                <span class="badge bg-primary text-white border border-primary rounded-pill px-3 py-1 mb-2">
+                  <i class="bi bi-stars me-1"></i> All-In-One Pro Subscription
                 </span>
-                <h2 class="pricing-title fw-bold">Laundry SaaS Pro</h2>
+                <h2 class="pricing-title fw-bold">Unlimited Pro SaaS</h2>
               </div>
-              <div class="pricing-icon-wrapper rounded-3 d-flex align-items-center justify-content-center">
+              <div class="pricing-icon-wrapper rounded-3 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #6366f1, #ec4899);">
                 <i class="bi bi-lightning-charge-fill fs-3 text-white"></i>
               </div>
             </div>
 
             <div class="price-display d-flex align-items-baseline gap-2 pb-4 border-bottom border-secondary mb-4">
-              <span class="price-amount fw-bolder">₹150</span>
+              <span class="price-amount fw-bolder" style="color: #a855f7;">₹200</span>
               <span class="price-period text-light-50">/ month</span>
-              <span class="badge bg-success-subtle text-success border border-success-subtle ms-auto px-3 py-1">
-                All-Inclusive
+              <span class="badge bg-primary-subtle text-primary border border-primary-subtle ms-auto px-3 py-1">
+                Unlimited Access
               </span>
             </div>
 
-            <div class="features-list mb-5">
-              <p class="text-uppercase text-light-50 small fw-bold tracking-wide mb-3">Everything you need to run your laundry:</p>
+            <div class="features-list mb-5 flex-grow-1">
+              <p class="text-uppercase text-light-50 small fw-bold tracking-wide mb-3">Included Core Features:</p>
               <ul class="list-unstyled mb-0">
                 <li class="d-flex align-items-center gap-3 mb-3">
-                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
-                  <span>Unlimited POS Orders & Billing</span>
+                  <i class="bi bi-check-circle-fill text-primary fs-5" style="color: #a855f7 !important;"></i>
+                  <span><strong style="color: #f3e8ff;">Unlimited POS Order & Billing</strong> (Zero restrictions on daily order volume)</span>
                 </li>
                 <li class="d-flex align-items-center gap-3 mb-3">
-                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
-                  <span>Real-time Order Tracking & Barcode Workflow</span>
+                  <i class="bi bi-check-circle-fill text-primary fs-5" style="color: #a855f7 !important;"></i>
+                  <span><strong style="color: #f3e8ff;">Real-Time Order Tracking & Barcode Workflow</strong> (Automated stage progression and thermal barcode tags)</span>
                 </li>
                 <li class="d-flex align-items-center gap-3 mb-3">
-                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
-                  <span>Automated WhatsApp & SMS Notifications</span>
-                </li>
-                <li class="d-flex align-items-center gap-3 mb-3">
-                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
-                  <span>Complete Expense & Customer Analytics</span>
-                </li>
-                <li class="d-flex align-items-center gap-3">
-                  <i class="bi bi-check-circle-fill text-primary fs-5"></i>
-                  <span>24/7 Priority Support & Automated Cloud Backup</span>
+                  <i class="bi bi-check-circle-fill text-primary fs-5" style="color: #a855f7 !important;"></i>
+                  <span><strong style="color: #f3e8ff;">⚡ Instant Customer Payment Request / Link Gateway</strong> (Directly collect online payments via SMS/WhatsApp with your own Razorpay keys)</span>
                 </li>
               </ul>
             </div>
 
             <button 
-              class="btn btn-subscribe w-100 py-4 rounded-4 fw-bold fs-5 shadow-lg d-flex align-items-center justify-content-center gap-3"
-              (click)="subscribeNow()"
-              [disabled]="processing || isActivePlan">
+              class="btn btn-subscribe w-100 py-4 rounded-4 fw-bold fs-5 shadow-lg d-flex align-items-center justify-content-center gap-3 mt-auto"
+              style="background: linear-gradient(135deg, #6366f1, #a855f7);"
+              (click)="subscribeNow('monthly_200')"
+              [disabled]="processing || (isActivePlan && statusData?.subscriptionPlan?.includes('200'))">
               <span *ngIf="processing" class="spinner-border spinner-border-sm me-2" role="status"></span>
-              <i *ngIf="!processing && !isActivePlan" class="bi bi-lock-fill"></i>
-              <i *ngIf="isActivePlan" class="bi bi-patch-check-fill text-success"></i>
+              <i *ngIf="!processing && !(isActivePlan && statusData?.subscriptionPlan?.includes('200'))" class="bi bi-rocket-takeoff-fill"></i>
+              <i *ngIf="isActivePlan && statusData?.subscriptionPlan?.includes('200')" class="bi bi-patch-check-fill text-white"></i>
               <span>
-                {{ isActivePlan 
-                   ? 'Active Plan (' + statusData.daysRemaining + ' Days Remaining)' 
-                   : processing ? 'Connecting to Razorpay...' : 'Subscribe to ₹150 / Month' }}
+                {{ isActivePlan && statusData?.subscriptionPlan?.includes('200')
+                   ? 'Active Pro Plan (' + statusData.daysRemaining + ' Days Left)' 
+                   : 'Subscribe to ₹200 / Month' }}
               </span>
             </button>
-
-            <div class="text-center mt-4">
-              <small class="text-light-50">
-                <i class="bi bi-shield-lock-fill me-1"></i> 256-Bit SSL Encrypted by Razorpay • Instant Activation
-              </small>
-            </div>
           </div>
         </div>
+      </div>
+
+      <div class="text-center mt-4 mb-5">
+        <small class="text-light-50">
+          <i class="bi bi-shield-lock-fill me-1"></i> 256-Bit SSL Encrypted by Razorpay • Instant Activation
+        </small>
       </div>
     </div>
   </div>

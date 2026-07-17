@@ -114,6 +114,24 @@ export class newOrderService {
         return this.http.post(this.apiUrl + '/order/record-payment', data, { headers });
     }
 
+    createPaymentLink(orderId: string): Observable<any> {
+        const token = this.storageService.getItem('authToken');
+        const headers = { Authorization: `Bearer ${token}` };
+        return this.http.post(this.apiUrl + '/order/create-payment-link', { orderId }, { headers });
+    }
+
+    checkPaymentLinkStatus(orderId: string): Observable<any> {
+        const token = this.storageService.getItem('authToken');
+        const headers = { Authorization: `Bearer ${token}` };
+        return this.http.get(`${this.apiUrl}/order/check-payment-link/${orderId}`, { headers });
+    }
+
+    simulateLinkPayment(orderId: string): Observable<any> {
+        const token = this.storageService.getItem('authToken');
+        const headers = { Authorization: `Bearer ${token}` };
+        return this.http.post(`${this.apiUrl}/order/simulate-link-payment`, { orderId }, { headers });
+    }
+
     updateOrderServiceStatus(orderId: string, serviceId: string, status: string): Observable<any> {
         const token = this.storageService.getItem('authToken');
         const headers = {

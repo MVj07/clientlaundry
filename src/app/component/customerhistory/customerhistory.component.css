@@ -137,4 +137,8 @@
   .customer-card {
     padding: 16px !important;
   }
+  .customer-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
 }

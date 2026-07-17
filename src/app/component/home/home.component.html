@@ -1,94 +1,196 @@
 <app-header></app-header>
 
-<div class="dashboard-container">
+<div class="dashboard-container bg-60-dominant">
 
-  <!-- Header -->
-  <div class="dashboard-header mb-4">
+  <!-- 1. Hero Welcome Command Center Banner -->
+  <div class="hero-banner mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
     <div>
-      <h2 class="dashboard-title">{{ businessName }} Dashboard</h2>
-      <p class="dashboard-subtitle text-muted mb-0 mt-1">
-        <span class="pulse-dot"></span> Live Operations Overview • {{ today | date:'fullDate' }}
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="pulse-dot"></span>
+        <span class="text-uppercase small fw-bold text-info" style="letter-spacing: 1px;">Live Operational Command Center</span>
+      </div>
+      <h1 class="hero-title">{{ greeting }}, {{ businessName }} Team 👋</h1>
+      <p class="hero-subtitle mb-0">
+        Here is your complete real-time performance summary for {{ today | date:'fullDate' }}.
       </p>
     </div>
-  </div>
-
-  <!-- KPI Cards -->
-  <div class="row g-4">
-    <!-- Today Orders Card -->
-    <div class="col-md-3">
-      <div class="kpi-card gradient-orders">
-        <div class="kpi-icon-container">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <div class="hero-stats-box">
+        <div>
+          <div class="small text-light opacity-75 fw-semibold">Efficiency Rate</div>
+          <div class="efficiency-badge">{{ efficiencyRate }}%</div>
         </div>
-        <div class="kpi-content">
-          <span class="kpi-title">Today's Orders</span>
-          <h3 class="kpi-value">{{ kpiCards[0]?.value }}</h3>
+        <div class="border-start border-light border-opacity-25 ps-3">
+          <div class="small text-light opacity-75 fw-semibold">Active Queue</div>
+          <div class="fs-4 fw-bold text-white">{{ totalPipelineOrders }} <span class="small opacity-75">orders</span></div>
         </div>
       </div>
-    </div>
-
-    <!-- Active Orders Card -->
-    <div class="col-md-3">
-      <div class="kpi-card gradient-washing">
-        <div class="kpi-icon-container">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </div>
-        <div class="kpi-content">
-          <span class="kpi-title">Active Orders</span>
-          <h3 class="kpi-value">{{ kpiCards[1]?.value }}</h3>
-        </div>
-      </div>
-    </div>
-
-    <!-- Today's Revenue Card -->
-    <div class="col-md-3">
-      <div class="kpi-card gradient-packing">
-        <div class="kpi-icon-container">
-          <span class="rupee-icon">₹</span>
-        </div>
-        <div class="kpi-content">
-          <span class="kpi-title">Today's Revenue</span>
-          <h3 class="kpi-value">{{ kpiCards[2]?.value }}</h3>
-        </div>
-      </div>
-    </div>
-
-    <!-- Monthly Sales Card -->
-    <div class="col-md-3">
-      <div class="kpi-card gradient-revenue">
-        <div class="kpi-icon-container">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        </div>
-        <div class="kpi-content">
-          <span class="kpi-title">Monthly Sales</span>
-          <h3 class="kpi-value">{{ kpiCards[3]?.value }}</h3>
-        </div>
+      <div class="d-flex flex-column gap-2">
+        <button class="btn btn-10-accent fw-bold px-4 py-2 d-flex align-items-center justify-content-center gap-2 shadow-sm" routerLink="/pos" style="background: linear-gradient(135deg, #8b5cf6, #6366f1); border: none; color: #fff; border-radius: 12px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          POS Terminal
+        </button>
+        <button class="btn btn-sm btn-outline-light text-white opacity-90 fw-semibold px-3 py-1.5" (click)="ngOnInit()" style="border-radius: 10px;">
+          ↻ Refresh Data
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Status Summary Section -->
-  <div class="row g-4 mt-2">
-    <div class="col-md-3" *ngFor="let status of statusSummary">
-      <div class="status-summary-card">
-        <div class="status-indicator"></div>
-        <div class="status-info">
-          <span class="status-label">{{ status.label }} Queue</span>
-          <h4 class="status-count">{{ status.count }}</h4>
+  <!-- 2. Full Financial & Operational KPI Set (6-Card Masterpiece Grid) -->
+  <div class="row g-4 mb-4">
+    <div class="col-xl-2 col-lg-4 col-md-6" *ngFor="let kpi of kpiCards">
+      <div class="kpi-card" [ngClass]="kpi.colorClass">
+        <div>
+          <div class="kpi-top-row">
+            <div class="kpi-icon-container">
+              <svg *ngIf="kpi.icon === 'order'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <svg *ngIf="kpi.icon === 'active'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span *ngIf="kpi.icon === 'revenue' || kpi.icon === 'expense' || kpi.icon === 'profit' || kpi.icon === 'monthly'" class="rupee-icon">₹</span>
+            </div>
+            <span class="kpi-trend-pill">{{ kpi.trend }}</span>
+          </div>
+          <span class="kpi-title">{{ kpi.title }}</span>
+          <h3 class="kpi-value">{{ kpi.value }}</h3>
+        </div>
+        <span class="kpi-subtitle">{{ kpi.subtitle }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Operational Stage Queues & Pipeline -->
+  <div class="row g-4 mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h5 class="section-title m-0 d-flex align-items-center gap-2">
+          <span>Operational Stage Queues</span>
+          <span class="badge badge-10-accent small fw-normal" style="background: rgba(99,102,241,0.15); color: #6366f1;">Click gate to open queue</span>
+        </h5>
+        <span class="small fw-bold text-30-secondary">Total Active Pipeline: {{ totalPipelineOrders }}</span>
+      </div>
+      
+      <!-- Visual Progress Distribution Bar -->
+      <div class="pipeline-progress-container mb-3 mt-2" *ngIf="totalPipelineOrders > 0">
+        <div *ngFor="let status of statusSummary" 
+             class="pipeline-segment" 
+             [ngClass]="'status-' + (status.identifier || status.label.toLowerCase())"
+             [style.width.%]="getPercentage(status.count)"
+             [title]="status.label + ': ' + status.count + ' (' + getPercentage(status.count) + '%)'">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-lg-6 col-md-6" *ngFor="let status of statusSummary">
+      <div class="status-summary-card surface-60-dominant" [ngClass]="'status-' + (status.identifier || status.label.toLowerCase())" (click)="navigateToQueue(status.route)" title="Open {{ status.label }}">
+        <div class="d-flex align-items-center gap-3">
+          <div class="status-indicator-ring">
+            {{ status.count }}
+          </div>
+          <div class="status-info flex-grow-1">
+            <span class="status-label">{{ status.label }}</span>
+            <div class="small text-muted fw-semibold" *ngIf="totalPipelineOrders > 0">{{ getPercentage(status.count) }}% of pipeline</div>
+          </div>
+        </div>
+        <div class="text-10-accent" style="color: #6366f1;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Main Section -->
-  <div class="row g-4 mt-2">
+  <!-- 4. Operational Analytics Row (Ledger Breakdown vs Top Garments) -->
+  <div class="row g-4 mb-4">
+    <!-- Payment Breakdown Ledger -->
+    <div class="col-lg-6">
+      <div class="analytics-card surface-60-dominant">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <h5 class="section-title m-0">Collection & Ledger Health</h5>
+          <span class="badge bg-success-subtle text-success fw-bold">{{ paymentStats.paidPercent }}% Collection Rate</span>
+        </div>
+        <p class="small text-30-secondary mb-3">Computed in real-time across {{ orders.length }} active billings</p>
 
-    <!-- Recent Orders -->
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="collection-box collection-paid">
+              <span class="small fw-bold text-uppercase opacity-75">Paid Orders</span>
+              <span class="fs-4 fw-bold">{{ paymentStats.paidCount }} <small class="fs-6 opacity-75">bills</small></span>
+              <span class="small fw-semibold mt-1">₹{{ paymentStats.totalPaidAmount }} Collected</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="collection-box collection-partial">
+              <span class="small fw-bold text-uppercase opacity-75">Partial Paid</span>
+              <span class="fs-4 fw-bold">{{ paymentStats.partialCount }} <small class="fs-6 opacity-75">bills</small></span>
+              <span class="small fw-semibold mt-1">Split Payments</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="collection-box collection-unpaid">
+              <span class="small fw-bold text-uppercase opacity-75">Unpaid Due</span>
+              <span class="fs-4 fw-bold">{{ paymentStats.unpaidCount }} <small class="fs-6 opacity-75">bills</small></span>
+              <span class="small fw-bold mt-1">₹{{ paymentStats.totalUnpaidAmount }} Outstanding</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Garments / Service Avatars -->
+    <div class="col-lg-6">
+      <div class="analytics-card surface-60-dominant">
+        <h5 class="section-title mb-1">Top Garments & Items Processed</h5>
+        <p class="small text-30-secondary mb-3">Garment volume ranking from today's active orders</p>
+
+        <div class="row g-2">
+          <div class="col-md-6" *ngFor="let item of topServiceItems">
+            <div class="item-row">
+              <div class="d-flex align-items-center gap-3">
+                <div class="item-icon-avatar">{{ item.icon }}</div>
+                <div>
+                  <div class="fw-bold text-dark fs-6">{{ item.name }}</div>
+                  <div class="small text-muted fw-semibold">{{ item.qty }} garments</div>
+                </div>
+              </div>
+              <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1 fw-bold">{{ item.percent }}%</span>
+            </div>
+          </div>
+          <div *ngIf="topServiceItems.length === 0" class="text-muted small py-4 w-100 text-center fw-semibold">
+            ✨ No item breakdown records found in today's orders yet.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Recent Orders Feed with Instant Search/Filters & Quick Operations Dock -->
+  <div class="row g-4 mb-4">
+    <!-- Recent Orders Feed -->
     <div class="col-lg-8">
-      <div class="dashboard-table-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="section-title m-0">Recent Orders</h5>
-          <button class="btn btn-link text-decoration-none btn-sm fw-semibold" routerLink="/orders">View All Orders →</button>
+      <div class="dashboard-table-card surface-60-dominant">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+          <div>
+            <h5 class="section-title m-0">Live Orders Board</h5>
+            <small class="text-30-secondary">Showing {{ filteredOrders.length }} of {{ orders.length }} recent orders</small>
+          </div>
+          
+          <!-- Instant Table Filters -->
+          <div class="d-flex gap-2 flex-wrap">
+            <input type="text" class="dashboard-filter-input" [(ngModel)]="searchQuery" (input)="onFilterChange()" placeholder="🔍 Search Bill / Customer...">
+            <select class="dashboard-filter-select" [(ngModel)]="statusFilter" (change)="onFilterChange()">
+              <option value="all">All Statuses</option>
+              <option value="confirm">Pending / Taken</option>
+              <option value="washing">Washing (Tracking Board)</option>
+              <option value="ironing">Ironing (Tracking Board)</option>
+              <option value="deliver">Ready for Delivery</option>
+              <option value="pickup">Ready for Pickup</option>
+            </select>
+            <select class="dashboard-filter-select" [(ngModel)]="paymentFilter" (change)="onFilterChange()">
+              <option value="all">All Payments</option>
+              <option value="paid">Paid</option>
+              <option value="partial">Partial</option>
+              <option value="unpaid">Unpaid</option>
+            </select>
+          </div>
         </div>
 
         <div class="table-responsive">
@@ -96,30 +198,44 @@
             <thead>
               <tr>
                 <th>Bill No</th>
-                <th>Customer</th>
-                <th>Status</th>
+                <th>Customer Name</th>
+                <th>Payment Status</th>
+                <th>Workflow Status</th>
                 <th class="text-end">Amount</th>
+                <th class="text-end">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let order of orders" class="order-row">
+              <tr *ngFor="let order of filteredOrders" class="order-row cursorP" [routerLink]="['/orders']">
                 <td class="order-bill">#{{ order.bill }}</td>
                 <td class="order-customer">
                   <div class="d-flex flex-column">
-                    <span class="fw-semibold text-dark">{{ order.customerId?.name || 'Walk-in Customer' }}</span>
+                    <span class="fw-bold text-dark">{{ order.customerId?.name || 'Walk-in Customer' }}</span>
                     <span class="text-muted small">{{ order.customerId?.mobile }}</span>
                   </div>
                 </td>
                 <td>
-                  <span class="badge-status"
-                    [ngClass]="'badge-' + order.status">
+                  <span class="badge-payment" [ngClass]="getPaymentBadgeClass(order.paymentStatus)">
+                    {{ order.paymentStatus | titlecase }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge-status" [ngClass]="getStatusBadgeClass(order.status)">
                     {{ order.status | titlecase }}
                   </span>
                 </td>
-                <td class="text-end fw-bold text-dark">₹{{ order.billAmount }}</td>
+                <td class="text-end fw-bold text-dark fs-6">₹{{ order.billAmount }}</td>
+                <td class="text-end" (click)="$event.stopPropagation()">
+                  <button class="btn btn-sm btn-outline-primary fw-semibold px-3 py-1" [routerLink]="['/orders']" title="Open in Tracking Board" style="border-radius: 8px;">
+                    Track →
+                  </button>
+                </td>
               </tr>
-              <tr *ngIf="orders.length === 0">
-                <td colspan="4" class="text-center py-4 text-muted">No recent orders found.</td>
+              <tr *ngIf="loading">
+                <td colspan="6" class="text-center py-4 text-muted">Loading active orders feed...</td>
+              </tr>
+              <tr *ngIf="!loading && filteredOrders.length === 0">
+                <td colspan="6" class="text-center py-4 text-muted">No orders match the selected filters or search query.</td>
               </tr>
             </tbody>
           </table>
@@ -127,60 +243,80 @@
       </div>
     </div>
 
-    <!-- Quick Actions -->
+    <!-- Quick Operations Dock (Exact App Structure) -->
     <div class="col-lg-4">
-      <div class="quick-actions-card">
-        <h5 class="section-title mb-4">Quick Operations</h5>
+      <div class="quick-actions-card surface-60-dominant">
+        <h5 class="section-title mb-1">Operations Dock</h5>
+        <p class="small text-30-secondary mb-4">Fast shortcuts to core operational queues</p>
 
         <div class="actions-grid">
-          <button class="action-btn btn-new-order" routerLink="/neworder">
+          <!-- POS Terminal -->
+          <button class="action-btn btn-pos" routerLink="/pos">
             <div class="action-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
             </div>
-            <span>New Order</span>
+            <span>POS Terminal</span>
           </button>
 
-          <button class="action-btn btn-new-customer" routerLink="/customerhistory">
+          <!-- Tracking Board -->
+          <button class="action-btn btn-tracking" routerLink="/orders">
             <div class="action-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <span>Customers</span>
-          </button>
-
-          <button class="action-btn btn-orders-board" routerLink="/orders">
-            <div class="action-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
             </div>
             <span>Tracking Board</span>
           </button>
 
-          <button class="action-btn btn-expenses" routerLink="/dailyexpenses">
+          <!-- Pending Orders -->
+          <button class="action-btn btn-pending" routerLink="/savepannel">
             <div class="action-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             </div>
-            <span>Expenses</span>
+            <span>Pending Orders</span>
+          </button>
+
+          <!-- Door Delivery -->
+          <button class="action-btn btn-customers" routerLink="/delivery">
+            <div class="action-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </div>
+            <span>Door Delivery</span>
+          </button>
+
+          <!-- Customer Pickup -->
+          <button class="action-btn btn-expenses" routerLink="/pickup">
+            <div class="action-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <span>Customer Pickup</span>
+          </button>
+
+          <!-- Order History / All Orders -->
+          <button class="action-btn btn-history" routerLink="/deliveryhistory">
+            <div class="action-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <span>Order History</span>
           </button>
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- Today's Deliverable Orders Section -->
-  <div class="row g-4 mt-2 mb-4">
+  <!-- 6. Today's Deliverable Orders Alert Schedule -->
+  <div class="row g-4 mb-4">
     <div class="col-12">
-      <div class="dashboard-table-card border border-danger-subtle" style="border-left: 5px solid #ef4444 !important;">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="section-title m-0 text-danger d-flex align-items-center gap-2" style="font-family: 'Outfit', sans-serif;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <div class="dashboard-table-card surface-60-dominant border-danger-subtle" style="border-left: 6px solid #ef4444 !important; border-radius: 20px;">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+          <h5 class="section-title m-0 text-danger d-flex align-items-center gap-2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
               <line x1="16" y1="2" x2="16" y2="6"/>
               <line x1="8" y1="2" x2="8" y2="6"/>
               <line x1="3" y1="10" x2="21" y2="10"/>
             </svg>
-            Today's Deliverable Orders
+            Today's Deliveries Due Schedule
           </h5>
-          <span class="badge bg-danger text-white">{{ todayDeliveries.length || 0 }} Deliveries Due</span>
+          <span class="badge bg-danger text-white px-3 py-2 fw-bold" style="border-radius: 10px;">{{ todayDeliveries.length || 0 }} Orders Scheduled Today</span>
         </div>
 
         <div class="table-responsive">
@@ -188,28 +324,32 @@
             <thead>
               <tr>
                 <th>Bill No</th>
-                <th>Customer</th>
+                <th>Customer Name</th>
                 <th>Phone Number</th>
-                <th>Status</th>
+                <th>Workflow Status</th>
                 <th class="text-end">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let order of todayDeliveries" class="order-row cursorP" [routerLink]="['/orders']">
+              <tr *ngFor="let order of todayDeliveries" class="order-row cursorP" [routerLink]="['/delivery']">
                 <td class="order-bill text-danger">#{{ order.bill }}</td>
-                <td class="order-customer fw-semibold text-dark">{{ order.customerId?.name || 'Walk-in Customer' }}</td>
-                <td class="text-secondary">{{ order.customerId?.mobile }}</td>
+                <td class="order-customer fw-bold text-dark">{{ order.customerId?.name || 'Walk-in Customer' }}</td>
+                <td class="text-30-secondary">{{ order.customerId?.mobile }}</td>
                 <td>
-                  <span class="badge-status" [ngClass]="'badge-' + order.status">
+                  <span class="badge-status" [ngClass]="getStatusBadgeClass(order.status)">
                     {{ order.status | titlecase }}
                   </span>
                 </td>
                 <td class="text-end">
-                  <button class="btn btn-sm btn-outline-danger" [routerLink]="['/orders']">Track Order →</button>
+                  <button class="btn btn-sm btn-outline-danger fw-semibold px-3 py-1.5" [routerLink]="['/delivery']" style="border-radius: 8px;">
+                    Deliver Order →
+                  </button>
                 </td>
               </tr>
               <tr *ngIf="!todayDeliveries || todayDeliveries.length === 0">
-                <td colspan="5" class="text-center py-5 text-muted fw-semibold">🎉 No orders scheduled for delivery today.</td>
+                <td colspan="5" class="text-center py-5 text-muted fw-semibold">
+                  🎉 No orders scheduled for delivery today. All caught up!
+                </td>
               </tr>
             </tbody>
           </table>
@@ -218,3 +358,6 @@
     </div>
   </div>
 </div>
+
+
+

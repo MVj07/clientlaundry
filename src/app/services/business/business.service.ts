@@ -47,4 +47,20 @@ export class BusinessService {
         }
         return this.http.get(this.apiUrl + '/view', { headers })
     }
+
+    saveRazorpayKeys(data: any): Observable<any> {
+        const token = this.storageService.getItem('authToken');
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        return this.http.post(this.apiUrl + '/save-razorpay-keys', data, { headers });
+    }
+
+    requestRazorpayOtp(): Observable<any> {
+        const token = this.storageService.getItem('authToken');
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+        return this.http.post(`${environment.apiUrl}/razorpay-keys/request-otp`, {}, { headers });
+    }
 }

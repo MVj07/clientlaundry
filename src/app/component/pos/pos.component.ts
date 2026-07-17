@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { newOrderService } from '../../services/newOrder/newOrder.service';
@@ -14,7 +14,7 @@ import { TagPrintService } from '../../services/tag-print/tag-print.service';
   templateUrl: './pos.component.html',
   styleUrl: './pos.component.css'
 })
-export class PosComponent implements OnInit {
+export class PosComponent implements OnInit, OnDestroy {
 
   // Search panel
   searchTerm: string = '';
@@ -22,8 +22,14 @@ export class PosComponent implements OnInit {
   searching: boolean = false;
   isDefaultView: boolean = true;  // true when showing default unpaid orders list
 
-  // Selected order
+  // Selected order & Payment Link state
   selectedOrder: any = null;
+  paymentLinkUrl: string | null = null;
+  paymentLinkId: string | null = null;
+  generatingLink: boolean = false;
+  linkCopied: boolean = false;
+  paymentPollingInterval: any = null;
+
 
   // Payment form
   paymentForm!: FormGroup;
@@ -162,8 +168,15 @@ export class PosComponent implements OnInit {
   }
 
   selectOrder(order: any) {
+    if (this.paymentPollingInterval) {
+      clearInterval(this.paymentPollingInterval);
+      this.paymentPollingInterval = null;
+    }
     this.selectedOrder = order;
     this.paymentDone = false;
+    this.paymentLinkUrl = order.razorpayPaymentLinkUrl || null;
+    this.paymentLinkId = order.razorpayPaymentLinkId || null;
+    this.linkCopied = false;
 
     // Pre-fill paidAmount with current billAmount - existing discount
     const existingDiscount = order.discount || 0;
@@ -175,11 +188,20 @@ export class PosComponent implements OnInit {
       paidAmount: remaining > 0 ? remaining : (order.billAmount - existingDiscount),
       paymentMethod: order.paymentMethod || 'cash'
     });
+    if (order.razorpayPaymentLinkId && order.paymentStatus !== 'paid') {
+      this.startPaymentLinkPolling();
+    }
   }
 
   clearSelection() {
+    if (this.paymentPollingInterval) {
+      clearInterval(this.paymentPollingInterval);
+      this.paymentPollingInterval = null;
+    }
     this.selectedOrder = null;
     this.paymentDone = false;
+    this.paymentLinkUrl = null;
+    this.paymentLinkId = null;
     this.searchTerm = '';
     this.paymentForm.reset({ discount: 0, paidAmount: 0, paymentMethod: 'cash' });
     this.loadUnpaidOrders();
@@ -288,4 +310,102 @@ export class PosComponent implements OnInit {
     if (!this.selectedOrder) return;
     this.tagPrintService.printThermalReceipt(this.selectedOrder, this.businessData);
   }
+
+  sendPaymentRequest() {
+    if (!this.selectedOrder) return;
+    this.generatingLink = true;
+    this.orderService.createPaymentLink(this.selectedOrder._id).subscribe({
+      next: (res) => {
+        this.generatingLink = false;
+        if (res.status && res.data) {
+          this.paymentLinkUrl = res.data.short_url;
+          this.paymentLinkId = res.data.paymentLinkId;
+          if (res.data.order) {
+            this.selectedOrder = res.data.order;
+          }
+          this.toaster.success('Payment link generated successfully!', '🔗 Link Ready');
+          this.startPaymentLinkPolling();
+        }
+      },
+      error: (err) => {
+        this.generatingLink = false;
+        this.toaster.error(err?.error?.message || 'Failed to create payment link');
+      }
+    });
+  }
+
+  startPaymentLinkPolling() {
+    if (this.paymentPollingInterval) clearInterval(this.paymentPollingInterval);
+    this.paymentPollingInterval = setInterval(() => {
+      if (!this.selectedOrder || this.selectedOrder.paymentStatus === 'paid' || !this.paymentLinkUrl) {
+        if (this.paymentPollingInterval) clearInterval(this.paymentPollingInterval);
+        return;
+      }
+      this.orderService.checkPaymentLinkStatus(this.selectedOrder._id).subscribe({
+        next: (statusRes) => {
+          if (statusRes.paid && statusRes.data) {
+            if (this.paymentPollingInterval) clearInterval(this.paymentPollingInterval);
+            this.selectedOrder = statusRes.data;
+            this.paymentDone = true;
+            this.toaster.success('Customer paid online! Order marked as PAID automatically.', '🎉 Payment Received');
+            this.loadUnpaidOrders();
+          }
+        },
+        error: () => {}
+      });
+    }, 4000);
+  }
+
+  copyPaymentLink() {
+    if (!this.paymentLinkUrl) return;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(this.paymentLinkUrl);
+    } else {
+      const el = document.createElement('textarea');
+      el.value = this.paymentLinkUrl;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    }
+    this.linkCopied = true;
+    this.toaster.info('Link copied to clipboard!', '📋 Copied');
+    setTimeout(() => this.linkCopied = false, 2500);
+  }
+
+  sendLinkViaWhatsApp() {
+    if (!this.selectedOrder || !this.paymentLinkUrl) return;
+    const phone = this.selectedOrder.customerId?.mobile || this.selectedOrder.customerId?.phone || '';
+    const name = this.selectedOrder.customerId?.name || 'Valued Customer';
+    const text = encodeURIComponent(`Hello ${name},\nYour Express Laundry bill #${this.selectedOrder.bill || ''} of ₹${this.finalAmount} is due.\nPlease click this secure Razorpay link to pay online:\n${this.paymentLinkUrl}\n\nThank you!`);
+    const url = phone ? `https://api.whatsapp.com/send?phone=${phone}&text=${text}` : `https://api.whatsapp.com/send?text=${text}`;
+    window.open(url, '_blank');
+  }
+
+  simulateCustomerPayment() {
+    if (!this.selectedOrder) return;
+    this.processing = true;
+    this.orderService.simulateLinkPayment(this.selectedOrder._id).subscribe({
+      next: (res) => {
+        this.processing = false;
+        if (this.paymentPollingInterval) clearInterval(this.paymentPollingInterval);
+        this.selectedOrder = res.data;
+        this.paymentDone = true;
+        this.toaster.success('Order automatically marked as PAID!', '🎉 Payment Successful');
+        this.loadUnpaidOrders();
+      },
+      error: (err) => {
+        this.processing = false;
+        this.toaster.error(err?.error?.message || 'Simulation failed');
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.paymentPollingInterval) {
+      clearInterval(this.paymentPollingInterval);
+      this.paymentPollingInterval = null;
+    }
+  }
 }
+

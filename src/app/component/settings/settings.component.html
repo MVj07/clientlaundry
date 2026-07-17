@@ -208,8 +208,68 @@
         </div>
       </div>
 
-      <!-- Full Width Row: Employee Staff Management (RBAC) -->
+      <!-- Full Width Row: Razorpay Payment Gateway Integration (`razorpay_key_id`, `razorpay_key_secret`) -->
       <div class="col-12 mt-4">
+        <div class="bg-white border rounded-3 p-4 shadow-sm"
+          style="border-color: #e2e8f0 !important; border-left: 5px solid #ec4899 !important;">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+              <h5 class="fw-bold text-dark m-0" style="font-family: 'Outfit', sans-serif;">💳 Razorpay Payment Gateway Configuration</h5>
+              <small class="text-secondary">Input your store's Razorpay API keys (`razorpay_key_id` & `razorpay_key_secret`) to collect customer payments & generate payment links directly.</small>
+            </div>
+            <span class="badge bg-pink-subtle text-pink border border-pink-subtle px-3 py-1" style="background-color: #fdf2f8; color: #be185d;">Live Integration</span>
+          </div>
+
+          <form (ngSubmit)="saveRazorpayKeys()" #razorpayForm="ngForm">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary small">Razorpay Key ID (`razorpay_key_id`)</label>
+                <input type="text" [(ngModel)]="razorpayKeys.razorpay_key_id" name="rzpKeyId" class="form-control" placeholder="e.g. rzp_live_xxxxxxxxxxxxx" style="border-radius: 8px; font-size: 14px; font-family: monospace;">
+                <small class="text-muted d-block mt-1">Found under Razorpay Dashboard > Settings > API Keys.</small>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-secondary small">Razorpay Key Secret (`razorpay_key_secret`)</label>
+                <div class="position-relative">
+                  <input [type]="showKeySecret ? 'text' : 'password'" [(ngModel)]="razorpayKeys.razorpay_key_secret" name="rzpKeySecret" class="form-control pe-5" placeholder="Enter secret key..." style="border-radius: 8px; font-size: 14px; font-family: monospace;">
+                  <button type="button" class="btn position-absolute border-0 bg-transparent text-secondary" style="right: 12px; top: 50%; transform: translateY(-50%); padding: 0;" (click)="showKeySecret = !showKeySecret">
+                    <svg *ngIf="!showKeySecret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg *ngIf="showKeySecret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  </button>
+                </div>
+                <small class="text-muted d-block mt-1">Stored encrypted (256-bit AES) on server. Hidden for security.</small>
+              </div>
+
+              <!-- OTP Authorization Box (Triggered when changing existing keys) -->
+              <div class="col-12" *ngIf="showOtpModal">
+                <div class="p-3 bg-light border border-warning rounded-3 shadow-sm d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                  <div>
+                    <span class="fw-bold text-dark d-block small">🔒 Email Security Authorization Required</span>
+                    <small class="text-secondary">Existing credentials detected. To prevent unauthorized overwrites, please enter the 6-digit verification code sent to your registered email.</small>
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <input type="text" [(ngModel)]="razorpayOtp" name="rzpOtp" class="form-control text-center fw-bold" placeholder="6-digit OTP" maxlength="6" style="width: 140px; border-radius: 8px; font-size: 16px; letter-spacing: 2px;">
+                    <button type="button" class="btn btn-outline-secondary btn-sm py-2 px-3 fw-semibold rounded-3" (click)="requestRazorpayOtp()" [disabled]="otpLoading">
+                      <span *ngIf="otpLoading" class="spinner-border spinner-border-sm"></span>
+                      <span>{{ otpLoading ? 'Sending...' : 'Resend Code' }}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 d-flex justify-content-end">
+                <button type="submit" [disabled]="keysLoading" class="primaryBtn py-2 px-4 d-flex align-items-center gap-2" style="border-radius: 8px; font-size: 14px; background: #ec4899;">
+                  <span *ngIf="keysLoading" class="spinner-border spinner-border-sm"></span>
+                  <span>💾 Save Razorpay Keys</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Full Width Row: Employee Staff Management (RBAC) - HIDDEN FOR NOW -->
+      <div class="col-12 mt-4" *ngIf="false">
         <div class="bg-white border rounded-3 p-4 shadow-sm"
           style="border-color: #e2e8f0 !important; border-left: 5px solid #8b5cf6 !important;">
           <div class="d-flex align-items-center justify-content-between mb-4">

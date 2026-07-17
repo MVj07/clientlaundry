@@ -212,7 +212,7 @@
 /* Responsive Customer Pickup Layout */
 @media (max-width: 768px) {
   .page-wrapper {
-    padding: 16px 12px !important;
+    padding: 92px 12px 24px 12px !important;
   }
   .page-header-bar {
     padding: 14px 16px !important;

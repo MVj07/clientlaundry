@@ -3,6 +3,7 @@ import { newOrderService } from '../../services/newOrder/newOrder.service';
 import { ToastrService } from 'ngx-toastr';
 import { TagPrintService, ThermalTagSettings } from '../../services/tag-print/tag-print.service';
 import { LoginService } from '../../services/login/login.service';
+import { BusinessService } from '../../services/business/business.service';
 
 @Component({
   selector: 'app-settings',
@@ -34,6 +35,17 @@ export class SettingsComponent implements OnInit {
     copiesPerPiece: 1
   };
 
+  razorpayKeys = {
+    razorpay_key_id: '',
+    razorpay_key_secret: ''
+  };
+  keysLoading = false;
+  showKeySecret = false;
+  isKeySet = false;
+  showOtpModal = false;
+  razorpayOtp = '';
+  otpLoading = false;
+
   employeesList: any[] = [];
   employeeForm = {
     name: '',
@@ -48,12 +60,78 @@ export class SettingsComponent implements OnInit {
     private orderService: newOrderService,
     private toast: ToastrService,
     public tagPrintService: TagPrintService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private businessService: BusinessService
   ) { }
 
   ngOnInit(): void {
     this.tagSettings = this.tagPrintService.getSettings();
     this.loadEmployees();
+    this.loadRazorpayKeys();
+  }
+
+  loadRazorpayKeys() {
+    this.businessService.getOne().subscribe({
+      next: (res: any) => {
+        const data = res.data || res;
+        if (data) {
+          this.razorpayKeys.razorpay_key_id = data.razorpay_key_id || '';
+          this.razorpayKeys.razorpay_key_secret = data.razorpay_key_secret || '';
+          this.isKeySet = Boolean(data.isKeySet || data.razorpay_key_id || data.razorpay_key_secret);
+        }
+      },
+      error: (err: any) => {
+        console.error('Failed to load razorpay keys', err);
+      }
+    });
+  }
+
+  saveRazorpayKeys() {
+    this.keysLoading = true;
+    const payload = {
+      ...this.razorpayKeys,
+      otp: this.razorpayOtp || undefined
+    };
+    this.businessService.saveRazorpayKeys(payload).subscribe({
+      next: (res: any) => {
+        this.keysLoading = false;
+        if (res.requiresOtp) {
+          this.showOtpModal = true;
+          this.requestRazorpayOtp();
+          this.toast.info(res.message || 'Please verify email OTP to update existing Razorpay credentials.');
+          return;
+        }
+        if (res.status || res.success) {
+          this.toast.success(res.message || 'Razorpay API keys saved successfully!');
+          this.showOtpModal = false;
+          this.razorpayOtp = '';
+          this.loadRazorpayKeys();
+        } else {
+          this.toast.error(res.message || 'Failed to save Razorpay keys');
+        }
+      },
+      error: (err: any) => {
+        this.toast.error(err.error?.message || 'Failed to save Razorpay keys');
+        this.keysLoading = false;
+      }
+    });
+  }
+
+  requestRazorpayOtp() {
+    this.otpLoading = true;
+    this.businessService.requestRazorpayOtp().subscribe({
+      next: (res: any) => {
+        this.otpLoading = false;
+        this.toast.success(res.message || 'Verification code sent to your email!');
+        if (res.devOtp) {
+          this.toast.info(`[Security verification code sent to email]: ${res.devOtp}`, 'Code Sent', { timeOut: 15000 });
+        }
+      },
+      error: (err: any) => {
+        this.otpLoading = false;
+        this.toast.error(err.error?.message || 'Failed to send verification code');
+      }
+    });
   }
 
   loadEmployees() {

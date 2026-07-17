@@ -21,8 +21,8 @@ export class SubscriptionService {
     return this.http.get(`${this.apiUrl}/status`, { headers: this.getHeaders() });
   }
 
-  createOrder(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create-order`, {}, { headers: this.getHeaders() });
+  createOrder(plan: string = 'monthly_150'): Observable<any> {
+    return this.http.post(`${this.apiUrl}/create-order`, { plan }, { headers: this.getHeaders() });
   }
 
   verifyPayment(paymentData: any): Observable<any> {

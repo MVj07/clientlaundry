@@ -253,7 +253,7 @@
 /* Responsive Tracking Board */
 @media (max-width: 768px) {
   .tracking-container {
-    padding: 16px 12px !important;
+    padding: 92px 12px 24px 12px !important;
   }
   .barcode-input {
     width: 100% !important;

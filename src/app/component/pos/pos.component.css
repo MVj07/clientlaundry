@@ -282,7 +282,7 @@
 /* Responsive POS Billing Layout */
 @media (max-width: 991px) {
   .billing-section {
-    padding: 16px 12px !important;
+    padding: 92px 12px 24px 12px !important;
   }
   .billing-card {
     padding: 16px !important;
